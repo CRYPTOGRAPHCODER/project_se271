@@ -1,12 +1,13 @@
 #ifndef __SUBJECT_H__
 #define __SUBJECT_H__
-#include <cstring>
+#include <string>
+#include <cstdlib>
 
-class subject(){
+class subject{
 private:
   std::string title;
   std::string prof;
-  int timetable;
+  int *timetable;
   int credit;
   double workload;
   int attend_limit;
@@ -15,9 +16,9 @@ private:
   int category;
   int score;
 public:
-  subject(){};
-  ~subject(){};
-  <Template t1>t1 get(){std::String var};
+  subject();
+  ~subject();
+  template <typename T1>T1 get(std::string var){};
 };
 
 #endif
