@@ -1,15 +1,15 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
 
-#include <cstring>
+#include <string>
 constexpr int STATS = 5;
 constexpr int EQUIPMENTS_MAX = 10;
 
-class player(){
+class player{
 private:
   std::string name;
-  int stats;
-  int equipments;
+  int *stats;
+  int *equipments;
   int life;
   int money;
   int credit_acquired_ess;
@@ -18,8 +18,8 @@ private:
   int credit_required_chs;
   int score;
 public:
-  player(){};
-  ~player(){};
+  player();
+  ~player();
 };
 
 #endif
