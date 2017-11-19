@@ -20,6 +20,9 @@ private:
 public:
   player();
   ~player();
+  bool tem_compare(char *x, char *y) {};
+  template<typename T>
+  T get(char *x) {};
 };
 
 #endif
