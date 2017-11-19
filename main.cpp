@@ -1,9 +1,9 @@
 #include "subject.h"
 #include "player.h"
-
+#include "main.h"
 void menu_main();
 
-int main(int argc, char[][]args){
+int main(int argc, const char * argv[]){
   menu_main();
   return 0;
 
@@ -20,7 +20,7 @@ void menu_main() {
 		switch (menu_select) {
 		case 'S':
 		case 's':
-			menu_start();
+			//menu_start();
 			break;
 		case 'L':
 		case 'l':

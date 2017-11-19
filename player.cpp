@@ -7,7 +7,7 @@ player::player(){
   for (int i = 0; i < STATS; i++){
 		this->stats[i] = 0;}
   for (int i = 0; i < EQUIPMENTS_MAX; i++){
-    this->equipments = 0;}
+    this->equipments[i] = 0;}
   this->life = this->stats[0]*100+1000;
   this->money = 0;
   this->credit_acquired_ess = 0;
