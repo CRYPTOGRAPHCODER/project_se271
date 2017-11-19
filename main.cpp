@@ -11,7 +11,7 @@ int main(int argc, const char * argv[]){
 }
 
 void menu_main() {
-	boolean isKey_vaild = true;
+	bool isKey_vaild = true;
 	while (isKey_vaild) {
 		system("cls");
 		printf("main menu\ns.start l.load x.exit \n >> ");
@@ -38,5 +38,5 @@ void menu_main() {
 }
 
 void menu_start(){
-  game_start();
+  game_init();
 }
