@@ -2,7 +2,6 @@
 
 player::player(){
   this->stats = new int[STATS];
-  this->name[0] = '0';
   this->equipments = new int[EQUIPMENTS_MAX];
   //stats : life / ...
   for (int i = 0; i < STATS; i++){
@@ -17,7 +16,6 @@ player::player(){
   this->credit_required_chs = 70;
   this->score = 0;
 };
-
 
 bool Tem_compare(char*x, char *y) {
 	for (int i = 1; x[i] != NULL; i++) {
