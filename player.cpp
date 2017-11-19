@@ -30,31 +30,31 @@ bool Tem_compare(char*x, char *y) {
 template<typename T>
 T get(char *x) {
 	if (x[0] == 'n')
-		if (Tem_compare("name", *x) == true) { return this->name }	
+		if (Tem_compare("name", *x) == true) { return this->name; }
 	if (x[0] == 's')
-		if (Tem_compare("stats", *x) == true) { return this->stats }
+		if (Tem_compare("stats", *x) == true) { return this->stats; }
 	if (x[0] == 'e')
-		if (Tem_compare("equipments", *x) == true) { return this->equipments }
+		if (Tem_compare("equipments", *x) == true) { return this->equipments; }
 	if (x[0] == 'l')
-		if (Tem_compare("life", *x) == true) { return this->life }
+		if (Tem_compare("life", *x) == true) { return this->life; }
 	if (x[0] == 'm')
-		if (Tem_compare("money", *x) == true) { return this->money }
+		if (Tem_compare("money", *x) == true) { return this->money; }
 	if (x[0] == 'c') {
 		if (x[7] == 'a') {
 			if (x[16] == 'e')
-				if (Tem_compare("credit_acquired_ess", *x) == true) { return this->credit_acquired_ess }
+				if (Tem_compare("credit_acquired_ess", *x) == true) { return this->credit_acquired_ess; }
 			else if (x[16] == 'c')
-				if (Tem_compare("credit_acquired_chs", *x) == true) { return this->credit_acquired_chs }
+				if (Tem_compare("credit_acquired_chs", *x) == true) { return this->credit_acquired_chs; }
 		}
 		else if (x[7] == 'r') {
 			if (x[16] == 'e')
-				if (Tem_compare("credit_required_ess", *x) == true) { return this->credit_required_ess }
+				if (Tem_compare("credit_required_ess", *x) == true) { return this->credit_required_ess; }
 			else if (x[16] == 'c')
-				if (Tem_compare("credit_required_chs", *x) == true) { return this->credit_required_chs }
+				if (Tem_compare("credit_required_chs", *x) == true) { return this->credit_required_chs; }
 		}
 	}
 	if (x[0] == 's')
-		if (Tem_compare("score", *x) == true) { return this->score }
+		if (Tem_compare("score", *x) == true) { return this->score; }
 };
 player::~player(){
 
