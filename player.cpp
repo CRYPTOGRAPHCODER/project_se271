@@ -3,7 +3,6 @@
 player::player(){
   this->stats = new int[STATS];
   this->name[0] = '0';
-  this->copy[0] = '0'; //copy를 초기화
   this->equipments = new int[EQUIPMENTS_MAX];
   //stats : life / ...
   for (int i = 0; i < STATS; i++){
@@ -20,45 +19,42 @@ player::player(){
 };
 
 
-template<typename T>
-T player::Tem_compare(char *x, char *y, T x) {
+bool Tem_compare(char*x, char *y) {
 	for (int i = 1; x[i] != NULL; i++) {
-		if (x[i] != x[i])
-			break;
+		if (x[i] != y[i])
+			return 0;
 	}
-	return T x;
+	return 1;
 };
 
 template<typename T>
 T get(char *x) {
 	if (x[0] == 'n')
-		Tem_compare<char*>('name', *x, name);
+		if (Tem_compare("name", *x) == true) { return this->name }	
 	if (x[0] == 's')
-		Tem_compare<int*>('stats', *x, stats);
+		if (Tem_compare("stats", *x) == true) { return this->stats }
 	if (x[0] == 'e')
-		Tem_compare<int*>('equipments', *x, equipments);
+		if (Tem_compare("equipments", *x) == true) { return this->equipments }
 	if (x[0] == 'l')
-		Tem_compare<int>('life', *x, life);
+		if (Tem_compare("life", *x) == true) { return this->life }
 	if (x[0] == 'm')
-		Tem_compare<int>('money', *x, money);
+		if (Tem_compare("money", *x) == true) { return this->money }
 	if (x[0] == 'c') {
 		if (x[7] == 'a') {
 			if (x[16] == 'e')
-				Tem_compare<int>('credit_acquired_ess', *x, credit_acquired_ess);
-			else if (x[16] == 'c') {
-				Tem_compare<int>('credit_acquired_chs', *x, credit_acquired_chs);
-			}
+				if (Tem_compare("credit_acquired_ess", *x) == true) { return this->credit_acquired_ess }
+			else if (x[16] == 'c')
+				if (Tem_compare("credit_acquired_chs", *x) == true) { return this->credit_acquired_chs }
 		}
 		else if (x[7] == 'r') {
 			if (x[16] == 'e')
-				Tem_compare<int>('credit_required_ess', *x, credit_required_ess);
-			else if (x[16] == 'c') {
-				Tem_compare<int>('credit_required_chs', *x, credit_required_chs);
-			}
+				if (Tem_compare("credit_required_ess", *x) == true) { return this->credit_required_ess }
+			else if (x[16] == 'c')
+				if (Tem_compare("credit_required_chs", *x) == true) { return this->credit_required_chs }
 		}
 	}
 	if (x[0] == 's')
-		Tem_compare<int>('score', *x, score);
+		if (Tem_compare("score", *x) == true) { return this->score }
 };
 player::~player(){
 
