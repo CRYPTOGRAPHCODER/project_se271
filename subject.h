@@ -5,8 +5,8 @@
 
 class subject{
 private:
-  std::string title;
-  std::string prof;
+  char *title;
+  char *prof;
   int *timetable;
   int credit;
   double workload;
@@ -18,7 +18,6 @@ private:
 public:
   subject();
   ~subject();
-  template <typename T1>T1 get(std::string var){};
 };
 
 #endif

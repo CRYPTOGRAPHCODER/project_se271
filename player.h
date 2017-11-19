@@ -7,7 +7,7 @@ constexpr int EQUIPMENTS_MAX = 10;
 
 class player{
 private:
-  std::string name;
+  char *name;
   int *stats;
   int *equipments;
   int life;
