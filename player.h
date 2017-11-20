@@ -20,7 +20,7 @@ private:
 public:
   player();
   ~player();
-  template <typename T> T get_value(char *x);
+  template <typename T> T get_value(const char *x);
 };
 
 #endif
