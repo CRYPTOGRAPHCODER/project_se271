@@ -5,8 +5,8 @@
 
 class subject{
 private:
-  char *title;
-  char *prof;
+  std::string title;
+  std::string prof;
   int *timetable;
   int credit;
   double workload;

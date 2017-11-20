@@ -3,7 +3,7 @@
 #include "player.h"
 
 
-void game_turn(int turn);
+void game_turn(int turn, player *pl);
   void store();
   void meet_friend();
 
@@ -15,12 +15,12 @@ void game_init(){
   player pl;
   int turn = 0;
   while (true){
-    game_turn(turn);
+    game_turn(turn, &pl);
     turn++;
-  }
+}
 }
 
-void game_turn(int turn){
+void game_turn(int turn, player *pl){
   bool isKey_vaild = true;
 	while (isKey_vaild) {
     //SetConsoleOutputCP(CP_UTF8);
@@ -45,6 +45,9 @@ void game_turn(int turn){
       printf(", X.SUGANG.DGIST.AC.KR ");
     }
     printf("\n\n >> ");
+
+    printf("%d",pl->get_value<int>("life"));
+
     char menu_select = getchar();
     while (getchar() != '\n');
     switch (menu_select) {

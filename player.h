@@ -1,13 +1,13 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
-
 #include <string>
+
 constexpr int STATS = 5;
 constexpr int EQUIPMENTS_MAX = 10;
-
+// add compile option -static-libstdc++
 class player{
 private:
-  char *name;
+  std::string name;
   int *stats;
   int *equipments;
   int life;
@@ -20,9 +20,7 @@ private:
 public:
   player();
   ~player();
-  bool tem_compare(char *x, char *y) {};
-  template<typename T>
-  T get(char *x) {};
+  template <typename T> T get_value(char *x);
 };
 
 #endif

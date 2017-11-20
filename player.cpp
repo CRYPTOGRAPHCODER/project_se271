@@ -1,5 +1,5 @@
 #include "player.h"
-
+#include "functions.h"
 player::player(){
   this->stats = new int[STATS];
   this->equipments = new int[EQUIPMENTS_MAX];
@@ -17,27 +17,19 @@ player::player(){
   this->score = 0;
 };
 
-bool tem_compare(char*x, char *y) {
-	for (int i = 1; x[i] != NULL; i++) {
-		if (x[i] != y[i])
-			return 0;
-	}
-	return 1;
-};
 
-template<typename T>
-T get(char *x) {
-	if (tem_compare("name", *x) == true) { return this->name; }
-	if (tem_compare("stats", *x) == true) { return this->stats; }
-	if (tem_compare("equipments", *x) == true) { return this->equipments; }
-	if (tem_compare("life", *x) == true) { return this->life; }
-	if (tem_compare("money", *x) == true) { return this->money; }
-	if (tem_compare("credit_acquired_ess", *x) == true) { return this->credit_acquired_ess; }
-	if (tem_compare("credit_acquired_chs", *x) == true) { return this->credit_acquired_chs; }
-	if (tem_compare("credit_required_ess", *x) == true) { return this->credit_required_ess; }
-	if (tem_compare("credit_required_chs", *x) == true) { return this->credit_required_chs; }
-	if (tem_compare("score", *x) == true) { return this->score; }
-};
+template <typename T> T player::get_value(const char *x) {
+  if (char_compare("life", *x) == true) { return this->life; }
+  if (char_compare("name", *x) == true) { return this->name; }
+  if (char_compare("stats", *x) == true) { return this->stats; }
+  if (char_compare("equipments", *x) == true) { return this->equipments; }
+	if (char_compare("money", *x) == true) { return this->money; }
+	if (char_compare("credit_acquired_ess", *x) == true) { return this->credit_acquired_ess; }
+	if (char_compare("credit_acquired_chs", *x) == true) { return this->credit_acquired_chs; }
+	if (char_compare("credit_required_ess", *x) == true) { return this->credit_required_ess; }
+	if (char_compare("credit_required_chs", *x) == true) { return this->credit_required_chs; }
+	if (char_compare("score", *x) == true) { return this->score; }
+}
 player::~player(){
 
 };
