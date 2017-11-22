@@ -6,10 +6,13 @@
 void game_turn(int turn, player *pl);
   void store();
   void meet_friend();
-
-
-
-
+  void visit_professor();
+  void club_room();
+  void play_game();
+  void wander_around();
+  void rest();
+  void work();
+  void sugang();
 
 void game_init(){
   player pl;
@@ -36,26 +39,61 @@ void game_turn(int turn, player *pl){
       case 4:
         printf("Night\n");break;
     }
-    printf(" 　　　 　　／⌒ヽ\n⊂二二二（　＾ω＾）二⊃\n　　　　　　|　　　 /\n　　 　　　 （　ヽ/\n　　　　　　 ﾉ>ノ\n　　 三　　レﾚ");
+    //printf(" 　　　 　　／⌒ヽ\n⊂二二二（　＾ω＾）二⊃\n　　　　　　|　　　 /\n　　 　　　 （　ヽ/\n　　　　　　 ﾉ>ノ\n　　 三　　レﾚ");
     printf("  What you gonna do?\n");
     printf("  S.Store, F.meet Friend, P.visit Professor \n");
-    printf("  C.go to Club room, G.play Game, W.Wander around \n");
+    printf("  C.go to Club room, G.play Game, A.wander Around \n");
     printf("  R.Rest, W.Work");
     if((turn/4)%10+1>7){
       printf(", X.SUGANG.DGIST.AC.KR ");
     }
     printf("\n\n >> ");
 
-    printf("%d",pl->get_value<int>("life"));
-
     char menu_select = getchar();
     while (getchar() != '\n');
     switch (menu_select) {
     case 'S':
     case 's':
+      store();
+      continue;
+    case 'F':
+    case 'f':
+      meet_friend();
+      isKey_vaild = false;
       break;
-    case 'L':
-    case 'l':
+    case 'P':
+    case 'p':
+      visit_professor();
+      isKey_vaild = false;
+      break;
+    case 'C':
+    case 'c':
+      club_room();
+      isKey_vaild = false;
+      break;
+    case 'G':
+    case 'g':
+      play_game();
+      isKey_vaild = false;
+      break;
+    case 'A':
+    case 'a':
+      wander_around();
+      isKey_vaild = false;
+      break;
+    case 'R':
+    case 'r':
+      rest();
+      isKey_vaild = false;
+      break;
+    case 'W':
+    case 'w':
+      work();
+      isKey_vaild = false;
+      break;
+    case 'X':
+    case 'x':
+      sugang();
       isKey_vaild = false;
       break;
     default:

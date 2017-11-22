@@ -20,7 +20,9 @@ private:
 public:
   player();
   ~player();
-  template <typename T> T get_value(const char *x);
+  int get_life(){return this->life;};
+  void set_life(int value){this->life = value;};
+  void add_life(int value){this->life += value;};
 };
 
 #endif
