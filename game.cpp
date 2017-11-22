@@ -15,6 +15,7 @@ void game_turn();
   void work();
   void sugang();
 void calculate_semester();
+void game_over();
 
 void print_game_turn(int turn);
 
@@ -24,6 +25,7 @@ int turn = 0;
 player pl;
 
 void game_init(){
+  // Initializes variables
   turn = 0;
 }
 
@@ -39,11 +41,13 @@ void game(){
     // Add 1 turn
     turn++;
   }
-
+  // End of game
+  game_over();
 
 }
 
 void game_turn(){
+  // Each Turn action
   bool isKey_vaild = true;
 	while (isKey_vaild) {
     print_game_turn(turn);
@@ -65,6 +69,7 @@ void game_turn(){
 }
 
 void print_game_turn(int turn){
+  // Temp Printing Each Turn;
   system("cls");
   printf("\n  Year %d, Day %d ",turn/40+1, (turn/4)%10+1);
   switch(turn%4+1){
@@ -83,6 +88,7 @@ void print_game_turn(int turn){
   }
   printf("\n\n >> ");
 }
+
 void store(){};
 void meet_friend(){};
 void visit_professor(){};
@@ -93,3 +99,4 @@ void rest(){};
 void work(){};
 void sugang(){};
 void calculate_semester(){};
+void game_over();

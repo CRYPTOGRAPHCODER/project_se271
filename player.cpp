@@ -2,7 +2,7 @@
 player::player(){
   this->stats = new int[STATS];
   this->equipments = new int[EQUIPMENTS_MAX];
-  //stats : life / ...
+  //stats : life / recov / math / science / literature / code
   for (int i = 0; i < STATS; i++){
 		this->stats[i] = 0;}
   for (int i = 0; i < EQUIPMENTS_MAX; i++){
