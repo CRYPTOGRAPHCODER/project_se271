@@ -47,7 +47,7 @@ void game(){
 }
 
 void game_turn(){
-  // Each Turn action
+  // Each Turn
   bool isKey_vaild = true;
 	while (isKey_vaild) {
     print_game_turn(turn);
