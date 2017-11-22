@@ -5,6 +5,7 @@ void menu_main();
 void menu_start();
 
 int main(int argc, const char * argv[]){
+  SetConsoleCP(65001);
   menu_main();
   return 0;
 
@@ -19,24 +20,18 @@ void menu_main() {
 		while (getchar() != '\n');
 
 		switch (menu_select) {
-		case 'S':
-		case 's':
-			menu_start();
-			break;
-		case 'L':
-		case 'l':
+		case 'S': case 's':
+      menu_start(); break;
+		case 'L': case 'l':
 			//menu_load();
-			break;
-		case 'X':
-		case 'x':
-			isKey_vaild = false;
-			break;
-		default:
-			break;
+      break;
+		case 'X': case 'x':
+			isKey_vaild = false; break;
+		default: break;
 		}
 	}
 }
 
 void menu_start(){
-  game_init();
+  game();
 }

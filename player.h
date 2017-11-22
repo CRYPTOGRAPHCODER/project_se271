@@ -10,6 +10,7 @@ private:
   std::string name;
   int *stats;
   int *equipments;
+  int *subjects;
   int life;
   int money;
   int credit_acquired_ess;
