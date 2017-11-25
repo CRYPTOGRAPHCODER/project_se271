@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Sugang_Simulator_2017</class>
+ <widget class="QMainWindow" name="Sugang_Simulator_2017">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1000</width>
+    <height>550</height>
+   </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>3200</width>
+    <height>1800</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Sugang_Simulator_2017</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QLabel" name="text_game">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>60</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Game Info</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="text_time">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>10</y>
+      <width>140</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Year / Week / Time</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="text_name">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>55</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Name</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="text_hp">
+    <property name="geometry">
+     <rect>
+      <x>375</x>
+      <y>70</y>
+      <width>71</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0 / 0</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QProgressBar" name="prog_hp">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>70</y>
+      <width>311</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>80</number>
+    </property>
+    <property name="textVisible">
+     <bool>false</bool>
+    </property>
+    <property name="invertedAppearance">
+     <bool>false</bool>
+    </property>
+    <property name="format">
+     <string>%p%</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="text_hp2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>70</y>
+      <width>31</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>HP</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="text_stats">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>100</y>
+      <width>431</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Stats     LIFE 8  HEAL 5  MATH 6  TECH 7  BOOK 8  CODE 2</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="text_items">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>130</y>
+      <width>431</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Items    SHAAA</string>
+    </property>
+   </widget>
+   <widget class="QProgressBar" name="prog_credit_selective">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>210</y>
+      <width>211</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>80</number>
+    </property>
+    <property name="textVisible">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QProgressBar" name="prog_credit_mandatory">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>210</y>
+      <width>211</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>80</number>
+    </property>
+    <property name="textVisible">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="text_req_credit">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>190</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Required Credit</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="text_score">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>160</y>
+      <width>211</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Score</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="text_money">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>160</y>
+      <width>211</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Money</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="text_credit_mandatory">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>230</y>
+      <width>101</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Mandatory 0 / 0</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="text_credit_selective_2">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>230</y>
+      <width>101</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Selective 0 / 0</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="textbox_memo">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>255</y>
+      <width>441</width>
+      <height>261</height>
+     </rect>
+    </property>
+    <property name="html">
+     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Gulim'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Memo (Write Yourself)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QProgressBar" name="prog_time">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>10</y>
+      <width>531</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>80</number>
+    </property>
+    <property name="textVisible">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="textbox_console">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>30</y>
+      <width>531</width>
+      <height>211</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="button3">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>270</y>
+      <width>531</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Mine</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="button8">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>450</y>
+      <width>531</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>No</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="button9">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>480</y>
+      <width>531</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>aYA</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="button7">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>420</y>
+      <width>531</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Flop</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="button5">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>360</y>
+      <width>531</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Do</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="button6">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>390</y>
+      <width>531</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>The</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="button1">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>240</y>
+      <width>531</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Hello</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="button2">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>300</y>
+      <width>531</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Turtle</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="button4">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>330</y>
+      <width>531</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Everybody</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1000</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuMenu">
+    <property name="title">
+     <string>Menu</string>
+    </property>
+    <widget class="QMenu" name="menuCheats">
+     <property name="title">
+      <string>Cheats..</string>
+     </property>
+     <addaction name="actionGraduate_Now_4_99_USD"/>
+     <addaction name="actionInvulnerable_2_99_USD"/>
+     <addaction name="actionInfinite_Lives_2_99_USD"/>
+     <addaction name="actionApply_Every_Classes_You_Want_3_99_USD"/>
+     <addaction name="actionAll_Cheats_BUY_NOW_9_99_USD"/>
+    </widget>
+    <widget class="QMenu" name="menuCredits">
+     <property name="title">
+      <string>Credits..</string>
+     </property>
+     <addaction name="actionKrustryee_GUI_Developer"/>
+     <addaction name="actionr3COD3r_Main_Programmer"/>
+     <addaction name="actionRes_Miserables_Sub_Programmer"/>
+    </widget>
+    <addaction name="actionStart_Game"/>
+    <addaction name="actionSave_Game"/>
+    <addaction name="actionLoad_Game"/>
+    <addaction name="menuCredits"/>
+    <addaction name="menuCheats"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <addaction name="menuMenu"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <action name="actionStart_Game">
+   <property name="text">
+    <string>Start Game</string>
+   </property>
+  </action>
+  <action name="actionSave_Game">
+   <property name="text">
+    <string>Save Game</string>
+   </property>
+  </action>
+  <action name="actionLoad_Game">
+   <property name="text">
+    <string>Load Game</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionGraduate_Now_4_99_USD">
+   <property name="text">
+    <string>Graduate Immediately(4.99 USD)</string>
+   </property>
+  </action>
+  <action name="actionInvulnerable_2_99_USD">
+   <property name="text">
+    <string>Invulnerable(2.99 USD)</string>
+   </property>
+  </action>
+  <action name="actionInfinite_Lives_2_99_USD">
+   <property name="text">
+    <string>Infinite Lives(2.99 USD)</string>
+   </property>
+  </action>
+  <action name="actionApply_Every_Classes_You_Want_3_99_USD">
+   <property name="text">
+    <string>Apply Every Classes You Want(3.99 USD)</string>
+   </property>
+  </action>
+  <action name="actionAll_Cheats_BUY_NOW_9_99_USD">
+   <property name="text">
+    <string>All Cheats - BUY NOW(9.99 USD)</string>
+   </property>
+  </action>
+  <action name="actionKrustryee_GUI_Developer">
+   <property name="text">
+    <string>Krustryee(GUI Developer)</string>
+   </property>
+  </action>
+  <action name="actionr3COD3r_Main_Programmer">
+   <property name="text">
+    <string>r3COD3r(Main Programmer)</string>
+   </property>
+  </action>
+  <action name="actionRes_Miserables_Sub_Programmer">
+   <property name="text">
+    <string>Res Miserables(Sub Programmer)</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
