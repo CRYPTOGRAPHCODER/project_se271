@@ -455,33 +455,39 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>Menu</string>
     </property>
-    <widget class="QMenu" name="menuCheats">
-     <property name="title">
-      <string>Cheats..</string>
-     </property>
-     <addaction name="actionGraduate_Now_4_99_USD"/>
-     <addaction name="actionInvulnerable_2_99_USD"/>
-     <addaction name="actionInfinite_Lives_2_99_USD"/>
-     <addaction name="actionApply_Every_Classes_You_Want_3_99_USD"/>
-     <addaction name="actionAll_Cheats_BUY_NOW_9_99_USD"/>
-    </widget>
-    <widget class="QMenu" name="menuCredits">
-     <property name="title">
-      <string>Credits..</string>
-     </property>
-     <addaction name="actionKrustryee_GUI_Developer"/>
-     <addaction name="actionr3COD3r_Main_Programmer"/>
-     <addaction name="actionRes_Miserables_Sub_Programmer"/>
-    </widget>
     <addaction name="actionStart_Game"/>
     <addaction name="actionSave_Game"/>
     <addaction name="actionLoad_Game"/>
-    <addaction name="menuCredits"/>
-    <addaction name="menuCheats"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
+   <widget class="QMenu" name="menuMiscellanous">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <widget class="QMenu" name="menuCredits_2">
+     <property name="title">
+      <string>Credits..</string>
+     </property>
+     <addaction name="actionr3CODEr_Main_Programmer"/>
+     <addaction name="actionKrustryee_GUI_Develpoper"/>
+     <addaction name="actionLes_Miserables_Sub_Programmer"/>
+    </widget>
+    <widget class="QMenu" name="menuCheats_2">
+     <property name="title">
+      <string>Cheats..</string>
+     </property>
+     <addaction name="actionGraduate_Immediately_4_99_USD"/>
+     <addaction name="actionInfinite_Lives_3_99_USD"/>
+     <addaction name="actionApply_Any_Class_You_Want_4_29_USD"/>
+     <addaction name="actionAll_Cheats_BUY_NOW_9_99_USD_2"/>
+    </widget>
+    <addaction name="separator"/>
+    <addaction name="menuCredits_2"/>
+    <addaction name="menuCheats_2"/>
+   </widget>
    <addaction name="menuMenu"/>
+   <addaction name="menuMiscellanous"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -493,22 +499,34 @@ p, li { white-space: pre-wrap; }
   </widget>
   <action name="actionStart_Game">
    <property name="text">
-    <string>Start Game</string>
+    <string>Start &amp;Game</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
    </property>
   </action>
   <action name="actionSave_Game">
    <property name="text">
     <string>Save Game</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
   </action>
   <action name="actionLoad_Game">
    <property name="text">
     <string>Load Game</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
+   </property>
   </action>
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+   <property name="shortcut">
+    <string>Esc</string>
    </property>
   </action>
   <action name="actionGraduate_Now_4_99_USD">
@@ -551,8 +569,65 @@ p, li { white-space: pre-wrap; }
     <string>Res Miserables(Sub Programmer)</string>
    </property>
   </action>
+  <action name="actiondkfhkda">
+   <property name="text">
+    <string>dkfhkda</string>
+   </property>
+  </action>
+  <action name="actionr3CODEr_Main_Programmer">
+   <property name="text">
+    <string>r3CODEr(Main Programmer)</string>
+   </property>
+  </action>
+  <action name="actionKrustryee_GUI_Develpoper">
+   <property name="text">
+    <string>Krustryee(GUI Develpoper)</string>
+   </property>
+  </action>
+  <action name="actionLes_Miserables_Sub_Programmer">
+   <property name="text">
+    <string>Les Miserables(Sub Programmer)</string>
+   </property>
+  </action>
+  <action name="actionGraduate_Immediately_4_99_USD">
+   <property name="text">
+    <string>Graduate Immediately(4.99 USD)</string>
+   </property>
+  </action>
+  <action name="actionInfinite_Lives_3_99_USD">
+   <property name="text">
+    <string>Infinite Lives(3.99 USD)</string>
+   </property>
+  </action>
+  <action name="actionApply_Any_Class_You_Want_4_29_USD">
+   <property name="text">
+    <string>Apply Any Class You Want(4.29 USD)</string>
+   </property>
+  </action>
+  <action name="actionAll_Cheats_BUY_NOW_9_99_USD_2">
+   <property name="text">
+    <string>All Cheats - BUY NOW(9.99 USD)</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>triggered()</signal>
+   <receiver>Sugang_Simulator_2017</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>499</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

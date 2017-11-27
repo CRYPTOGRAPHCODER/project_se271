@@ -17,10 +17,13 @@ public:
 
 private:
     Ui::Sugang_Simulator_2017 *ui;
-};
 
 private slots:
-    void menu_startgame();
+    void Main_SlotNewfile();
+    void on_actionStart_Game_triggered();
+    void on_actionSave_Game_triggered();
+    void on_actionLoad_Game_triggered();
 };
+
 
 #endif // SUGANG_SIMULATOR_2017_H
