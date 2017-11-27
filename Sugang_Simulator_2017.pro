@@ -25,10 +25,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        sugang_simulator_2017.cpp
+        sugang_simulator_2017.cpp \
+    game.cpp \
+    player.cpp \
+    subject.cpp
 
 HEADERS += \
-        sugang_simulator_2017.h
+        sugang_simulator_2017.h \
+    game.h \
+    player.h \
+    subject.h
 
 FORMS += \
         sugang_simulator_2017.ui

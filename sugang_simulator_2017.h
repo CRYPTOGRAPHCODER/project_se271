@@ -19,4 +19,8 @@ private:
     Ui::Sugang_Simulator_2017 *ui;
 };
 
+private slots:
+    void menu_startgame();
+};
+
 #endif // SUGANG_SIMULATOR_2017_H
