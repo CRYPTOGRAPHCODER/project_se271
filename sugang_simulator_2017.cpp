@@ -1,7 +1,7 @@
 #include "sugang_simulator_2017.h"
 #include "ui_sugang_simulator_2017.h"
-
 #include "game.h"
+
 
 Sugang_Simulator_2017::Sugang_Simulator_2017(QWidget *parent) :
     QMainWindow(parent),
@@ -13,12 +13,11 @@ Sugang_Simulator_2017::Sugang_Simulator_2017(QWidget *parent) :
     ui->prog_hp->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
     ui->prog_credit_selective->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
 
-
-    player pl;
-    int turn = 10;
-    player_data_update(pl,turn);
+    gameManager g;
+    player_data_update(g.get_pl(),g.get_turn());
     console_update("ah!");
-    //button_update(but);
+    std::string but = "Shit";
+    button_update(but,0);
 }
 
 Sugang_Simulator_2017::~Sugang_Simulator_2017()
@@ -69,56 +68,53 @@ void Sugang_Simulator_2017::player_data_update(player pl,int t){
 void Sugang_Simulator_2017::console_update(std::string text){
     ui->textbox_console->setText(QString::fromStdString(text));
 }
-void Sugang_Simulator_2017::button_update(std::string *da){
-    int i = 0;
-    ui->button1->setEnabled(false);
-    ui->button2->setEnabled(false);
-    ui->button3->setEnabled(false);
-    ui->button4->setEnabled(false);
-    ui->button5->setEnabled(false);
-    ui->button6->setEnabled(false);
-    ui->button7->setEnabled(false);
-    ui->button8->setEnabled(false);
-    ui->button9->setEnabled(false);
-    while(i<9 || da[i]==""){
-        switch(i){
-            case 0:
-                ui->button1->setText(QString::fromStdString(da[i]));
-                ui->button1->setEnabled(true);
-            break;
-            case 1:
-                ui->button2->setText(QString::fromStdString(da[i]));
-                ui->button2->setEnabled(true);
-            break;
-            case 2:
-                ui->button3->setText(QString::fromStdString(da[i]));
-                ui->button3->setEnabled(true);
-            break;
-            case 3:
-                ui->button4->setText(QString::fromStdString(da[i]));
-                ui->button4->setEnabled(true);
-            break;
-            case 4:
-                ui->button5->setText(QString::fromStdString(da[i]));
-                ui->button5->setEnabled(true);
-            break;
-            case 5:
-                ui->button6->setText(QString::fromStdString(da[i]));
-                ui->button6->setEnabled(true);
-            break;
-            case 6:
-                ui->button7->setText(QString::fromStdString(da[i]));
-                ui->button7->setEnabled(true);
-            break;
-            case 7:
-                ui->button8->setText(QString::fromStdString(da[i]));
-                ui->button8->setEnabled(true);
-            break;
-            case 8:
-                ui->button9->setText(QString::fromStdString(da[i]));
-                ui->button9->setEnabled(true);
-        break;
-        }
+
+void Sugang_Simulator_2017::button_update(std::string da, int index){
+    switch(index){
+    case 0:
+        if(da.compare("")==0){ui->button1->setEnabled(false);
+        }else{ui->button1->setEnabled(true);}
+        ui->button1->setText(QString::fromStdString(da));
+    break;
+    case 1:
+        if(da.compare("")==0){ui->button2->setEnabled(false);
+        }else{ui->button2->setEnabled(true);}
+        ui->button2->setText(QString::fromStdString(da));
+    break;
+    case 2:
+        if(da.compare("")==0){ui->button3->setEnabled(false);
+        }else{ui->button3->setEnabled(true);}
+        ui->button3->setText(QString::fromStdString(da));
+    break;
+    case 3:
+        if(da.compare("")==0){ui->button4->setEnabled(false);
+        }else{ui->button4->setEnabled(true);}
+        ui->button4->setText(QString::fromStdString(da));
+    break;
+    case 4:
+        if(da.compare("")==0){ui->button5->setEnabled(false);
+        }else{ui->button5->setEnabled(true);}
+        ui->button5->setText(QString::fromStdString(da));
+    break;
+    case 5:
+        if(da.compare("")==0){ui->button6->setEnabled(false);
+        }else{ui->button6->setEnabled(true);}
+        ui->button6->setText(QString::fromStdString(da));
+    break;
+    case 6:
+        if(da.compare("")==0){ui->button7->setEnabled(false);
+        }else{ui->button7->setEnabled(true);}
+        ui->button7->setText(QString::fromStdString(da));
+    break;
+    case 7:
+        if(da.compare("")==0){ui->button8->setEnabled(false);
+        }else{ui->button8->setEnabled(true);}
+        ui->button8->setText(QString::fromStdString(da));
+    break;
+    case 8:
+        if(da.compare("")==0){ui->button9->setEnabled(false);
+        }else{ui->button9->setEnabled(true);}
+        ui->button9->setText(QString::fromStdString(da));
+    break;
     }
-    delete[] da;
 }

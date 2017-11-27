@@ -4,11 +4,11 @@ player::player(){
   this->stats = new int[STATS];
   //stats : life / recov / math / science / literature / code
   for (int i = 0; i < STATS; i++){
-		this->stats[i] = 0;}
+        this->stats[i] = i;}
 
   this->equipments = new int[EQUIPMENTS_MAX];
   for (int i = 0; i < EQUIPMENTS_MAX; i++){
-    this->equipments[i] = 0;}
+    this->equipments[i] = i;}
 
   this->life_f = this->stats[0]*100+1000;
   this->life = this->life_f;

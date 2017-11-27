@@ -2,8 +2,9 @@
 #define SUGANG_SIMULATOR_2017_H
 
 #include <QMainWindow>
-#include "player.h"
 #include <string>
+#include "player.h"
+
 
 namespace Ui {
 class Sugang_Simulator_2017;
@@ -18,7 +19,7 @@ public:
     ~Sugang_Simulator_2017();
     void player_data_update(player pl, int turn);
     void console_update(std::string text);
-    void button_update(std::string *da);
+    void button_update(std::string da, int index);
 
 private:
     Ui::Sugang_Simulator_2017 *ui;
