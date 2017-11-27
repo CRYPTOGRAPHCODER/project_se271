@@ -1,6 +1,7 @@
 #include "game.h"
 #include "subject.h"
 #include "player.h"
+#include "sugang_simulator_2017.h"
 
 void game();
 void game_init();
@@ -17,6 +18,8 @@ void game_turn();
 void calculate_semester();
 void game_over();
 
+
+
 void print_game_turn(int turn);
 
 // Global variables that indicates turns and player
@@ -25,7 +28,7 @@ int turn = 0;
 player pl;
 
 void game_init(){
-  // Initializes variables
+  // Initializes game
   turn = 0;
 }
 
@@ -99,4 +102,6 @@ void rest(){};
 void work(){};
 void sugang(){};
 void calculate_semester(){};
-void game_over();
+void game_over(){};
+void game_save(){};
+void game_load(){};

@@ -465,25 +465,16 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>Help</string>
     </property>
-    <widget class="QMenu" name="menuCredits_2">
-     <property name="title">
-      <string>Credits..</string>
-     </property>
-     <addaction name="actionr3CODEr_Main_Programmer"/>
-     <addaction name="actionKrustryee_GUI_Develpoper"/>
-     <addaction name="actionLes_Miserables_Sub_Programmer"/>
-    </widget>
     <widget class="QMenu" name="menuCheats_2">
      <property name="title">
       <string>Cheats..</string>
      </property>
-     <addaction name="actionGraduate_Immediately_4_99_USD"/>
      <addaction name="actionInfinite_Lives_3_99_USD"/>
      <addaction name="actionApply_Any_Class_You_Want_4_29_USD"/>
      <addaction name="actionAll_Cheats_BUY_NOW_9_99_USD_2"/>
     </widget>
-    <addaction name="separator"/>
-    <addaction name="menuCredits_2"/>
+    <addaction name="actionHelp"/>
+    <addaction name="actionCredits"/>
     <addaction name="menuCheats_2"/>
    </widget>
    <addaction name="menuMenu"/>
@@ -529,71 +520,6 @@ p, li { white-space: pre-wrap; }
     <string>Esc</string>
    </property>
   </action>
-  <action name="actionGraduate_Now_4_99_USD">
-   <property name="text">
-    <string>Graduate Immediately(4.99 USD)</string>
-   </property>
-  </action>
-  <action name="actionInvulnerable_2_99_USD">
-   <property name="text">
-    <string>Invulnerable(2.99 USD)</string>
-   </property>
-  </action>
-  <action name="actionInfinite_Lives_2_99_USD">
-   <property name="text">
-    <string>Infinite Lives(2.99 USD)</string>
-   </property>
-  </action>
-  <action name="actionApply_Every_Classes_You_Want_3_99_USD">
-   <property name="text">
-    <string>Apply Every Classes You Want(3.99 USD)</string>
-   </property>
-  </action>
-  <action name="actionAll_Cheats_BUY_NOW_9_99_USD">
-   <property name="text">
-    <string>All Cheats - BUY NOW(9.99 USD)</string>
-   </property>
-  </action>
-  <action name="actionKrustryee_GUI_Developer">
-   <property name="text">
-    <string>Krustryee(GUI Developer)</string>
-   </property>
-  </action>
-  <action name="actionr3COD3r_Main_Programmer">
-   <property name="text">
-    <string>r3COD3r(Main Programmer)</string>
-   </property>
-  </action>
-  <action name="actionRes_Miserables_Sub_Programmer">
-   <property name="text">
-    <string>Res Miserables(Sub Programmer)</string>
-   </property>
-  </action>
-  <action name="actiondkfhkda">
-   <property name="text">
-    <string>dkfhkda</string>
-   </property>
-  </action>
-  <action name="actionr3CODEr_Main_Programmer">
-   <property name="text">
-    <string>r3CODEr(Main Programmer)</string>
-   </property>
-  </action>
-  <action name="actionKrustryee_GUI_Develpoper">
-   <property name="text">
-    <string>Krustryee(GUI Develpoper)</string>
-   </property>
-  </action>
-  <action name="actionLes_Miserables_Sub_Programmer">
-   <property name="text">
-    <string>Les Miserables(Sub Programmer)</string>
-   </property>
-  </action>
-  <action name="actionGraduate_Immediately_4_99_USD">
-   <property name="text">
-    <string>Graduate Immediately(4.99 USD)</string>
-   </property>
-  </action>
   <action name="actionInfinite_Lives_3_99_USD">
    <property name="text">
     <string>Infinite Lives(3.99 USD)</string>
@@ -607,6 +533,16 @@ p, li { white-space: pre-wrap; }
   <action name="actionAll_Cheats_BUY_NOW_9_99_USD_2">
    <property name="text">
     <string>All Cheats - BUY NOW(9.99 USD)</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="text">
+    <string>Help</string>
+   </property>
+  </action>
+  <action name="actionCredits">
+   <property name="text">
+    <string>Credits</string>
    </property>
   </action>
  </widget>
