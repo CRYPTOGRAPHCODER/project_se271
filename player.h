@@ -12,6 +12,7 @@ private:
   int *equipments;
   int *subjects;
   int life;
+  int life_f;
   int money;
   int credit_acquired_ess;
   int credit_required_ess;
@@ -21,6 +22,10 @@ private:
 public:
   player();
   ~player();
+
+  //name
+  std::string get_name() { return this->name; };
+  void set_name(int value) { this->name = value; };
 
   //stats
   int* get_stats() { return this->stats; };
@@ -36,6 +41,11 @@ public:
   int get_life() { return this->life; };
   void set_life(int value) { this->life = value; };
   void add_life(int value) { this->life += value; };
+
+  //life_f
+  int get_life_f() { return this->life_f; };
+  void set_life_f(int value) { this->life_f = value; };
+  void add_life_f(int value) { this->life_f += value; };
 
   //money
   int get_money() { return this->money; };
