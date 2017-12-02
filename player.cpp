@@ -2,7 +2,7 @@
 player::player(){
   this->name = "Waldo";
   this->stats = new int[STATS];
-  //stats : life / recov / math / science / literature / code
+  //stats : life / recov / science / code / literature
   for (int i = 0; i < STATS; i++){
         this->stats[i] = 5;}
 

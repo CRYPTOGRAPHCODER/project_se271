@@ -61,17 +61,21 @@ void Sugang_Simulator_2017::on_actionLoad_Game_triggered()
 
 void Sugang_Simulator_2017::player_data_update(player pl,int t){
     ui->text_hp->setText(QString::number(pl.get_life())+"/"+QString::number(pl.get_life_f()));
-    ui->text_money->setText("Money     "+QString::number(pl.get_money()));
-    ui->text_name->setText("Name     " +QString::fromStdString(pl.get_name()));
+    ui->text_money->setText("돈     "+QString::number(pl.get_money()));
+    ui->text_score->setText("점수     "+QString::number(pl.get_score()));
+    ui->text_stats->setText("스탯       체력 "+QString::number(pl.get_stats()[0])+"   회복 "+QString::number(pl.get_stats()[1])
+            +"   인기 "+QString::number(pl.get_stats()[2])+"   이학 "+QString::number(pl.get_stats()[3])
+            +"   공학 "+QString::number(pl.get_stats()[4])+"   문학 "+QString::number(pl.get_stats()[5]));
+    ui->text_name->setText("이름     " +QString::fromStdString(pl.get_name()));
     ui->text_credit_mandatory->setText(QString::number(pl.get_credit_required_ess())+"/"+QString::number(pl.get_credit_required_ess()));
     ui->text_credit_selective->setText(QString::number(pl.get_credit_required_chs())+"/"+QString::number(pl.get_credit_required_chs()));
     QString tx = "";
     tx="Year "+QString::number(t/40+1)+", Day "+QString::number((t/4)%10+1)+", ";
     switch(t%4+1){
-      case 1: tx+="Morning";break;
-      case 2: tx+="Afternoon";break;
-      case 3: tx+="Evening";break;
-      case 4: tx+="Night";break;
+      case 1: tx+="아침";break;
+      case 2: tx+="오후";break;
+      case 3: tx+="저녁";break;
+      case 4: tx+="밤";break;
     }
     ui->text_time->setText(tx);
 
@@ -168,38 +172,38 @@ void Sugang_Simulator_2017::update(){
 }
 
 void Sugang_Simulator_2017::on_button1_released(){
-    update();
     g.proceed(1);
+    update();
 }
 void Sugang_Simulator_2017::on_button2_released(){
-    update();
     g.proceed(2);
+    update();
 }
 void Sugang_Simulator_2017::on_button3_released(){
-    update();
     g.proceed(3);
+    update();
 }
 void Sugang_Simulator_2017::on_button4_released(){
-    update();
     g.proceed(4);
+    update();
 }
 void Sugang_Simulator_2017::on_button5_released(){
-    update();
     g.proceed(5);
+    update();
 }
 void Sugang_Simulator_2017::on_button6_released(){
-    update();
     g.proceed(6);
+    update();
 }
 void Sugang_Simulator_2017::on_button7_released(){
-    update();
     g.proceed(7);
+    update();
 }
 void Sugang_Simulator_2017::on_button8_released(){
-    update();
     g.proceed(8);
+    update();
 }
 void Sugang_Simulator_2017::on_button9_released(){
-    update();
     g.proceed(9);
+    update();
 }

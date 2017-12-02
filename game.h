@@ -9,6 +9,8 @@
 
 
 constexpr int MAX_SUBJECT = 100;
+constexpr int DATA_LENGTH = 100;
+constexpr int BUTTON_LENGTH = 9;
 class gameManager{
 private:
     // Global variables that indicates turns and player
@@ -25,14 +27,17 @@ private:
     // String data to print to console
     std::string console;
     // String data to print to buttons
-    std::string button[9];
-
+    std::string button[BUTTON_LENGTH];
+    // data
+    std::string console_data[DATA_LENGTH];
+    std::string button_data[DATA_LENGTH][BUTTON_LENGTH];
 public:
     gameManager();
     ~gameManager();
     void game();
     void game_init();
     void game_turn();
+    void data_set();
 
     void proceed(int input);
     void print_update();
