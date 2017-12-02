@@ -4,16 +4,29 @@
 #include <iostream>
 #include <cstdio>
 #include "windows.h"
-#include "sugang_simulator_2017.h"
+#include "subject.h"
+#include "player.h"
 
 
+constexpr int MAX_SUBJECT = 100;
 class gameManager{
 private:
     // Global variables that indicates turns and player
     // Turn : 10 Days, 4 times
     int turn;
+    // Player variable holds data of player
     player pl;
-    int gamestate = -1;
+    // Determine state of the game
+    // -1, -2 ... game over
+    // 0, start of the game
+    int gamestate = 0;
+    // Define enough number of subjects
+    subject s[MAX_SUBJECT];
+    // String data to print to console
+    std::string console;
+    // String data to print to buttons
+    std::string button[9];
+
 public:
     gameManager();
     ~gameManager();
@@ -22,6 +35,8 @@ public:
     void game_load();
     void game_save();
     void game_turn();
+
+    void proceed(int input);
 
     void store();
     void meet_friend();
@@ -37,9 +52,11 @@ public:
     void calculate_semester();
     void game_over();
 
-    player get_pl(){return pl;}
-    int get_turn(){return turn;}
-    int get_gamestate(){return gamestate;}
+    player get_pl(){return this->pl;}
+    int get_turn(){return this->turn;}
+    int get_gamestate(){return this->gamestate;}
+    std::string get_console(){return this->console;}
+    std::string get_button(int i){return this->button[i];}
 };
 
 

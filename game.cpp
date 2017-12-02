@@ -1,21 +1,32 @@
 #include "game.h"
-#include "subject.h"
-#include "player.h"
-#include "sugang_simulator_2017.h"
-
-
 
 gameManager::gameManager(){
     this->turn = 0;
+    for(int i=0;i<9;i++){
+        this->button[i]="";
+    }
 }
 
 gameManager::~gameManager(){
 
 }
 
+void gameManager::proceed(int input){
+    switch(gamestate){
+    case 0:
+        break;
+    default:
+        break;
+    }
+
+}
+
 void gameManager::game_init(){
   // Initializes game
   turn = 0;
+  this->console = " 합격을 축하드립니다!";
+  this->button[0] = "다음";
+
 }
 
 void gameManager::game(){
@@ -55,28 +66,6 @@ void gameManager::game_turn(){
     }
   }
 }
-/*
-void gameManager::print_game_turn(int turn){
-  // Temp Printing Each Turn;
-  system("cls");
-  printf("\n  Year %d, Day %d ",turn/40+1, (turn/4)%10+1);
-  switch(turn%4+1){
-    case 1: printf("Morning\n");break;
-    case 2: printf("Afternoon\n");break;
-    case 3: printf("Evening\n");break;
-    case 4: printf("Night\n");break;
-  }
-  printf("\n 　　　 　　／⌒ヽ\n⊂二二二（　＾ω＾）二⊃\n　　　　　　|　　　 /\n　　 　　　 （　ヽ/\n　　　　　　 ﾉ>ノ\n　　 三　　レﾚ\n\n");
-  printf("  What you gonna do?\n");
-  printf("  S.Store, F.meet Friend, P.visit Professor \n");
-  printf("  C.go to Club room, G.play Game, A.wander Around \n");
-  printf("  R.Rest, W.Work");
-  if((turn/4)%10+1>7){
-    printf(", X.SUGANG.DGIST.AC.KR ");
-  }
-  printf("\n\n >> ");
-}
-*/
 
 void gameManager::store(){};
 void gameManager::meet_friend(){};

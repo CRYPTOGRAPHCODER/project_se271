@@ -41,19 +41,12 @@ Sugang_Simulator_2017::~Sugang_Simulator_2017()
 
 void Sugang_Simulator_2017::on_actionStart_Game_triggered()
 {
-
-    while(true){
-        this->selection = 0;
-        button_update("Moi?",0);
-
-        while(this->selection==0){
-            this->selection = 1;
-        }
-        if(g.get_gamestate()<0){
-            break;
-        }
+    g.game_init();
+    for(int i=0;i<9;i++){
+        button_update(g.get_button(i),i);
     }
-    console_update("Ay, shit");
+    console_update(g.get_console());
+    player_data_update(g.get_pl(),g.get_turn());
 }
 
 void Sugang_Simulator_2017::on_actionSave_Game_triggered()
@@ -100,6 +93,15 @@ void Sugang_Simulator_2017::console_update(std::string text){
 }
 
 void Sugang_Simulator_2017::button_disable(){
+    ui->button1->setText(QString::fromStdString(""));
+    ui->button2->setText(QString::fromStdString(""));
+    ui->button3->setText(QString::fromStdString(""));
+    ui->button4->setText(QString::fromStdString(""));
+    ui->button5->setText(QString::fromStdString(""));
+    ui->button6->setText(QString::fromStdString(""));
+    ui->button7->setText(QString::fromStdString(""));
+    ui->button8->setText(QString::fromStdString(""));
+    ui->button9->setText(QString::fromStdString(""));
     ui->button1->setEnabled(false);
     ui->button2->setEnabled(false);
     ui->button3->setEnabled(false);
@@ -162,46 +164,46 @@ void Sugang_Simulator_2017::button_update(std::string da, int index){
 }
 
 void Sugang_Simulator_2017::on_button1_released(){
-    this -> selection = 1;
     button_disable();
+    g.proceed(1);
 }
 
 void Sugang_Simulator_2017::on_button2_released(){
-    this -> selection = 2;
     button_disable();
+    g.proceed(2);
 }
 
 void Sugang_Simulator_2017::on_button3_released(){
-    this -> selection = 3;
     button_disable();
+    g.proceed(3);
 }
 
 void Sugang_Simulator_2017::on_button4_released(){
-    this -> selection = 4;
     button_disable();
+    g.proceed(4);
 }
 
 void Sugang_Simulator_2017::on_button5_released(){
-    this -> selection = 5;
     button_disable();
+    g.proceed(5);
 }
 
 void Sugang_Simulator_2017::on_button6_released(){
-    this -> selection = 6;
     button_disable();
+    g.proceed(6);
 }
 
 void Sugang_Simulator_2017::on_button7_released(){
-    this -> selection = 7;
     button_disable();
+    g.proceed(7);
 }
 
 void Sugang_Simulator_2017::on_button8_released(){
-    this -> selection = 8;
     button_disable();
+    g.proceed(8);
 }
 
 void Sugang_Simulator_2017::on_button9_released(){
-    this -> selection = 9;
     button_disable();
+    g.proceed(9);
 }

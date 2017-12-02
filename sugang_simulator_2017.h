@@ -13,17 +13,17 @@ class Sugang_Simulator_2017 : public QMainWindow
 {
     Q_OBJECT
 
-private:
-    Ui::Sugang_Simulator_2017 *ui;
-    gameManager g;
-    int selection;
-
 public:
     explicit Sugang_Simulator_2017(QWidget *parent = 0);
     ~Sugang_Simulator_2017();
     void player_data_update(player pl, int  mturn);
     void console_update(std::string text);
     void button_update(std::string da, int index);
+
+private:
+    Ui::Sugang_Simulator_2017 *ui;
+    gameManager g;
+
 
 
 private slots:
