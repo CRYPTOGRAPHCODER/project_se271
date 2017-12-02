@@ -51,7 +51,7 @@ public:
   //money
   int get_money() { return this->money; };
   void set_money(int value) { this->money = value; };
-  void add_monet(int value) { this->money += value; };
+  void add_money(int value) { this->money += value; };
 
   //credit_acquired_ess
   int get_credit_acquired_ess() { return this->credit_acquired_ess; };
@@ -61,7 +61,6 @@ public:
   //credit_required_ess
   int get_credit_required_ess() { return this->credit_required_ess; };
   void set_credit_required_ess(int value) { this->credit_required_ess = value; };
-  void add_credit_required_ess(int value) { this->credit_required_ess += value; };
 
   //credit_acquired_chs
   int get_credit_acquired_chs() { return this->credit_acquired_chs; };
@@ -71,11 +70,9 @@ public:
   //credit_required_chs
   int get_credit_required_chs() { return this->credit_required_chs; };
   void set_credit_required_chs(int value) { this->credit_required_chs = value; };
-  void add_credit_required_chs(int value) { this->credit_required_chs += value; };
 
   //score
   int get_score() { return this->score; };
-  void set_score(int value) { this->score = value; };
   void add_score(int value) { this->score += value; };
 };
 
