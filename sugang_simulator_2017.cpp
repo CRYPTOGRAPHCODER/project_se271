@@ -1,23 +1,37 @@
 #include "sugang_simulator_2017.h"
 #include "ui_sugang_simulator_2017.h"
-#include "game.h"
 
 
 Sugang_Simulator_2017::Sugang_Simulator_2017(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Sugang_Simulator_2017)
 {
+    //Ui Setup
     ui->setupUi(this);
     ui->prog_time->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
     ui->prog_credit_mandatory->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
     ui->prog_hp->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
     ui->prog_credit_selective->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
-
-    gameManager g;
+    int seletion = 0;
+    //Game Setup
     player_data_update(g.get_pl(),g.get_turn());
-    console_update("ah!");
-    std::string but = "Shit";
-    button_update(but,0);
+    std::string con = "";
+    con += "\n　　　◆◆◆　◆　◆　◆◆◆　◆◆◆　◆◆　　◆　◆◆◆";
+    con += "\n　　　◆　　　◆　◆　◆　　　◆　◆　◆◆　　◆　◆";
+    con += "\n　　　◆◆◆　◆　◆　◆　◆　◆◆◆　◆　◆　◆　◆　◆";
+    con += "\n　　　　　◆　◆　◆　◆　◆　◆　◆　◆　　◆◆　◆　◆";
+    con += "\n　　　◆◆◆　◆◆◆　◆◆◆　◆　◆　◆　　◆◆　◆◆◆";
+    con += "\n                                              Simulator 2017 v1.0";
+    con += "\n\n             \"The Realistic life of undergraudates\"";
+
+    con += "\n\n ▶ 새 게임 - Menu -> Game Start";
+    con += "\n ▶ 게임 로드 - Menu -> Game Load";
+
+    console_update(con);
+    std::string but = "";
+    for(int i=0;i<9;i++){
+        button_update(but,i);
+    }
 }
 
 Sugang_Simulator_2017::~Sugang_Simulator_2017()
@@ -32,7 +46,10 @@ void Sugang_Simulator_2017::on_actionStart_Game_triggered()
 
 void Sugang_Simulator_2017::on_actionSave_Game_triggered()
 {
-    //game_save();
+    player SaveData = g.get_pl();
+    FILE *fp = fopen("Savedata.dat", "wb");
+    fwrite( &SaveData, sizeof(SaveData), 1, fp);
+    fclose(fp);
 }
 
 void Sugang_Simulator_2017::on_actionLoad_Game_triggered()
@@ -67,6 +84,18 @@ void Sugang_Simulator_2017::player_data_update(player pl,int t){
 }
 void Sugang_Simulator_2017::console_update(std::string text){
     ui->textbox_console->setText(QString::fromStdString(text));
+}
+
+void Sugang_Simulator_2017::button_disable(){
+    ui->button1->setEnabled(false);
+    ui->button2->setEnabled(false);
+    ui->button3->setEnabled(false);
+    ui->button4->setEnabled(false);
+    ui->button5->setEnabled(false);
+    ui->button6->setEnabled(false);
+    ui->button7->setEnabled(false);
+    ui->button8->setEnabled(false);
+    ui->button9->setEnabled(false);
 }
 
 void Sugang_Simulator_2017::button_update(std::string da, int index){
@@ -117,4 +146,49 @@ void Sugang_Simulator_2017::button_update(std::string da, int index){
         ui->button9->setText(QString::fromStdString(da));
     break;
     }
+}
+
+void Sugang_Simulator_2017::on_button1_released(){
+    this -> selection = 1;
+    button_disable();
+}
+
+void Sugang_Simulator_2017::on_button2_released(){
+    this -> selection = 2;
+    button_disable();
+}
+
+void Sugang_Simulator_2017::on_button3_released(){
+    this -> selection = 3;
+    button_disable();
+}
+
+void Sugang_Simulator_2017::on_button4_released(){
+    this -> selection = 4;
+    button_disable();
+}
+
+void Sugang_Simulator_2017::on_button5_released(){
+    this -> selection = 5;
+    button_disable();
+}
+
+void Sugang_Simulator_2017::on_button6_released(){
+    this -> selection = 6;
+    button_disable();
+}
+
+void Sugang_Simulator_2017::on_button7_released(){
+    this -> selection = 7;
+    button_disable();
+}
+
+void Sugang_Simulator_2017::on_button8_released(){
+    this -> selection = 8;
+    button_disable();
+}
+
+void Sugang_Simulator_2017::on_button9_released(){
+    this -> selection = 9;
+    button_disable();
 }

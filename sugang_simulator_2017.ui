@@ -320,7 +320,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>460</x>
-      <y>270</y>
+      <y>305</y>
       <width>531</width>
       <height>30</height>
      </rect>
@@ -336,7 +336,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>460</x>
-      <y>450</y>
+      <y>455</y>
       <width>531</width>
       <height>30</height>
      </rect>
@@ -352,7 +352,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>460</x>
-      <y>480</y>
+      <y>485</y>
       <width>531</width>
       <height>30</height>
      </rect>
@@ -368,7 +368,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>460</x>
-      <y>420</y>
+      <y>425</y>
       <width>531</width>
       <height>30</height>
      </rect>
@@ -384,7 +384,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>460</x>
-      <y>360</y>
+      <y>365</y>
       <width>531</width>
       <height>30</height>
      </rect>
@@ -400,7 +400,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>460</x>
-      <y>390</y>
+      <y>395</y>
       <width>531</width>
       <height>30</height>
      </rect>
@@ -416,7 +416,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>460</x>
-      <y>240</y>
+      <y>245</y>
       <width>531</width>
       <height>30</height>
      </rect>
@@ -432,7 +432,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>460</x>
-      <y>300</y>
+      <y>275</y>
       <width>531</width>
       <height>30</height>
      </rect>
@@ -448,7 +448,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>460</x>
-      <y>330</y>
+      <y>335</y>
       <width>531</width>
       <height>30</height>
      </rect>
