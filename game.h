@@ -32,11 +32,13 @@ public:
     ~gameManager();
     void game();
     void game_init();
-    void game_load();
-    void game_save();
     void game_turn();
 
     void proceed(int input);
+    void print_update();
+
+
+
 
     void store();
     void meet_friend();

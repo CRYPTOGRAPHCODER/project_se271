@@ -65,7 +65,7 @@
    <widget class="QLabel" name="text_hp">
     <property name="geometry">
      <rect>
-      <x>375</x>
+      <x>200</x>
       <y>70</y>
       <width>71</width>
       <height>20</height>
@@ -86,7 +86,7 @@
      <rect>
       <x>60</x>
       <y>70</y>
-      <width>311</width>
+      <width>381</width>
       <height>20</height>
      </rect>
     </property>
@@ -193,7 +193,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Required Credit</string>
+     <string>Credit Status</string>
     </property>
    </widget>
    <widget class="QLabel" name="text_score">
@@ -226,7 +226,7 @@
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>230</y>
+      <y>210</y>
       <width>101</width>
       <height>20</height>
      </rect>
@@ -241,8 +241,8 @@
    <widget class="QLabel" name="text_credit_selective">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>230</y>
+      <x>280</x>
+      <y>210</y>
       <width>101</width>
       <height>20</height>
      </rect>
@@ -258,9 +258,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>255</y>
+      <y>245</y>
       <width>441</width>
-      <height>261</height>
+      <height>271</height>
      </rect>
     </property>
     <property name="html">
@@ -457,6 +457,50 @@ p, li { white-space: pre-wrap; }
      <string>Everybody</string>
     </property>
    </widget>
+   <widget class="QLabel" name="text_time_2">
+    <property name="geometry">
+     <rect>
+      <x>830</x>
+      <y>10</y>
+      <width>151</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Time Progress Bar (Year)</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <zorder>text_game</zorder>
+   <zorder>text_time</zorder>
+   <zorder>text_name</zorder>
+   <zorder>prog_hp</zorder>
+   <zorder>text_hp2</zorder>
+   <zorder>text_stats</zorder>
+   <zorder>text_items</zorder>
+   <zorder>prog_credit_selective</zorder>
+   <zorder>prog_credit_mandatory</zorder>
+   <zorder>text_req_credit</zorder>
+   <zorder>text_score</zorder>
+   <zorder>text_money</zorder>
+   <zorder>textbox_memo</zorder>
+   <zorder>prog_time</zorder>
+   <zorder>textbox_console</zorder>
+   <zorder>button3</zorder>
+   <zorder>button8</zorder>
+   <zorder>button9</zorder>
+   <zorder>button7</zorder>
+   <zorder>button5</zorder>
+   <zorder>button6</zorder>
+   <zorder>button1</zorder>
+   <zorder>button2</zorder>
+   <zorder>button4</zorder>
+   <zorder>text_hp</zorder>
+   <zorder>text_credit_selective</zorder>
+   <zorder>text_credit_mandatory</zorder>
+   <zorder>text_time_2</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

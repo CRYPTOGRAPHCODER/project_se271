@@ -5,6 +5,7 @@ gameManager::gameManager(){
     for(int i=0;i<9;i++){
         this->button[i]="";
     }
+    print_update();
 }
 
 gameManager::~gameManager(){
@@ -12,21 +13,34 @@ gameManager::~gameManager(){
 }
 
 void gameManager::proceed(int input){
-    switch(gamestate){
+    switch(this->gamestate){
     case 0:
+        if(input == 1){
+            this->gamestate = 1;
+        }
         break;
     default:
         break;
     }
-
+    print_update();
 }
 
+void gameManager::print_update(){
+    switch (this->gamestate){
+    case 0:
+        this->console = "합격을 축하드립니다!";
+        for(int i=0;i<9;i++){this->button[i]="";}
+        this->button[0] = "다음";
+        break;
+    default:
+        this->console = "에러 페이지입니다";
+        for(int i=0;i<9;i++){this->button[i]="";}
+        break;
+    }
+}
 void gameManager::game_init(){
   // Initializes game
   turn = 0;
-  this->console = " 합격을 축하드립니다!";
-  this->button[0] = "다음";
-
 }
 
 void gameManager::game(){
@@ -78,5 +92,3 @@ void gameManager::work(){};
 void gameManager::sugang(){};
 void gameManager::calculate_semester(){};
 void gameManager::game_over(){};
-void gameManager::game_save(){};
-void gameManager::game_load(){};

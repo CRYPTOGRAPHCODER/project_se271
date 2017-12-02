@@ -15,19 +15,19 @@ Sugang_Simulator_2017::Sugang_Simulator_2017(QWidget *parent) :
 
     //Game Setup
     player_data_update(g.get_pl(),g.get_turn());
-    std::string con = "";
-    con += "\n　　　◆◆◆　◆　◆　◆◆◆　◆◆◆　◆◆　　◆　◆◆◆";
-    con += "\n　　　◆　　　◆　◆　◆　　　◆　◆　◆◆　　◆　◆";
-    con += "\n　　　◆◆◆　◆　◆　◆　◆　◆◆◆　◆　◆　◆　◆　◆";
-    con += "\n　　　　　◆　◆　◆　◆　◆　◆　◆　◆　　◆◆　◆　◆";
-    con += "\n　　　◆◆◆　◆◆◆　◆◆◆　◆　◆　◆　　◆◆　◆◆◆";
-    con += "\n                                              Simulator 2017 v1.0";
-    con += "\n\n             \"The Realistic life of undergraudates\"";
+    std::string console = "";
+    console += "\n　　　◆◆◆　◆　◆　◆◆◆　◆◆◆　◆◆　　◆　◆◆◆";
+    console += "\n　　　◆　　　◆　◆　◆　　　◆　◆　◆◆　　◆　◆";
+    console += "\n　　　◆◆◆　◆　◆　◆　◆　◆◆◆　◆　◆　◆　◆　◆";
+    console += "\n　　　　　◆　◆　◆　◆　◆　◆　◆　◆　　◆◆　◆　◆";
+    console += "\n　　　◆◆◆　◆◆◆　◆◆◆　◆　◆　◆　　◆◆　◆◆◆";
+    console += "\n                                              Simulator 2017 v1.0";
+    console += "\n\n             \"The Realistic life of undergraudates\"";
 
-    con += "\n\n ▶ 새 게임 - Menu -> Game Start";
-    con += "\n ▶ 게임 로드 - Menu -> Game Load";
+    console += "\n\n ▶ 새 게임 - Menu -> Game Start";
+    console += "\n ▶ 게임 로드 - Menu -> Game Load";
 
-    console_update(con);
+    console_update(console);
     std::string but = "";
     for(int i=0;i<9;i++){
         button_update(but,i);
@@ -42,11 +42,7 @@ Sugang_Simulator_2017::~Sugang_Simulator_2017()
 void Sugang_Simulator_2017::on_actionStart_Game_triggered()
 {
     g.game_init();
-    for(int i=0;i<9;i++){
-        button_update(g.get_button(i),i);
-    }
-    console_update(g.get_console());
-    player_data_update(g.get_pl(),g.get_turn());
+    update();
 }
 
 void Sugang_Simulator_2017::on_actionSave_Game_triggered()
@@ -91,7 +87,6 @@ void Sugang_Simulator_2017::player_data_update(player pl,int t){
 void Sugang_Simulator_2017::console_update(std::string text){
     ui->textbox_console->setText(QString::fromStdString(text));
 }
-
 void Sugang_Simulator_2017::button_disable(){
     ui->button1->setText(QString::fromStdString(""));
     ui->button2->setText(QString::fromStdString(""));
@@ -112,7 +107,6 @@ void Sugang_Simulator_2017::button_disable(){
     ui->button8->setEnabled(false);
     ui->button9->setEnabled(false);
 }
-
 void Sugang_Simulator_2017::button_update(std::string da, int index){
     switch(index){
     case 0:
@@ -163,47 +157,49 @@ void Sugang_Simulator_2017::button_update(std::string da, int index){
     }
 }
 
-void Sugang_Simulator_2017::on_button1_released(){
+void Sugang_Simulator_2017::update(){
     button_disable();
+    for(int i=0;i<9;i++){
+        button_update(g.get_button(i),i);
+    }
+    console_update(g.get_console());
+    player_data_update(g.get_pl(),g.get_turn());
+
+}
+
+void Sugang_Simulator_2017::on_button1_released(){
+    update();
     g.proceed(1);
 }
-
 void Sugang_Simulator_2017::on_button2_released(){
-    button_disable();
+    update();
     g.proceed(2);
 }
-
 void Sugang_Simulator_2017::on_button3_released(){
-    button_disable();
+    update();
     g.proceed(3);
 }
-
 void Sugang_Simulator_2017::on_button4_released(){
-    button_disable();
+    update();
     g.proceed(4);
 }
-
 void Sugang_Simulator_2017::on_button5_released(){
-    button_disable();
+    update();
     g.proceed(5);
 }
-
 void Sugang_Simulator_2017::on_button6_released(){
-    button_disable();
+    update();
     g.proceed(6);
 }
-
 void Sugang_Simulator_2017::on_button7_released(){
-    button_disable();
+    update();
     g.proceed(7);
 }
-
 void Sugang_Simulator_2017::on_button8_released(){
-    button_disable();
+    update();
     g.proceed(8);
 }
-
 void Sugang_Simulator_2017::on_button9_released(){
-    button_disable();
+    update();
     g.proceed(9);
 }

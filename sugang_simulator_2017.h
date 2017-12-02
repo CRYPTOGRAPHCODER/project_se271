@@ -19,6 +19,8 @@ public:
     void player_data_update(player pl, int  mturn);
     void console_update(std::string text);
     void button_update(std::string da, int index);
+    void button_disable();
+    void update();
 
 private:
     Ui::Sugang_Simulator_2017 *ui;
@@ -39,7 +41,6 @@ private slots:
     void on_button7_released();
     void on_button8_released();
     void on_button9_released();
-    void button_disable();
 };
 
 
