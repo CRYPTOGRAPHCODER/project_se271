@@ -13,6 +13,7 @@ private:
     // Turn : 10 Days, 4 times
     int turn;
     player pl;
+    int gamestate = -1;
 public:
     gameManager();
     ~gameManager();
@@ -38,6 +39,7 @@ public:
 
     player get_pl(){return pl;}
     int get_turn(){return turn;}
+    int get_gamestate(){return gamestate;}
 };
 
 

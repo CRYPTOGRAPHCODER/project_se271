@@ -12,7 +12,7 @@ Sugang_Simulator_2017::Sugang_Simulator_2017(QWidget *parent) :
     ui->prog_credit_mandatory->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
     ui->prog_hp->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
     ui->prog_credit_selective->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
-    int seletion = 0;
+
     //Game Setup
     player_data_update(g.get_pl(),g.get_turn());
     std::string con = "";
@@ -41,15 +41,28 @@ Sugang_Simulator_2017::~Sugang_Simulator_2017()
 
 void Sugang_Simulator_2017::on_actionStart_Game_triggered()
 {
-    //game_init();
+
+    while(true){
+        this->selection = 0;
+        button_update("Moi?",0);
+
+        while(this->selection==0){
+            this->selection = 1;
+        }
+        if(g.get_gamestate()<0){
+            break;
+        }
+    }
+    console_update("Ay, shit");
 }
 
 void Sugang_Simulator_2017::on_actionSave_Game_triggered()
 {
+    /*
     player SaveData = g.get_pl();
     FILE *fp = fopen("Savedata.dat", "wb");
     fwrite( &SaveData, sizeof(SaveData), 1, fp);
-    fclose(fp);
+    fclose(fp);*/
 }
 
 void Sugang_Simulator_2017::on_actionLoad_Game_triggered()
