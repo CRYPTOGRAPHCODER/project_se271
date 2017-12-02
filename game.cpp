@@ -1,21 +1,8 @@
 #include "game.h"
-void gameManager::data_set(){
-    console_data[0] = "합격을 축하드립니다! 당신은 길고 긴 수험 생활을 끝내고 대학교에 진학하였습니다.";
-    button_data[0][0] = "다음";
-    console_data[1] = "기본적인 조작 방법에 대해서 설명하겠습니다";
-    button_data[1][0] = "다음";
-}
 
 gameManager::gameManager(){
 
     this->turn = 0;
-    for(int i=0;i<DATA_LENGTH;i++){
-        for(int j=0;j<BUTTON_LENGTH;j++){
-            this->button_data[i][j]="";
-        }
-        this->console_data[i]="";
-    }
-    data_set();
     for(int i=0;i<BUTTON_LENGTH;i++){
         this->button[i]="";
     }
@@ -40,8 +27,20 @@ void gameManager::proceed(int input){
 }
 
 void gameManager::print_update(){
-    this->console = console_data[gamestate];
-    for(int i=0;i<9;i++){this->button[i]=button_data[gamestate][i];}
+    switch(this->gamestate){
+    case 0:
+        this->console = d.co_intro01;
+        for(int i=0;i<9;i++){this->button[i]=d.bt_intro01[i];}
+        break;
+    case 1:
+        this->console = d.co_intro02;
+        for(int i=0;i<9;i++){this->button[i]=d.bt_intro01[i];}
+        break;
+    default:
+        this->console = "ERROR";
+        for(int i=0;i<9;i++){this->button[i]="";}
+        break;
+    }
 }
 void gameManager::game_init(){
   // Initializes game

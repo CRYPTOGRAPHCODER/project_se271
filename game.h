@@ -7,10 +7,12 @@
 #include "subject.h"
 #include "player.h"
 
-
 constexpr int MAX_SUBJECT = 100;
 constexpr int DATA_LENGTH = 100;
 constexpr int BUTTON_LENGTH = 9;
+
+
+
 class gameManager{
 private:
     // Global variables that indicates turns and player
@@ -29,15 +31,13 @@ private:
     // String data to print to buttons
     std::string button[BUTTON_LENGTH];
     // data
-    std::string console_data[DATA_LENGTH];
-    std::string button_data[DATA_LENGTH][BUTTON_LENGTH];
+    data d;
 public:
     gameManager();
     ~gameManager();
     void game();
     void game_init();
     void game_turn();
-    void data_set();
 
     void proceed(int input);
     void print_update();
@@ -64,6 +64,15 @@ public:
     int get_gamestate(){return this->gamestate;}
     std::string get_console(){return this->console;}
     std::string get_button(int i){return this->button[i];}
+};
+
+
+struct data
+{
+    std::string co_intro01 = "합격을 축하드립니다! 당신은 길고 긴 수험 생활을 끝내고 대학교에 진학하였습니다.";
+    std::string bt_intro01[9] = {"다음","","","","","","","",""};
+    std::string co_intro02 = "기본적인 조작 방법에 대해서 설명하겠습니다.\n본 게임에서 모든 유효한 조작은 아래 9개의 버튼을 눌러서 사용합니다.";
+    std::string bt_intro02[9] = {"다음","","","","","","","",""};
 };
 
 

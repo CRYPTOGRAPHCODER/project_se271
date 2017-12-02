@@ -67,8 +67,8 @@ void Sugang_Simulator_2017::player_data_update(player pl,int t){
             +"   인기 "+QString::number(pl.get_stats()[2])+"   이학 "+QString::number(pl.get_stats()[3])
             +"   공학 "+QString::number(pl.get_stats()[4])+"   문학 "+QString::number(pl.get_stats()[5]));
     ui->text_name->setText("이름     " +QString::fromStdString(pl.get_name()));
-    ui->text_credit_mandatory->setText(QString::number(pl.get_credit_required_ess())+"/"+QString::number(pl.get_credit_required_ess()));
-    ui->text_credit_selective->setText(QString::number(pl.get_credit_required_chs())+"/"+QString::number(pl.get_credit_required_chs()));
+    ui->text_credit_mandatory->setText("필수 "+QString::number(pl.get_credit_required_ess())+"/"+QString::number(pl.get_credit_required_ess()));
+    ui->text_credit_selective->setText("선택 "+QString::number(pl.get_credit_required_chs())+"/"+QString::number(pl.get_credit_required_chs()));
     QString tx = "";
     tx="Year "+QString::number(t/40+1)+", Day "+QString::number((t/4)%10+1)+", ";
     switch(t%4+1){
