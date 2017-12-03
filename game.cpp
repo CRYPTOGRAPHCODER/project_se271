@@ -1,18 +1,47 @@
 #include "game.h"
-#include "subject.h"
-#include "player.h"
-#include "sugang_simulator_2017.h"
-
-
 
 gameManager::gameManager(){
+
     this->turn = 0;
+    for(int i=0;i<BUTTON_LENGTH;i++){
+        this->button[i]="";
+    }
+    print_update();
 }
 
 gameManager::~gameManager(){
 
 }
 
+void gameManager::proceed(int input){
+    switch(this->gamestate){
+    case 0:
+        if(input == 1){
+            this->gamestate = 1;
+        }
+        break;
+    default:
+        break;
+    }
+    print_update();
+}
+
+void gameManager::print_update(){
+    switch(this->gamestate){
+    case 0:
+        this->console = d.co_intro01;
+        for(int i=0;i<9;i++){this->button[i]=d.bt_intro01[i];}
+        break;
+    case 1:
+        this->console = d.co_intro02;
+        for(int i=0;i<9;i++){this->button[i]=d.bt_intro01[i];}
+        break;
+    default:
+        this->console = "ERROR";
+        for(int i=0;i<9;i++){this->button[i]="";}
+        break;
+    }
+}
 void gameManager::game_init(){
   // Initializes game
   turn = 0;
@@ -55,28 +84,6 @@ void gameManager::game_turn(){
     }
   }
 }
-/*
-void gameManager::print_game_turn(int turn){
-  // Temp Printing Each Turn;
-  system("cls");
-  printf("\n  Year %d, Day %d ",turn/40+1, (turn/4)%10+1);
-  switch(turn%4+1){
-    case 1: printf("Morning\n");break;
-    case 2: printf("Afternoon\n");break;
-    case 3: printf("Evening\n");break;
-    case 4: printf("Night\n");break;
-  }
-  printf("\n 　　　 　　／⌒ヽ\n⊂二二二（　＾ω＾）二⊃\n　　　　　　|　　　 /\n　　 　　　 （　ヽ/\n　　　　　　 ﾉ>ノ\n　　 三　　レﾚ\n\n");
-  printf("  What you gonna do?\n");
-  printf("  S.Store, F.meet Friend, P.visit Professor \n");
-  printf("  C.go to Club room, G.play Game, A.wander Around \n");
-  printf("  R.Rest, W.Work");
-  if((turn/4)%10+1>7){
-    printf(", X.SUGANG.DGIST.AC.KR ");
-  }
-  printf("\n\n >> ");
-}
-*/
 
 void gameManager::store(){};
 void gameManager::meet_friend(){};
@@ -89,5 +96,3 @@ void gameManager::work(){};
 void gameManager::sugang(){};
 void gameManager::calculate_semester(){};
 void gameManager::game_over(){};
-void gameManager::game_save(){};
-void gameManager::game_load(){};

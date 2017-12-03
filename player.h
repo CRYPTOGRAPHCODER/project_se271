@@ -2,7 +2,7 @@
 #define __PLAYER_H__
 #include <string>
 
-constexpr int STATS = 5;
+constexpr int STATS = 6;
 constexpr int EQUIPMENTS_MAX = 10;
 // add compile option -static-libstdc++
 class player{
@@ -26,7 +26,6 @@ public:
   //name
   std::string get_name() { return this->name; };
   void set_name(std::string value) { this->name = value; };
-  void add_name(std::string value) { this->name += value; };
 
   //stats
   int* get_stats() { return this->stats; };
@@ -36,7 +35,6 @@ public:
   //equipments
   int* get_equipments() { return this->equipments; };
   void set_equipments(int value, int i) { equipments[i] = value; };
-  void add_equipments(int value, int i) { equipments[i] += value; };
 
   //life
   int get_life() { return this->life; };

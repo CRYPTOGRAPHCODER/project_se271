@@ -1,23 +1,37 @@
 #include "sugang_simulator_2017.h"
 #include "ui_sugang_simulator_2017.h"
-#include "game.h"
 
 
 Sugang_Simulator_2017::Sugang_Simulator_2017(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Sugang_Simulator_2017)
 {
+    //Ui Setup
     ui->setupUi(this);
     ui->prog_time->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
     ui->prog_credit_mandatory->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
     ui->prog_hp->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
     ui->prog_credit_selective->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
 
-    gameManager g;
+    //Game Setup
     player_data_update(g.get_pl(),g.get_turn());
-    console_update("ah!");
-    std::string but = "Shit";
-    button_update(but,0);
+    std::string console = "";
+    console += "\n　　　◆◆◆　◆　◆　◆◆◆　◆◆◆　◆◆　　◆　◆◆◆";
+    console += "\n　　　◆　　　◆　◆　◆　　　◆　◆　◆◆　　◆　◆";
+    console += "\n　　　◆◆◆　◆　◆　◆　◆　◆◆◆　◆　◆　◆　◆　◆";
+    console += "\n　　　　　◆　◆　◆　◆　◆　◆　◆　◆　　◆◆　◆　◆";
+    console += "\n　　　◆◆◆　◆◆◆　◆◆◆　◆　◆　◆　　◆◆　◆◆◆";
+    console += "\n                                              Simulator 2017 v1.0";
+    console += "\n\n             \"The Realistic life of undergraudates\"";
+
+    console += "\n\n ▶ 새 게임 - Menu -> Game Start";
+    console += "\n ▶ 게임 로드 - Menu -> Game Load";
+
+    console_update(console);
+    std::string but = "";
+    for(int i=0;i<9;i++){
+        button_update(but,i);
+    }
 }
 
 Sugang_Simulator_2017::~Sugang_Simulator_2017()
@@ -27,12 +41,17 @@ Sugang_Simulator_2017::~Sugang_Simulator_2017()
 
 void Sugang_Simulator_2017::on_actionStart_Game_triggered()
 {
-    //game_init();
+    g.game_init();
+    update();
 }
 
 void Sugang_Simulator_2017::on_actionSave_Game_triggered()
 {
-    //game_save();
+    /*
+    player SaveData = g.get_pl();
+    FILE *fp = fopen("Savedata.dat", "wb");
+    fwrite( &SaveData, sizeof(SaveData), 1, fp);
+    fclose(fp);*/
 }
 
 void Sugang_Simulator_2017::on_actionLoad_Game_triggered()
@@ -42,17 +61,21 @@ void Sugang_Simulator_2017::on_actionLoad_Game_triggered()
 
 void Sugang_Simulator_2017::player_data_update(player pl,int t){
     ui->text_hp->setText(QString::number(pl.get_life())+"/"+QString::number(pl.get_life_f()));
-    ui->text_money->setText("Money     "+QString::number(pl.get_money()));
-    ui->text_name->setText("Name     " +QString::fromStdString(pl.get_name()));
-    ui->text_credit_mandatory->setText(QString::number(pl.get_credit_required_ess())+"/"+QString::number(pl.get_credit_required_ess()));
-    ui->text_credit_selective->setText(QString::number(pl.get_credit_required_chs())+"/"+QString::number(pl.get_credit_required_chs()));
+    ui->text_money->setText("돈     "+QString::number(pl.get_money()));
+    ui->text_score->setText("점수     "+QString::number(pl.get_score()));
+    ui->text_stats->setText("스탯       체력 "+QString::number(pl.get_stats()[0])+"   회복 "+QString::number(pl.get_stats()[1])
+            +"   인기 "+QString::number(pl.get_stats()[2])+"   이학 "+QString::number(pl.get_stats()[3])
+            +"   공학 "+QString::number(pl.get_stats()[4])+"   문학 "+QString::number(pl.get_stats()[5]));
+    ui->text_name->setText("이름     " +QString::fromStdString(pl.get_name()));
+    ui->text_credit_mandatory->setText("필수 "+QString::number(pl.get_credit_required_ess())+"/"+QString::number(pl.get_credit_required_ess()));
+    ui->text_credit_selective->setText("선택 "+QString::number(pl.get_credit_required_chs())+"/"+QString::number(pl.get_credit_required_chs()));
     QString tx = "";
     tx="Year "+QString::number(t/40+1)+", Day "+QString::number((t/4)%10+1)+", ";
     switch(t%4+1){
-      case 1: tx+="Morning";break;
-      case 2: tx+="Afternoon";break;
-      case 3: tx+="Evening";break;
-      case 4: tx+="Night";break;
+      case 1: tx+="아침";break;
+      case 2: tx+="오후";break;
+      case 3: tx+="저녁";break;
+      case 4: tx+="밤";break;
     }
     ui->text_time->setText(tx);
 
@@ -68,7 +91,26 @@ void Sugang_Simulator_2017::player_data_update(player pl,int t){
 void Sugang_Simulator_2017::console_update(std::string text){
     ui->textbox_console->setText(QString::fromStdString(text));
 }
-
+void Sugang_Simulator_2017::button_disable(){
+    ui->button1->setText(QString::fromStdString(""));
+    ui->button2->setText(QString::fromStdString(""));
+    ui->button3->setText(QString::fromStdString(""));
+    ui->button4->setText(QString::fromStdString(""));
+    ui->button5->setText(QString::fromStdString(""));
+    ui->button6->setText(QString::fromStdString(""));
+    ui->button7->setText(QString::fromStdString(""));
+    ui->button8->setText(QString::fromStdString(""));
+    ui->button9->setText(QString::fromStdString(""));
+    ui->button1->setEnabled(false);
+    ui->button2->setEnabled(false);
+    ui->button3->setEnabled(false);
+    ui->button4->setEnabled(false);
+    ui->button5->setEnabled(false);
+    ui->button6->setEnabled(false);
+    ui->button7->setEnabled(false);
+    ui->button8->setEnabled(false);
+    ui->button9->setEnabled(false);
+}
 void Sugang_Simulator_2017::button_update(std::string da, int index){
     switch(index){
     case 0:
@@ -117,4 +159,51 @@ void Sugang_Simulator_2017::button_update(std::string da, int index){
         ui->button9->setText(QString::fromStdString(da));
     break;
     }
+}
+
+void Sugang_Simulator_2017::update(){
+    button_disable();
+    for(int i=0;i<9;i++){
+        button_update(g.get_button(i),i);
+    }
+    console_update(g.get_console());
+    player_data_update(g.get_pl(),g.get_turn());
+
+}
+
+void Sugang_Simulator_2017::on_button1_released(){
+    g.proceed(1);
+    update();
+}
+void Sugang_Simulator_2017::on_button2_released(){
+    g.proceed(2);
+    update();
+}
+void Sugang_Simulator_2017::on_button3_released(){
+    g.proceed(3);
+    update();
+}
+void Sugang_Simulator_2017::on_button4_released(){
+    g.proceed(4);
+    update();
+}
+void Sugang_Simulator_2017::on_button5_released(){
+    g.proceed(5);
+    update();
+}
+void Sugang_Simulator_2017::on_button6_released(){
+    g.proceed(6);
+    update();
+}
+void Sugang_Simulator_2017::on_button7_released(){
+    g.proceed(7);
+    update();
+}
+void Sugang_Simulator_2017::on_button8_released(){
+    g.proceed(8);
+    update();
+}
+void Sugang_Simulator_2017::on_button9_released(){
+    g.proceed(9);
+    update();
 }

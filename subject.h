@@ -51,8 +51,8 @@ public:
   void set_category(int value) { this->category = value; };
 
   //workload
-  double get_workload() { return this->score; };
-  void set_workload(double value) { this->score = value; };
+  double get_workload() { return this->workload; };
+  void set_workload(double value) { this->workload = value; };
 };
 
 #endif

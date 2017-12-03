@@ -2,13 +2,13 @@
 player::player(){
   this->name = "Waldo";
   this->stats = new int[STATS];
-  //stats : life / recov / math / science / literature / code
+  //stats : life / recov / science / code / literature
   for (int i = 0; i < STATS; i++){
-        this->stats[i] = i;}
+        this->stats[i] = 5;}
 
   this->equipments = new int[EQUIPMENTS_MAX];
   for (int i = 0; i < EQUIPMENTS_MAX; i++){
-    this->equipments[i] = i;}
+    this->equipments[i] = 0;}
 
   this->life_f = this->stats[0]*100+1000;
   this->life = this->life_f;
