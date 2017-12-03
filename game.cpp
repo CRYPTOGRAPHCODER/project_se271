@@ -3,95 +3,241 @@
 gameManager::gameManager(){
 
     this->turn = 0;
+    generate_subjects(0);
     for(int i=0;i<BUTTON_LENGTH;i++){
         this->button[i]="";
     }
-    print_update();
+    print_update(d.co_intro01,d.bt_intro);
+}
+static std::random_device rd;
+static std::mt19937 rng(rd());
+
+double gameManager::rnd_d(){
+   std::uniform_real_distribution<double> rand(0.0, 1.0);
+   return rand(rng);
+}
+int* get_ia(int lim, int coun) {
+   int* rnd_a = new int[coun];
+   for (int t = 0; t < coun; t++) { rnd_a[t] = 0; };
+   for (int i = 0; i < coun; i++) {
+      rnd_a[i] = (int)(rnd_d()*lim);
+      for (int k = 0; k < i; k++) {
+         if (rnd_a[k] == rnd_a[i]) {
+            rnd_a[i] = 0;
+            i--;
+            break;
+         }
+      }
+   }
+   return rnd_a;
 }
 
 gameManager::~gameManager(){
 
 }
 
+// gamestate
+// 0~19 : intro
+// 20 : Main Turn
+// 21 : Go outside
+// 22 : Connect Internet
+// 23 : Store
+// 24 : Rest at home
+
 void gameManager::proceed(int input){
     switch(this->gamestate){
     case 0:
-        if(input == 1){
-            this->gamestate = 1;
-        }
-        break;
-    default:
-        break;
-    }
-    print_update();
-}
-
-void gameManager::print_update(){
-    switch(this->gamestate){
-    case 0:
-        this->console = d.co_intro01;
-        for(int i=0;i<9;i++){this->button[i]=d.bt_intro01[i];}
+        this->gamestate ++;
+        print_update(d.co_intro02,d.bt_intro);
         break;
     case 1:
-        this->console = d.co_intro02;
-        for(int i=0;i<9;i++){this->button[i]=d.bt_intro01[i];}
+        this->gamestate ++;
+        print_update(d.co_intro03,d.bt_intro);
+        break;
+    case 2:
+        this->gamestate ++;
+        print_update(d.co_intro04,d.bt_intro);
+        break;
+    case 3:
+        this->gamestate = 20;
+        print_update(d.co_main,d.bt_main);
+        break;
+    case 20:
+        this->gamestate += input;
+        switch(input){
+        case 1:
+            print_update(d.co_outside,d.bt_outside);break;
+        case 2:
+            print_update(d.co_internet,d.bt_internet);break;
+        case 3:
+            print_update(d.co_store,d.bt_store);break;
+        case 4:
+            print_update(d.co_rest,d.bt_rest);break;
+        default:
+            break;
+        }
+        break;
+    case 21:
+        switch(input){
+        case 1:
+            meet_friend();
+            this->gamestate = 25;
+            break;
+        case 2:
+            club_room();
+            this->gamestate = 25;
+            break;
+        case 3:
+            this->gamestate = 25;
+            visit_professor();
+            break;
+        case 4:
+            this->gamestate = 25;
+            wander_around();
+            break;
+        case 5:
+            this->gamestate = 25;
+            work();
+            break;
+        case 9:
+            this->gamestate = 20;
+            print_update(d.co_main,d.bt_main);
+            break;
+        default:
+            break;
+        }
+        break;
+    case 22:
+        print_update(d.co_internet,d.bt_internet);
+        break;
+    case 23:
+        print_update(d.co_store,d.bt_store);
+        break;
+    case 24:
+        rest();
+        this->gamestate = 20;
+        print_update(d.co_main,d.bt_main);
+        break;
+    case 25:
+        this->gamestate = 20;
+        print_update(d.co_main,d.bt_main);
         break;
     default:
-        this->console = "ERROR";
-        for(int i=0;i<9;i++){this->button[i]="";}
         break;
     }
 }
-void gameManager::game_init(){
-  // Initializes game
-  turn = 0;
-}
 
-void gameManager::game(){
-  // Initializing game
-  game_init();
-  // Start game
-  // Repeat until player is game over or complete the game
-  while (pl.get_life()>0){
-    // Action of each turn;
-    game_turn();
-
-    // Add 1 turn
-    turn++;
-  }
-  // End of game
-  game_over();
-
-}
-
-void gameManager::game_turn(){
-  // Each Turn
-  bool isKey_vaild = true;
-	while (isKey_vaild) {
-    char menu_select = getchar();
-    while (getchar() != '\n');
-    switch (menu_select) {
-    case 'S': case 's': store(); continue;
-    case 'F': case 'f': meet_friend(); isKey_vaild = false; break;
-    case 'P': case 'p': visit_professor(); isKey_vaild = false; break;
-    case 'C': case 'c': club_room(); isKey_vaild = false; break;
-    case 'G': case 'g': play_game(); isKey_vaild = false; break;
-    case 'A': case 'a': wander_around(); isKey_vaild = false; break;
-    case 'R': case 'r': rest(); isKey_vaild = false; break;
-    case 'W': case 'w': work(); isKey_vaild = false; break;
-    case 'X': case 'x': sugang(); isKey_vaild = false; break;
-    default: continue;
+void gameManager::print_update(std::string co, std::string* bt){
+    this->console = co;
+    for(int i=0;i<BUTTON_LENGTH;i++){this->button[i]=bt[i];}
+    if(co==""){
+        this->console = "ERROR";
+        for(int i=0;i<9;i++){this->button[i]="";}
     }
-  }
+    //Debuging Mode
+    this->console += "\n\n"+std::to_string(gamestate);
+    /*
+    for (int i=0;i<MAX_SUBJECT;i++){
+        this->console += "\nT:"+std::to_string(s[i].timetable[0])+" "+std::to_string(s[i].timetable[1])+" "+std::to_string(s[i].timetable[2]);
+        this->console += " L: "+std::to_string(s[i].attend_limit);
+        this->console += " C: "+std::to_string(s[i].category);
+        this->console += " W:";
+        for(int j=0;j<6;j++){
+            this->console += " "+std::to_string(s[i].workload[j]);
+        }
+        this->console += " N:"+s[i].title+" C:"+std::to_string(s[i].credit);
+
+    }*/
 }
+void gameManager::generate_subjects(double level){
+    for(int i=0;i<MAX_SUBJECT;i++){
+        // set the category
+        if(i<MAX_SUBJECT/3){
+            s[i].category = 0;}
+        else{
+            s[i].category = 1;}
+
+        // set the title of subjects
+        /// set the basic name
+        s[i].title = d.subjects[(int)(rnd_d()*100)];
+        /// add I or II
+        if(rnd_d()>0.7){
+            s[i].title += " II";
+        }
+        else if (rnd_d()>0.9){
+            s[i].title += " III";
+        }
+        // set the credit - amount of timetable
+        s[i].credit = (int)(rnd_d()*3)+1;
+
+        // set the timetables of subjects - based on credit
+        /// Pick the each subject - not perfect since there might be same class - need to be fixed
+        s[i].timetable = rnd_ia(20,s[i].credit);
+
+        // set the attend limit - completely random bet 20~100
+        s[i].attend_limit = (int)(rnd_d()*80+20);
+
+        // set the workload - will effect on health deduction
+        for(int j=0;j<4;j++){
+            s[i].workload[j] = (int)(rnd_d()*2000);
+        }
+
+    }
+}
+
+void gameManager::game_turn_pass(){
+    this->turn ++;
+    this->level *= 1.01;
+}
+
+void gameManager::rest(){
+    pl.add_life(pl.get_stats()[1]*100);
+    game_turn_pass();
+}
+
+void gameManager::meet_friend(){
+    action = 5;
+    act = (int)(rnd_d()*action);
+    //Basic string
+    std::string co ="";
+    co += d.co_meet_friend[act];
+
+    switch(act){
+    case 1:
+        pl.add_life(-this->level*70*(rnd_d()/2+0.75));
+        pl.add_money(-this->level*2000*(rnd_d()/2+0.75));
+        break;
+    case 2:
+        //수강신청 내용을 공개
+        break;
+    case 3:
+        break;
+    case 4:
+		//수강신청 이야기를 하러 가서 정보를 얻었습니다.\n하지만 친구한테 생각지도 못한 빚이 있었다는걸 알게 되었네요. 빚은 갚아야죠? (정보 획득, 소지금 감소)
+        break;
+    case 5:
+		//열심히 대화를 했지만 새로운 정보는 없었습니다. (변화 없음)
+        break;
+    default:
+
+        break;
+    }
+    print_update(co,d.co_meet_friend);
+}
+
+
 
 void gameManager::store(){};
-void gameManager::meet_friend(){};
-void gameManager::visit_professor(){};
+void gameManager::visit_professor(){
+	//교수님의 열정과 의욕이 굉장합니다! FUS RO DAH!(과목의 난이도 대폭 증가)
+	//교수님이 수업만 따라오면 무리없을 거라 하십니다만 믿음이 안 갑니다. 언제나 그렇듯 말이죠. (과목의 난이도 증가)
+	//이런, 교수님이 안 계십니다.(체력 소모)
+	//아직 생각 중이라고 하십니다. (증가, 감소, 변화값 싹다 랜덤)
+	//교수님의 설명과 행동에서 수업의 여유로움을 느꼈습니다. JUST DO IT!! (과목의 난이도 감소)
+	//Objection! 교수님이 전력으로 과목의 어려움을 강하게 부정하셨습니다. 신뢰의 신청이 필요합니다. (과목의 난이도 대폭 감소)
+};
 void gameManager::club_room(){};
-void gameManager::play_game(){};
 void gameManager::wander_around(){};
-void gameManager::rest(){};
 void gameManager::work(){};
 void gameManager::sugang(){};
 void gameManager::calculate_semester(){};
