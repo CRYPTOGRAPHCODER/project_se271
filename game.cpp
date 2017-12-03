@@ -3,7 +3,7 @@
 gameManager::gameManager(){
 
     this->turn = 0;
-    generate_subjects(0);
+    generate_subjects();
     for(int i=0;i<BUTTON_LENGTH;i++){
         this->button[i]="";
     }
@@ -16,7 +16,7 @@ double gameManager::rnd_d(){
    std::uniform_real_distribution<double> rand(0.0, 1.0);
    return rand(rng);
 }
-int* get_ia(int lim, int coun) {
+int* gameManager::rnd_ia(int lim, int coun) {
    int* rnd_a = new int[coun];
    for (int t = 0; t < coun; t++) { rnd_a[t] = 0; };
    for (int i = 0; i < coun; i++) {
@@ -72,7 +72,9 @@ void gameManager::proceed(int input){
         case 3:
             print_update(d.co_store,d.bt_store);break;
         case 4:
-            print_update(d.co_rest,d.bt_rest);break;
+            rest();break;
+        case 5:
+            study();break;
         default:
             break;
         }
@@ -81,26 +83,26 @@ void gameManager::proceed(int input){
         switch(input){
         case 1:
             meet_friend();
-            this->gamestate = 25;
+            this->gamestate = 31;
             break;
         case 2:
             club_room();
-            this->gamestate = 25;
+            this->gamestate = 31;
             break;
         case 3:
-            this->gamestate = 25;
             visit_professor();
+            this->gamestate = 31;
             break;
         case 4:
-            this->gamestate = 25;
             wander_around();
+            this->gamestate = 31;
             break;
         case 5:
-            this->gamestate = 25;
             work();
+            this->gamestate = 31;
             break;
         case 9:
-            this->gamestate = 20;
+            this->gamestate = 31;
             print_update(d.co_main,d.bt_main);
             break;
         default:
@@ -114,11 +116,14 @@ void gameManager::proceed(int input){
         print_update(d.co_store,d.bt_store);
         break;
     case 24:
-        rest();
         this->gamestate = 20;
         print_update(d.co_main,d.bt_main);
         break;
     case 25:
+        this->gamestate = 20;
+        print_update(d.co_main,d.bt_main);
+        break;
+    case 31:
         this->gamestate = 20;
         print_update(d.co_main,d.bt_main);
         break;
@@ -149,7 +154,7 @@ void gameManager::print_update(std::string co, std::string* bt){
 
     }*/
 }
-void gameManager::generate_subjects(double level){
+void gameManager::generate_subjects(){
     for(int i=0;i<MAX_SUBJECT;i++){
         // set the category
         if(i<MAX_SUBJECT/3){
@@ -172,14 +177,17 @@ void gameManager::generate_subjects(double level){
 
         // set the timetables of subjects - based on credit
         /// Pick the each subject - not perfect since there might be same class - need to be fixed
-        s[i].timetable = rnd_ia(20,s[i].credit);
+        int* a = rnd_ia(20,s[i].credit);
 
+        for(int j=0;j<s[i].credit;j++){
+            s[i].timetable[j] = a[j];
+        }
         // set the attend limit - completely random bet 20~100
         s[i].attend_limit = (int)(rnd_d()*80+20);
 
         // set the workload - will effect on health deduction
         for(int j=0;j<4;j++){
-            s[i].workload[j] = (int)(rnd_d()*2000);
+            s[i].workload[j] = (int)(rnd_d()*1500*this->level);
         }
 
     }
@@ -187,25 +195,21 @@ void gameManager::generate_subjects(double level){
 
 void gameManager::game_turn_pass(){
     this->turn ++;
-    this->level *= 1.01;
-}
-
-void gameManager::rest(){
-    pl.add_life(pl.get_stats()[1]*100);
-    game_turn_pass();
+    this->level *= 1.009;
+    pl.set_life_f(pl.get_stats()[0]*100+1000);
 }
 
 void gameManager::meet_friend(){
-    action = 5;
-    act = (int)(rnd_d()*action);
+    int action = 5;
+    int act = (int)(rnd_d()*action);
     //Basic string
     std::string co ="";
     co += d.co_meet_friend[act];
 
     switch(act){
     case 1:
-        pl.add_life(-this->level*70*(rnd_d()/2+0.75));
-        pl.add_money(-this->level*2000*(rnd_d()/2+0.75));
+        pl.add_life(-this->level*700*(rnd_d()/4+7/8));
+        pl.add_money(-this->level*20000*(rnd_d()/2+0.75));
         break;
     case 2:
         //수강신청 내용을 공개
@@ -222,14 +226,45 @@ void gameManager::meet_friend(){
     }
     print_update(co,d.co_meet_friend);
 }
+void gameManager::work(){
+    std::string co ="";
+    co += d.co_work;
+    int l = (int)(-this->level*200*(rnd_d()/2+0.75));
+    pl.add_life(l);
+    int m = (int)(+this->level*50000*(rnd_d()/2+0.75));
+    pl.add_money(m);
+    co += "\n";
+    co += "\n"+d.msg_money+std::to_string(m)+d.msg_add;
+    co += "\n"+d.msg_life+std::to_string(-l)+d.msg_sub;
+    print_update(co,d.bt_work);
+}
 
+void gameManager::rest(){
+    print_update(d.co_rest,d.bt_rest);
+    pl.add_life((int)(pl.get_stats()[1]*100*(rnd_d()/2+0.75)));
+    game_turn_pass();
+}
 
+void gameManager::study(){
+    std::string co ="";
+    co += d.co_study[(int)(rnd_d()*5)];
+    int l = (int)(-this->level*150*(rnd_d()/2+0.75));
+    int s = (int)(rnd_d()*1.5+1);
+    int w = (int)(rnd_d()*6);
+    pl.add_life(l);
+    pl.add_stats(s,w);
+    co += "\n";
+    co += "\n"+d.msg_stats[w]+std::to_string(s)+d.msg_add;
+    co += "\n"+d.msg_life+std::to_string(-l)+d.msg_sub;
+    print_update(co,d.bt_study);
+    game_turn_pass();
+}
 
 void gameManager::store(){};
 void gameManager::visit_professor(){};
 void gameManager::club_room(){};
 void gameManager::wander_around(){};
-void gameManager::work(){};
+
 void gameManager::sugang(){};
 void gameManager::calculate_semester(){};
 void gameManager::game_over(){};
