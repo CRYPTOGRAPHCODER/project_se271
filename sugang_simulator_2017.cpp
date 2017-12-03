@@ -41,7 +41,6 @@ Sugang_Simulator_2017::~Sugang_Simulator_2017()
 
 void Sugang_Simulator_2017::on_actionStart_Game_triggered()
 {
-    g.game_init();
     update();
 }
 

@@ -11,7 +11,7 @@ player::player(){
     this->equipments[i] = 0;}
 
   this->life_f = this->stats[0]*100+1000;
-  this->life = this->life_f;
+  this->life = this->life_f/2;
 
   this->money = 0;
 

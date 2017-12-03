@@ -39,7 +39,7 @@ public:
   //life
   int get_life() { return this->life; };
   void set_life(int value) { this->life = value; };
-  void add_life(int value) { this->life += value; };
+  void add_life(int value) { this->life += value; if(this->life>this->life_f){life=life_f;} };
 
   //life_f
   int get_life_f() { return this->life_f; };

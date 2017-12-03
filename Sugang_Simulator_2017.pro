@@ -27,14 +27,12 @@ SOURCES += \
         main.cpp \
         sugang_simulator_2017.cpp \
     game.cpp \
-    player.cpp \
-    subject.cpp
+    player.cpp
 
 HEADERS += \
         sugang_simulator_2017.h \
     game.h \
-    player.h \
-    subject.h
+    player.h
 
 FORMS += \
         sugang_simulator_2017.ui
