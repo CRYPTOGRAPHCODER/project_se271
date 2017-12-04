@@ -25,15 +25,9 @@ public:
   int category;
 };
 
+
 struct data
 {
-    std::string co_ = "";
-    std::string bt_[9] = {"","","","","","","","",""};
-
-    std::string co_init = "-";
-    std::string bt_init[9] = {"다음","","","","","","","",""};
-
-
     std::string co_intro01 = "합격을 축하드립니다! 당신은 길고 긴 수험 생활을 끝내고 대학교에 진학하였습니다.";
     std::string bt_intro[9] = {"다음","","","","","","","",""};
     std::string co_intro02 = "기본적인 조작 방법에 대해서 설명하겠습니다.\n본 게임에서 모든 유효한 조작은 아래 9개의 버튼을 눌러서 사용합니다.";
@@ -143,11 +137,11 @@ public:
 
     player get_pl(){return this->pl;}
     int get_turn(){return this->turn;}
+
     int get_gamestate(){return this->gamestate;}
     std::string get_console(){return this->console;}
     std::string get_button(int i){return this->button[i];}
 };
-
 
 
 #endif

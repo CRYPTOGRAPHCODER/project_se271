@@ -13,6 +13,7 @@ Sugang_Simulator_2017::Sugang_Simulator_2017(QWidget *parent) :
     ui->prog_hp->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
     ui->prog_credit_selective->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
 
+
     //Game Setup
     player_data_update(g.get_pl(),g.get_turn());
     std::string console = "";
@@ -28,6 +29,24 @@ Sugang_Simulator_2017::Sugang_Simulator_2017(QWidget *parent) :
     console += "\n ▶ 게임 로드 - Menu -> Game Load";
 
     console_update(console);
+
+    int seletion = 0;
+    //Game Setup
+    player_data_update(g.get_pl(),g.get_turn());
+    std::string con = "";
+    con += "\n　　　◆◆◆　◆　◆　◆◆◆　◆◆◆　◆◆　　◆　◆◆◆";
+    con += "\n　　　◆　　　◆　◆　◆　　　◆　◆　◆◆　　◆　◆";
+    con += "\n　　　◆◆◆　◆　◆　◆　◆　◆◆◆　◆　◆　◆　◆　◆";
+    con += "\n　　　　　◆　◆　◆　◆　◆　◆　◆　◆　　◆◆　◆　◆";
+    con += "\n　　　◆◆◆　◆◆◆　◆◆◆　◆　◆　◆　　◆◆　◆◆◆";
+    con += "\n                                              Simulator 2017 v1.0";
+    con += "\n\n             \"The Realistic life of undergraudates\"";
+
+    con += "\n\n ▶ 새 게임 - Menu -> Game Start";
+    con += "\n ▶ 게임 로드 - Menu -> Game Load";
+
+    console_update(con);
+
     std::string but = "";
     for(int i=0;i<9;i++){
         button_update(but,i);
@@ -46,16 +65,29 @@ void Sugang_Simulator_2017::on_actionStart_Game_triggered()
 
 void Sugang_Simulator_2017::on_actionSave_Game_triggered()
 {
-    /*
+    ui->textbox_memo->setText("Saving...");
     player SaveData = g.get_pl();
-    FILE *fp = fopen("Savedata.dat", "wb");
-    fwrite( &SaveData, sizeof(SaveData), 1, fp);
-    fclose(fp);*/
+    ofstream fout("Savedata.dat", ios_base::out|ios_base::binary);
+    fout.write((char*)&SaveData, sizeof(SaveData));
+    fout.close();
 }
 
 void Sugang_Simulator_2017::on_actionLoad_Game_triggered()
 {
-    //game_load();
+    player LoadData;
+    ifstream fin("Savedata.dat", ios_base::in | ios_base::binary);
+    if(fin.is_open() == false){
+        ui->textbox_memo->setText("No Saved File");
+    }
+    else{
+        fin.read((char*)&LoadData, sizeof(LoadData));
+        fin.close();
+        if(LoadData.test == 1){
+            ui->textbox_memo->setText("Success");
+        }
+
+    }
+
 }
 
 void Sugang_Simulator_2017::player_data_update(player pl,int t){
@@ -90,6 +122,7 @@ void Sugang_Simulator_2017::player_data_update(player pl,int t){
 void Sugang_Simulator_2017::console_update(std::string text){
     ui->textbox_console->setText(QString::fromStdString(text));
 }
+
 void Sugang_Simulator_2017::button_disable(){
     ui->button1->setText(QString::fromStdString(""));
     ui->button2->setText(QString::fromStdString(""));
@@ -100,16 +133,9 @@ void Sugang_Simulator_2017::button_disable(){
     ui->button7->setText(QString::fromStdString(""));
     ui->button8->setText(QString::fromStdString(""));
     ui->button9->setText(QString::fromStdString(""));
-    ui->button1->setEnabled(false);
-    ui->button2->setEnabled(false);
-    ui->button3->setEnabled(false);
-    ui->button4->setEnabled(false);
-    ui->button5->setEnabled(false);
-    ui->button6->setEnabled(false);
-    ui->button7->setEnabled(false);
-    ui->button8->setEnabled(false);
-    ui->button9->setEnabled(false);
 }
+
+
 void Sugang_Simulator_2017::button_update(std::string da, int index){
     switch(index){
     case 0:
@@ -159,6 +185,7 @@ void Sugang_Simulator_2017::button_update(std::string da, int index){
     break;
     }
 }
+
 
 void Sugang_Simulator_2017::update(){
     button_disable();
