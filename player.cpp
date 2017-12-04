@@ -23,5 +23,4 @@ player::player(){
   this->score = 0;
 }
 player::~player(){
-
 }

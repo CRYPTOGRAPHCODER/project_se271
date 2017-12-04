@@ -5,6 +5,10 @@
 #include <string>
 #include "player.h"
 #include "game.h"
+#include <fstream>
+#include <iostream>
+
+using namespace std;
 
 namespace Ui {
 class Sugang_Simulator_2017;
@@ -12,6 +16,7 @@ class Sugang_Simulator_2017;
 class Sugang_Simulator_2017 : public QMainWindow
 {
     Q_OBJECT
+
 
 public:
     explicit Sugang_Simulator_2017(QWidget *parent = 0);
@@ -28,6 +33,10 @@ private:
 
 
 
+
+    int selection;
+
+
 private slots:
     void on_actionStart_Game_triggered();
     void on_actionSave_Game_triggered();
@@ -41,6 +50,8 @@ private slots:
     void on_button7_released();
     void on_button8_released();
     void on_button9_released();
+
+
 };
 
 

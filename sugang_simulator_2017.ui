@@ -536,6 +536,7 @@ p, li { white-space: pre-wrap; }
     <addaction name="actionHelp"/>
     <addaction name="actionCredits"/>
     <addaction name="menuCheats_2"/>
+    <addaction name="actionBug_Report"/>
    </widget>
    <addaction name="menuMenu"/>
    <addaction name="menuMiscellanous"/>
@@ -603,6 +604,11 @@ p, li { white-space: pre-wrap; }
   <action name="actionCredits">
    <property name="text">
     <string>Credits</string>
+   </property>
+  </action>
+  <action name="actionBug_Report">
+   <property name="text">
+    <string>Bug Report</string>
    </property>
   </action>
  </widget>
