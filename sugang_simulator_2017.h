@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <string>
+#include <fstream>
+#include <iostream>
 #include "player.h"
 #include "game.h"
 

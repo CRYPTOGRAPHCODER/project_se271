@@ -43,20 +43,31 @@ void Sugang_Simulator_2017::on_actionStart_Game_triggered()
 {
     update();
 }
-
 void Sugang_Simulator_2017::on_actionSave_Game_triggered()
 {
-    /*
+    ui->textbox_console->setText("Saving...");
     player SaveData = g.get_pl();
-    FILE *fp = fopen("Savedata.dat", "wb");
-    fwrite( &SaveData, sizeof(SaveData), 1, fp);
-    fclose(fp);*/
+    std::ofstream fout("Savedata.dat", std::ios_base::out|std::ios_base::binary);
+    fout.write((char*)&SaveData, sizeof(SaveData));
+    fout.close();
 }
 
 void Sugang_Simulator_2017::on_actionLoad_Game_triggered()
 {
-    //game_load();
+    gameManager LoadData;
+    std::ifstream fin("Savedata.dat", std::ios_base::in | std::ios_base::binary);
+    if(fin.is_open() == false){
+        ui->textbox_console->setText("No Saved File");
+    }
+    else{
+        fin.read((char*)&LoadData, sizeof(LoadData));
+        fin.close();
+        ui->textbox_console->setText("Loading Complete");
+    }
+    g = LoadData;
+    update();
 }
+
 
 void Sugang_Simulator_2017::player_data_update(player pl,int t){
     ui->text_hp->setText(QString::number(pl.get_life())+"/"+QString::number(pl.get_life_f()));
