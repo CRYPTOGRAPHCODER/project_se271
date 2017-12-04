@@ -1,4 +1,4 @@
-#include "sugang_simulator_2017.h"
+﻿#include "sugang_simulator_2017.h"
 #include "ui_sugang_simulator_2017.h"
 
 
@@ -90,6 +90,7 @@ void Sugang_Simulator_2017::on_actionLoad_Game_triggered()
     player g = LoadData.get_pl();
 
 }
+
 
 void Sugang_Simulator_2017::player_data_update(player pl,int t){
     ui->text_hp->setText(QString::number(pl.get_life())+"/"+QString::number(pl.get_life_f()));
