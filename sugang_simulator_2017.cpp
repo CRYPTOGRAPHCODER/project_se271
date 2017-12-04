@@ -83,10 +83,11 @@ void Sugang_Simulator_2017::on_actionLoad_Game_triggered()
         fin.read((char*)&LoadData, sizeof(LoadData));
         fin.close();
         if(LoadData.test == 1){
-            ui->textbox_memo->setText("Success");
+            ui->textbox_memo->setText("Loading Complete");
         }
 
     }
+    player g = LoadData.get_pl();
 
 }
 
