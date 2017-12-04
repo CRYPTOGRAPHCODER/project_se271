@@ -20,6 +20,7 @@ private:
   int credit_required_chs;
   int score;
 public:
+  int test = 1;
   player();
   ~player();
 
