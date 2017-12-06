@@ -2,13 +2,15 @@
 
 gameManager::gameManager(){
 
-    this->turn = 0;
+    this->turn = 32;
+    this->subject_number = 40;
     generate_subjects();
     for(int i=0;i<BUTTON_LENGTH;i++){
         this->button[i]="";
     }
     print_update(d.co_intro01,d.bt_intro);
 }
+
 static std::random_device rd;
 static std::mt19937 rng(rd());
 
@@ -68,7 +70,7 @@ void gameManager::proceed(int input){
         case 1:
             print_update(d.co_outside,d.bt_outside);break;
         case 2:
-            print_update(d.co_internet,d.bt_internet);break;
+            print_update(d.co_sugang,d.bt_sugang);break;
         case 3:
             print_update(d.co_store,d.bt_store);break;
         case 4:
@@ -102,7 +104,7 @@ void gameManager::proceed(int input){
             this->gamestate = 31;
             break;
         case 9:
-            this->gamestate = 31;
+            this->gamestate = 20;
             print_update(d.co_main,d.bt_main);
             break;
         default:
@@ -110,24 +112,35 @@ void gameManager::proceed(int input){
         }
         break;
     case 22:
-        print_update(d.co_internet,d.bt_internet);
+        switch(input){
+        case 1:
+            //수강신청
+            if((this->turn/4)%10<=7){
+                this->gamestate = 20;
+                print_update(d.co_main, d.bt_main);
+            }
+            else{
+                this->gamestate = 101;
+                print_sugang_apply(1);
+            }
+            break;
+        case 2:
+            this->gamestate = 100;
+            print_sugang_data();
+            break;
+        case 9:
+            this->gamestate = 20;
+            print_update(d.co_main,d.bt_main);
+            break;
+        }
         break;
     case 23:
         print_update(d.co_store,d.bt_store);
         break;
-    case 24:
-        this->gamestate = 20;
-        print_update(d.co_main,d.bt_main);
-        break;
-    case 25:
-        this->gamestate = 20;
-        print_update(d.co_main,d.bt_main);
-        break;
-    case 31:
-        this->gamestate = 20;
-        print_update(d.co_main,d.bt_main);
-        break;
+    case 24: case 25: case 31: case 100:
     default:
+        this->gamestate = 20;
+        print_update(d.co_main,d.bt_main);
         break;
     }
 }
@@ -142,7 +155,7 @@ void gameManager::print_update(std::string co, std::string* bt){
     //Debuging Mode
     this->console += "\n\n"+std::to_string(gamestate);
     /*
-    for (int i=0;i<MAX_SUBJECT;i++){
+    for (int i=0;i<subject_number;i++){
         this->console += "\nT:"+std::to_string(s[i].timetable[0])+" "+std::to_string(s[i].timetable[1])+" "+std::to_string(s[i].timetable[2]);
         this->console += " L: "+std::to_string(s[i].attend_limit);
         this->console += " C: "+std::to_string(s[i].category);
@@ -155,22 +168,44 @@ void gameManager::print_update(std::string co, std::string* bt){
     }*/
 }
 void gameManager::generate_subjects(){
-    for(int i=0;i<MAX_SUBJECT;i++){
+    for(int i=0;i<subject_number;i++){
         // set the category
-        if(i<MAX_SUBJECT/3){
+        if(i<subject_number/3){
             s[i].category = 0;}
         else{
             s[i].category = 1;}
+
+        double rol = rnd_d();
+
+        if(rol>0.7){
+            s[i].level = 1;
+        }
+        else if(rol>0.4){
+            s[i].level = 2;
+        }
+        else if(rol>0.2){
+            s[i].level = 3;
+        }
+        else if(rol>0.0){
+            s[i].level = 4;
+        }
+
 
         // set the title of subjects
         /// set the basic name
         s[i].title = d.subjects[(int)(rnd_d()*100)];
         /// add I or II
-        if(rnd_d()>0.7){
+        if(s[i].level == 2){
             s[i].title += " II";
         }
-        else if (rnd_d()>0.9){
+        if(s[i].level == 3){
             s[i].title += " III";
+        }
+        if(s[i].level == 4){
+            s[i].title += " IV";
+        }
+        if(s[i].level == 5){
+            s[i].title += " V";
         }
         // set the credit - amount of timetable
         s[i].credit = (int)(rnd_d()*3)+1;
@@ -184,13 +219,49 @@ void gameManager::generate_subjects(){
         }
         // set the attend limit - completely random bet 20~100
         s[i].attend_limit = (int)(rnd_d()*80+20);
-
         // set the workload - will effect on health deduction
+        int basic_workload = 1500;
+
         for(int j=0;j<4;j++){
-            s[i].workload[j] = (int)(rnd_d()*1500*this->level);
+            s[i].workload[j] = (int)(rnd_d()*basic_workload*this->level);
         }
+        s[i].attend_hope = (int)(s[i].attend_limit * (rnd_d()*0.4+0.8));
 
     }
+}
+
+void gameManager::print_sugang_data(){
+    std::string c;
+    c+=d.co_s_watch;
+    c+="\n과목명\t\t\t시간\t수강희망/수강제한  분류";
+
+    for (int i=0;i<subject_number;i++){
+        c+="\n";
+        std::string m = s[i].title;
+        c+=s[i].title;
+        for(int i=m.length();i<45;i++){
+            c+=" ";
+        }
+        c+="\t";
+
+        for(int j=0;j<s[i].credit;j++){
+            c+=d.sb_day[s[i].timetable[j]/4]+d.sb_time[s[i].timetable[j]%4]+" ";
+        }
+        for(int j=s[i].credit;j<=2;j++){
+            c+="　　　 ";
+        }
+        std::string tmp = std::to_string(s[i].attend_hope)+"/"+std::to_string(s[i].attend_limit);
+        c+=tmp;
+        for(int i = tmp.length(); i < 10; i++){
+            c+=" ";
+        }
+        c+=d.sb_category[s[i].category];
+    }
+    print_update(c,d.bt_s_watch);
+}
+
+void gameManager::print_sugang_apply(int index){
+
 }
 
 void gameManager::game_turn_pass(){

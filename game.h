@@ -16,12 +16,13 @@ constexpr int BUTTON_LENGTH = 9;
 struct subject{
 public:
   std::string title;
+  int level = 1;
   int timetable[3] = {0,0,0};
   int credit;
   int workload[4] = {0,0,0,0};
-  int attend_limit;
+  int attend_limit = 0;
   int attend_hope;
-  int attend_people;
+  int attend_people = 0;
   int category;
 };
 
@@ -44,11 +45,11 @@ struct data
     std::string bt_intro04[9] = {"다음","","","","","","","",""};
 
     std::string co_main = "어디로 갈까요?";
-    std::string bt_main[9] = {"밖으로 나가기","컴퓨터 키기","상점으로 가기","방에서 휴식","공부하기","","","",""};
+    std::string bt_main[9] = {"밖으로 나가기","수강신청","상점으로 가기","방에서 휴식","공부하기","","","",""};
     std::string co_outside = "밖으로 나왔습니다. 어디로 갈까요?";
     std::string bt_outside[9] = {"친구를 만나기","동아리방 가기","교수님 만나기","주변을 정처없이 돌아다니기","일하러 가기","","","","집으로 돌아가기"};
-    std::string co_internet = "컴퓨터를 켰습니다. 어디에 들어갈까요?";
-    std::string bt_internet[9] = {"수강신청!","학부생 홈페이지","페이스북","학부생 커뮤니티","","","","","컴퓨터 끄기"};
+    std::string co_sugang = "수강신청 페이지에 들어왔습니다.";
+    std::string bt_sugang[9] = {"로그인(8일 이후부터 로그인 가능)","과목 정보 보기","","","","","","","컴퓨터 끄기"};
     std::string co_store = "상점에 도착했습니다.";
     std::string bt_store[9] = {"","","","","","","","",""};
     std::string co_rest = "집에서 휴식합니다. 체력을 회복합니다.";
@@ -70,6 +71,18 @@ struct data
                                "재밌게 공부했습니다."};
     std::string bt_study[9] = {"다음","","","","","","","",""};
 
+    std::string co_s_watch = "이번 학기의 수강 가능한 과목 목록입니다.";
+    std::string bt_s_watch[9] = {"","","","","","","","","돌아가기"};
+
+    std::string co_s_apply = "해당 과목에 해당하는 버튼을 눌러 주세요.";
+    std::string bt_s_apply[9] = {"","","","","","","다음","이전","돌아가기"};
+
+    std::string sb_day[5] = {"월","화","수","목","금"};
+    std::string sb_time[4] = {"아침","점심","오후","저녁"};
+    std::string sb_category[2] = {"교선필수","교선선택"};
+
+
+    // Stat changing message
     std::string msg_add = "만큼 증가했습니다.";
     std::string msg_sub = "만큼 감소했습니다.";
     std::string msg_money = "돈이 ";
@@ -96,8 +109,11 @@ private:
     // -1, -2 ... game over
     // 0, start of the game
     int gamestate = 0;
+
     // Define enough number of subjects
     subject s[MAX_SUBJECT];
+    // Number of subject
+    int subject_number;
     // String data to print to console
     std::string console;
     // String data to print to buttons
@@ -119,6 +135,10 @@ public:
 
     // Generates subjects for each semester
     void generate_subjects();
+
+    // print_update sugang data
+    void print_sugang_data();
+    void print_sugang_apply(int index);
 
     // Outside actions
     void meet_friend();

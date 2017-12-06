@@ -97,6 +97,13 @@ void Sugang_Simulator_2017::player_data_update(player pl,int t){
     ui->prog_credit_mandatory->setValue(pl.get_credit_acquired_ess());
     ui->prog_credit_selective->setMaximum(pl.get_credit_required_chs());
     ui->prog_credit_selective->setValue(pl.get_credit_acquired_chs());
+
+    if(t/4%10>=7){
+        ui->prog_time->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #dd3636; width: 1px;}");
+    }
+    if(pl.get_life()<pl.get_life_f()*0.3){
+        ui->prog_hp->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #dd3636; width: 1px;}");
+    }
 }
 void Sugang_Simulator_2017::console_update(std::string text){
     ui->textbox_console->setText(QString::fromStdString(text));
