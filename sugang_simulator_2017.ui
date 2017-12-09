@@ -25,7 +25,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>60</width>
+      <width>81</width>
       <height>20</height>
      </rect>
     </property>
@@ -36,9 +36,9 @@
    <widget class="QLabel" name="text_time">
     <property name="geometry">
      <rect>
-      <x>300</x>
+      <x>289</x>
       <y>10</y>
-      <width>140</width>
+      <width>151</width>
       <height>20</height>
      </rect>
     </property>
@@ -186,14 +186,17 @@
    <widget class="QLabel" name="text_req_credit">
     <property name="geometry">
      <rect>
-      <x>190</x>
+      <x>180</x>
       <y>190</y>
-      <width>61</width>
+      <width>91</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
      <string>학점 현황</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="text_score">
@@ -460,9 +463,9 @@ p, li { white-space: pre-wrap; }
    <widget class="QLabel" name="text_time_2">
     <property name="geometry">
      <rect>
-      <x>830</x>
+      <x>780</x>
       <y>10</y>
-      <width>151</width>
+      <width>201</width>
       <height>20</height>
      </rect>
     </property>

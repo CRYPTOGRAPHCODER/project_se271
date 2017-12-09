@@ -8,6 +8,11 @@ Sugang_Simulator_2017::Sugang_Simulator_2017(QWidget *parent) :
 {
     //Ui Setup
     ui->setupUi(this);
+    /*
+    QFont font("굴림");
+    font.setStyleHint(QFont::Monospace);
+    QApplication::setFont(font);
+    */
     ui->prog_time->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
     ui->prog_credit_mandatory->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
     ui->prog_hp->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
@@ -16,6 +21,16 @@ Sugang_Simulator_2017::Sugang_Simulator_2017(QWidget *parent) :
     //Game Setup
     player_data_update(g.get_pl(),g.get_turn());
     std::string console = "";
+    /*
+    console += "\n    .d8888b.  888     888  .d8888b.         d8888 888b    888  .d8888b.  ";
+    console += "\n   d88P  Y88b 888     888 d88P  Y88b       d88888 8888b   888 d88P  Y88b ";
+    console += "\n   Y88b.      888     888 888    888      d88P888 88888b  888 888    888 ";
+    console += "\n    'Y888b.   888     888 888            d88P 888 888Y88b 888 888        ";
+    console += "\n       'Y88b. 888     888 888  88888    d88P  888 888 Y88b888 888  88888 ";
+    console += "\n         '888 888     888 888    888   d88P   888 888  Y88888 888    888 ";
+    console += "\n   Y88b  d88P Y88b. .d88P Y88b  d88P  d8888888888 888   Y8888 Y88b  d88P ";
+    console += "\n    'Y8888P'   'Y88888P'   'Y8888P88 d88P     888 888    Y888  'Y8888P88 ";
+    */
     console += "\n　　　◆◆◆　◆　◆　◆◆◆　◆◆◆　◆◆　　◆　◆◆◆";
     console += "\n　　　◆　　　◆　◆　◆　　　◆　◆　◆◆　　◆　◆";
     console += "\n　　　◆◆◆　◆　◆　◆　◆　◆◆◆　◆　◆　◆　◆　◆";
@@ -80,8 +95,8 @@ void Sugang_Simulator_2017::player_data_update(player pl,int t){
     ui->text_money->setText("돈     "+QString::number(pl.get_money()));
     ui->text_score->setText("점수     "+QString::number(pl.get_score()));
     ui->text_stats->setText("스탯       체력 "+QString::number(pl.get_stats()[0])+"   회복 "+QString::number(pl.get_stats()[1])
-            +"   인기 "+QString::number(pl.get_stats()[2])+"   이학 "+QString::number(pl.get_stats()[3])
-            +"   공학 "+QString::number(pl.get_stats()[4])+"   문학 "+QString::number(pl.get_stats()[5]));
+            +"   이학 "+QString::number(pl.get_stats()[2])+"   공학 "+QString::number(pl.get_stats()[3])
+            +"   문학 "+QString::number(pl.get_stats()[4])+"   사회 "+QString::number(pl.get_stats()[5]));
     ui->text_name->setText("이름     " +QString::fromStdString(pl.get_name()));
     ui->text_credit_mandatory->setText("필수 "+QString::number(pl.get_credit_required_ess())+"/"+QString::number(pl.get_credit_required_ess()));
     ui->text_credit_selective->setText("선택 "+QString::number(pl.get_credit_required_chs())+"/"+QString::number(pl.get_credit_required_chs()));
@@ -93,6 +108,7 @@ void Sugang_Simulator_2017::player_data_update(player pl,int t){
       case 3: tx+="저녁";break;
       case 4: tx+="밤";break;
     }
+    tx+=", 턴 " + QString::number(t);
     ui->text_time->setText(tx);
 
     ui->prog_hp->setMaximum(pl.get_life_f());

@@ -6,6 +6,14 @@ double rnd_d(){
     std::uniform_real_distribution<double> rand(0.0, 1.0);
     return rand(rng);
 }
+
+double rnd_r(double min, double max){
+    static std::random_device rd;
+    static std::mt19937 rng(time(0));
+    std::uniform_real_distribution<double> rand(min, max);
+    return rand(rng);
+}
+
 int* rnd_ia(int lim, int coun) {
     int* rnd_a = new int[coun];
     for (int t = 0; t < coun; t++) { rnd_a[t] = 0; };

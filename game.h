@@ -43,7 +43,7 @@ struct data
     std::string bt_intro04[9] = {"다음","","","","","","","",""};
 
     std::string co_main = "어디로 갈까요?";
-    std::string bt_main[9] = {"밖으로 나가기","수강신청","상점으로 가기","방에서 휴식","공부하기","","","",""};
+    std::string bt_main[9] = {"밖으로 나가기","수강신청","상점으로 가기","방에서 휴식","공부하기","운동하기","","",""};
     std::string co_outside = "밖으로 나왔습니다. 어디로 갈까요?";
     std::string bt_outside[9] = {"친구를 만나기","동아리방 가기","교수님 만나기","주변을 정처없이 돌아다니기","일하러 가기","","","","집으로 돌아가기"};
     std::string co_sugang = "수강신청 페이지에 들어왔습니다.";
@@ -69,6 +69,13 @@ struct data
                                "재밌게 공부했습니다."};
     std::string bt_study[9] = {"다음","","","","","","","",""};
 
+    std::string co_exercise[5] = {"당신은 열심히 운동했습니다.",
+                               "방학이지만 집중해서 운동했습니다."
+                               "게임을 하고 싶은 열망을 누르고 운동했습니다."
+                               "오늘은 왠지 운동이 잘 되는군요."
+                               "재밌게 운동했습니다."};
+    std::string bt_exercise[9] = {"다음","","","","","","","",""};
+
     std::string co_s_watch = "이번 학기의 수강 가능한 과목 목록입니다.";
     std::string bt_s_watch[9] = {"","","","","","","","","돌아가기"};
 
@@ -78,6 +85,14 @@ struct data
     std::string sb_day[5] = {"월","화","수","목","금"};
     std::string sb_time[4] = {"아침","점심","오후","저녁"};
     std::string sb_category[2] = {"교선필수","교선선택"};
+
+    std::string co_gameover[6] = {"\n　★★★★　★★★★　★★　★★　★★★★　　　　★★　　★　　★　★★★★　★★★★",
+                                  "\n　★　　　　★　　★　★　★　★　★　　　　　　★　　★　★　　★　★　　　　★　　★",
+                                  "\n　★　★★　★★★★　★　　　★　★★★★　　　★　　★　★　★　　★★★★　★★★　",
+                                  "\n　★　　★　★　　★　★　　　★　★　　　　　　★　　★　★★　　　★　　　　★　　★",
+                                  "\n　★★★★　★　　★　★　　　★　★★★★　　　　★★　　★　　　　★★★★　★　　★",
+                                  "\n\n게임 오버! 왼쪽의 최종 스코어를 확인해 주세요.\n\n ▶ 새 게임 - Menu -> Game Start\n ▶ 게임 로드 - Menu -> Game Load"};
+    std::string bt_gameover[9] = {"","","","","","","","",""};
 
 
     // Stat changing message
@@ -133,7 +148,6 @@ public:
     // Update console and button text
     void print_update(std::string co, std::string* bt);
 
-
     // Generates subjects for each semester
     void generate_subjects();
 
@@ -149,17 +163,18 @@ public:
     void wander_around();
     void work();
     void study();
+    void exercise();
     // Computer actions
     void sugang();
+    void sugang_apply(int index);
     // Store
     void store();
     // Rest
     void rest();
     // Handle end of the each turn
     void game_turn_pass();
-
+    // Handle end of the semester
     void calculate_semester();
-    void game_over();
 
 
 

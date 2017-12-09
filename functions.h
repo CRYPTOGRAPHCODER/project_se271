@@ -5,6 +5,7 @@
 #include <time.h>
 
 double rnd_d();
+double rnd_r(double min, double max);
 int* rnd_ia(int lim, int coun);
 
 #endif // FUNCTIONS_H
