@@ -4,13 +4,15 @@
 
 constexpr int STATS = 6;
 constexpr int EQUIPMENTS_MAX = 10;
+constexpr int SUBJECTS_MAX = 20;
+
 // add compile option -static-libstdc++
 class player{
 private:
   std::string name;
-  int *stats;
-  int *equipments;
-  int *subjects;
+  int stats[STATS];
+  int equipments[EQUIPMENTS_MAX];
+  int subjects[SUBJECTS_MAX];
   int life;
   int life_f;
   int money;
@@ -35,6 +37,10 @@ public:
   //equipments
   int* get_equipments() { return this->equipments; };
   void set_equipments(int value, int i) { equipments[i] = value; };
+
+  //subjects
+  int* get_subjects() { return this->subjects; };
+  void set_subjects(int value, int i) { subjects[i] = value; };
 
   //life
   int get_life() { return this->life; };

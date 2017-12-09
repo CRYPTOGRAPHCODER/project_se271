@@ -1,4 +1,6 @@
 #include "game.h"
+#include "functions.h"
+#include "player.h"
 
 gameManager::gameManager(){
 
@@ -9,29 +11,6 @@ gameManager::gameManager(){
         this->button[i]="";
     }
     print_update(d.co_intro01,d.bt_intro);
-}
-
-static std::random_device rd;
-static std::mt19937 rng(rd());
-
-double gameManager::rnd_d(){
-   std::uniform_real_distribution<double> rand(0.0, 1.0);
-   return rand(rng);
-}
-int* gameManager::rnd_ia(int lim, int coun) {
-   int* rnd_a = new int[coun];
-   for (int t = 0; t < coun; t++) { rnd_a[t] = 0; };
-   for (int i = 0; i < coun; i++) {
-      rnd_a[i] = (int)(rnd_d()*lim);
-      for (int k = 0; k < i; k++) {
-         if (rnd_a[k] == rnd_a[i]) {
-            rnd_a[i] = 0;
-            i--;
-            break;
-         }
-      }
-   }
-   return rnd_a;
 }
 
 gameManager::~gameManager(){
@@ -121,7 +100,7 @@ void gameManager::proceed(int input){
             }
             else{
                 this->gamestate = 101;
-                print_sugang_apply(1);
+                print_sugang_apply(this->gamestate - 100);
             }
             break;
         case 2:
@@ -136,6 +115,27 @@ void gameManager::proceed(int input){
         break;
     case 23:
         print_update(d.co_store,d.bt_store);
+        break;
+    case 101: case 102: case 103: case 104: case 105: case 106: case 107: case 108: case 109: case 110: case 111: case 112:
+        switch(input){
+        case 1: case 2: case 3: case 4: case 5: case 6: case 7:
+            // Apply to subject
+            break;
+        case 8:
+            // To Next Menu
+            if(this->gamestate == 100 + this->subject_number/7 + 1){
+                this->gamestate = 100;
+            }
+            this->gamestate += 1;
+            print_sugang_apply(this->gamestate-100);
+            break;
+        case 9:
+            // To Main Menu, spend turn
+            this->gamestate = 20;
+            game_turn_pass();
+            print_update(d.co_main,d.bt_main);
+            break;
+        }
         break;
     case 24: case 25: case 31: case 100:
     default:
@@ -177,19 +177,14 @@ void gameManager::generate_subjects(){
 
         double rol = rnd_d();
 
-        if(rol>0.7){
-            s[i].level = 1;
-        }
-        else if(rol>0.4){
-            s[i].level = 2;
-        }
-        else if(rol>0.2){
-            s[i].level = 3;
-        }
+        if(rol>0.5){
+            s[i].level = 1;}
+        else if(rol>0.3){
+            s[i].level = 2;}
+        else if(rol>0.1){
+            s[i].level = 3;}
         else if(rol>0.0){
-            s[i].level = 4;
-        }
-
+            s[i].level = 4;}
 
         // set the title of subjects
         /// set the basic name
@@ -226,7 +221,6 @@ void gameManager::generate_subjects(){
             s[i].workload[j] = (int)(rnd_d()*basic_workload*this->level);
         }
         s[i].attend_hope = (int)(s[i].attend_limit * (rnd_d()*0.4+0.8));
-
     }
 }
 
@@ -237,31 +231,70 @@ void gameManager::print_sugang_data(){
 
     for (int i=0;i<subject_number;i++){
         c+="\n";
-        std::string m = s[i].title;
-        c+=s[i].title;
-        for(int i=m.length();i<45;i++){
-            c+=" ";
-        }
-        c+="\t";
-
-        for(int j=0;j<s[i].credit;j++){
-            c+=d.sb_day[s[i].timetable[j]/4]+d.sb_time[s[i].timetable[j]%4]+" ";
-        }
-        for(int j=s[i].credit;j<=2;j++){
-            c+="　　　 ";
-        }
-        std::string tmp = std::to_string(s[i].attend_hope)+"/"+std::to_string(s[i].attend_limit);
-        c+=tmp;
-        for(int i = tmp.length(); i < 10; i++){
-            c+=" ";
-        }
+        c+=print_subject_data(i);
         c+=d.sb_category[s[i].category];
     }
     print_update(c,d.bt_s_watch);
 }
 
-void gameManager::print_sugang_apply(int index){
+std::string gameManager::print_subject_data(int i){
+    std::string c;
+    std::string m = s[i].title;
+    c+=s[i].title;
+    for(int i=m.length();i<45;i++){
+        c+=" ";}
+    c+="\t";
 
+    for(int j=0;j<s[i].credit;j++){
+        c+=d.sb_day[s[i].timetable[j]/4]+d.sb_time[s[i].timetable[j]%4]+" ";}
+    for(int j=s[i].credit;j<=2;j++){
+        c+="　　　 ";}
+    std::string tmp = std::to_string(s[i].attend_hope)+"/"+std::to_string(s[i].attend_limit);
+    c+=tmp;
+    for(int i = tmp.length(); i < 10; i++){
+        c+=" ";}
+    return c;
+}
+
+void gameManager::print_sugang_apply(int index){
+    //Console message - current time, applied subjects
+    std::string c = d.co_s_apply[0];
+    c+=std::to_string(this->sugang_time/60)+":"+std::to_string(this->sugang_time%60);
+    c+=d.co_s_apply[1];
+    for (int i=0;i<SUBJECTS_MAX;i++){
+        int p = pl.get_subjects()[i];
+        // Continue if player's subject data is unavailable
+        if (p<0){
+            continue;}
+        c+="\n";
+        c+=print_subject_data(p);
+        c+=d.sb_category[s[p].category];
+    }
+    //Button design - subject 1~7, next, out
+    std::string k[9] = d.bt_s_apply;
+    for (int i=0;i<7;i++){
+        int p = index*6+i;
+        std::string b;
+        // Add data to button
+        b+=print_subject_data(p);
+        b+=d.sb_category[s[p].category];
+        // Add Apply or deapply
+        bool apply = false;
+        for(int j=0;j<SUBJECTS_MAX;j++)
+        {
+            if(pl.get_subjects()[j]==p){
+                b+= " 수강취소";
+                apply = true;
+                break;
+            }
+        }
+        if(!apply){
+            b+= " 수강신청";
+        }
+
+        k[i] = b;
+    }
+    print_update(c,k);
 }
 
 void gameManager::game_turn_pass(){

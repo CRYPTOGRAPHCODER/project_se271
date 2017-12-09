@@ -3,8 +3,6 @@
 
 #include <iostream>
 #include <cstdio>
-#include <random>
-#include <time.h>
 
 #include "windows.h"
 #include "player.h"
@@ -74,8 +72,8 @@ struct data
     std::string co_s_watch = "이번 학기의 수강 가능한 과목 목록입니다.";
     std::string bt_s_watch[9] = {"","","","","","","","","돌아가기"};
 
-    std::string co_s_apply = "해당 과목에 해당하는 버튼을 눌러 주세요.";
-    std::string bt_s_apply[9] = {"","","","","","","다음","이전","돌아가기"};
+    std::string co_s_apply[2] = {"수강하고 싶은 과목에 해당하는 버튼을 눌러 주세요.\n\n새로운 과목을 확인하거나, 수강신청을 시도하면 남은 시간이 감소합니다.\n남은 시간 : ","\n\n현재까지 수강한 과목 목록"};
+    std::string bt_s_apply[9] = {"","","","","","","","다음","수강신청 끝내기"};
 
     std::string sb_day[5] = {"월","화","수","목","금"};
     std::string sb_time[4] = {"아침","점심","오후","저녁"};
@@ -109,7 +107,8 @@ private:
     // -1, -2 ... game over
     // 0, start of the game
     int gamestate = 0;
-
+    // Time limit for sugang apply
+    int sugang_time = 180;
     // Define enough number of subjects
     subject s[MAX_SUBJECT];
     // Number of subject
@@ -120,13 +119,15 @@ private:
     std::string button[BUTTON_LENGTH];
     // data
     data d;
-    // global level - basic is 10
+    // global level - basic is 1
     double level = 1;
 public:
     gameManager();
     ~gameManager();
+    /*
     double rnd_d();
     int* rnd_ia(int lim,int coun);
+    */
     // Each action to proceed
     void proceed(int input);
     // Update console and button text
@@ -139,6 +140,7 @@ public:
     // print_update sugang data
     void print_sugang_data();
     void print_sugang_apply(int index);
+    std::string print_subject_data(int i);
 
     // Outside actions
     void meet_friend();

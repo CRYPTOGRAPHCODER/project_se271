@@ -1,6 +1,5 @@
 #include "sugang_simulator_2017.h"
 #include <QApplication>
-
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);

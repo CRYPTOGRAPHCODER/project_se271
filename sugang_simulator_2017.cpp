@@ -32,6 +32,9 @@ Sugang_Simulator_2017::Sugang_Simulator_2017(QWidget *parent) :
     for(int i=0;i<9;i++){
         button_update(but,i);
     }
+
+    ui->actionSave_Game->setEnabled(false);
+
 }
 
 Sugang_Simulator_2017::~Sugang_Simulator_2017()
@@ -41,6 +44,8 @@ Sugang_Simulator_2017::~Sugang_Simulator_2017()
 
 void Sugang_Simulator_2017::on_actionStart_Game_triggered()
 {
+    ui->actionSave_Game->setEnabled(true);
+    g = gameManager();
     update();
 }
 void Sugang_Simulator_2017::on_actionSave_Game_triggered()
@@ -54,6 +59,7 @@ void Sugang_Simulator_2017::on_actionSave_Game_triggered()
 
 void Sugang_Simulator_2017::on_actionLoad_Game_triggered()
 {
+    ui->actionSave_Game->setEnabled(true);
     gameManager LoadData;
     std::ifstream fin("Savedata.dat", std::ios_base::in | std::ios_base::binary);
     if(fin.is_open() == false){
