@@ -22,6 +22,8 @@ gameManager::~gameManager(){
 // 23 : Store 24 : Rest at home 25 : Study
 // 26 : Exercise 44 : game over 100~ : sugang
 
+/// Proceed
+
 void gameManager::proceed(int input){
     switch(this->gamestate){
     case 0:
@@ -109,14 +111,28 @@ void gameManager::proceed(int input){
         case 1: case 2: case 3: case 4: case 5: case 6: case 7:
             sugang_apply((this->gamestate-101)*7+input-1);  // Apply to subject
             this->sugang_time -= (int)(rnd_r(10.0,13.0));   // Decrease Time
-            print_sugang_apply(this->gamestate-100); break; // Update data
+            sugang_time_decrease(10.0,13.0);
+            print_sugang_apply(this->gamestate-100);
+            if(this->sugang_time <= 0){
+                this->sugang_time = this->sugang_time_full;
+                this->gamestate = 20;
+                game_turn_pass();
+                print_update(d.co_main,d.bt_main);
+            }
+            break;
         case 8:                                             // View Next Subject
             if(this->gamestate >= (100 + this->subject_number/7 + 1)){
                 this->gamestate = 100;
             }
             this->gamestate += 1;
-            this->sugang_time -= (int)(rnd_r(1.0,3.0));     // Decrease Time
-            print_sugang_apply(this->gamestate-100);break;
+            sugang_time_decrease(1.0,3.0);
+            if(this->sugang_time <= 0){
+                this->sugang_time = this->sugang_time_full;
+                this->gamestate = 20;
+                game_turn_pass();
+                print_update(d.co_main,d.bt_main);
+            }
+            break;
         case 9:
             this->gamestate = 20;                           // To Main Menu, spend turn
             game_turn_pass();
@@ -134,28 +150,110 @@ void gameManager::proceed(int input){
     }
 }
 
-void gameManager::print_update(std::string co, std::string* bt){
-    this->console = co;
-    for(int i=0;i<BUTTON_LENGTH;i++){this->button[i]=bt[i];}
-    if(co==""){
-        this->console = "ERROR";
-        for(int i=0;i<9;i++){this->button[i]="";}
-    }
-    //Debuging Mode
-    // this->console += "\n\n"+std::to_string(gamestate);
-    /*
-    for (int i=0;i<subject_number;i++){
-        this->console += "\nT:"+std::to_string(s[i].timetable[0])+" "+std::to_string(s[i].timetable[1])+" "+std::to_string(s[i].timetable[2]);
-        this->console += " L: "+std::to_string(s[i].attend_limit);
-        this->console += " C: "+std::to_string(s[i].category);
-        this->console += " W:";
-        for(int j=0;j<6;j++){
-            this->console += " "+std::to_string(s[i].workload[j]);
-        }
-        this->console += " N:"+s[i].title+" C:"+std::to_string(s[i].credit);
+/* turn pass event for almost every action
+*/
+void gameManager::game_turn_pass(){
+    this->turn ++;
+    this->level *= 1.009;
+    pl.set_life_f(pl.get_stats()[0]*100+1000);
 
-    }*/
+    // Game Over Check
+    if(pl.get_life()<=0){
+        pl.set_life(0);
+        this->gamestate = 44;
+        std::string c="";
+        for(int i=0;i<6;i++){
+            c+=d.co_gameover[i];}
+        print_update(c,d.bt_gameover);
+    }
 }
+
+/// Sugang
+
+/* add people to sugang
+*/
+void gameManager::sugang_time_pass(double timepass){
+    for(int i=0;i<this->subject_number;i++){
+        s[i].attend_people+=(int)(timepass);
+
+
+        if(s[i].attend_people>s[i].attend_limit){
+            s[i].attend_people=s[i].attend_limit;
+        }
+    }
+
+}
+
+/* Decrase sugang time
+ */
+void gameManager::sugang_time_decrease(double min, double max){
+    double st = rnd_r(min,max);
+    this->sugang_time -= (int)(st);   // Decrease Time
+    sugang_time_pass(st);
+    print_sugang_apply(this->gamestate-100);
+}
+
+/* apply subjects
+ *
+ */
+void gameManager::sugang_apply(int index){
+    // Apply
+    bool AppDeapp = true;
+    for(int i=0;i<SUBJECTS_MAX;i++){
+        if(pl.get_subjects()[i] == index){
+            pl.get_subjects()[i] = -1;
+            s[index].attend_people--;
+            AppDeapp = false;
+        }
+    }
+    if(AppDeapp){
+        bool apply = true;
+        // check timetable
+        for(int i=0;i<SUBJECTS_MAX;i++){
+            for(int j=0;j<s[pl.get_subjects()[i]].credit;j++){
+                for(int k=0;k<s[index].credit;k++){
+                    if(s[pl.get_subjects()[i]].timetable[j]==s[index].timetable[k]){
+                        apply = false;
+                    }
+                    if(!apply){
+                        break;}
+                }
+                if(!apply){
+                    break;}
+            }
+            if(!apply){
+                break;}
+        }
+
+        // sugang hope people
+        double success = 0;
+        if(s[index].attend_hope<s[index].attend_limit){
+            success = 1;
+        }else{
+            success = ((double)s[index].attend_limit/(double)s[index].attend_hope)*((double)s[index].attend_limit/(double)s[index].attend_hope);
+        }
+        if(rnd_d()>success){
+            apply = false;
+        }
+        // sugang possible
+        if(s[index].attend_people>=s[index].attend_limit){
+            apply = false;
+        }
+        // message update and add sugang
+        if(apply){
+            for(int i = 0;i<SUBJECTS_MAX;i++){
+                if(pl.get_subjects()[i]==-1){
+                    pl.set_subjects(index,i);
+                    break;
+                }
+            }
+            s[index].attend_people++;
+        }
+    }
+}
+
+
+/// Print Functions
 
 /* print sugang data
  * Printing subject datas
@@ -166,7 +264,7 @@ void gameManager::print_sugang_data(){
     c+="\n과목명\t\t\t시간\t수강희망/수강제한  분류";
     for (int i=0;i<subject_number;i++){
         c+="\n";
-        c+=print_subject_data(i);
+        c+=print_subject_data_hope(i);
         c+=d.sb_category[s[i].category];
     }
     print_update(c,d.bt_s_watch);
@@ -180,19 +278,20 @@ void gameManager::print_sugang_apply(int index){
     std::string c = d.co_s_apply[0];
     c+=std::to_string(this->sugang_time/60)+":"+std::to_string(this->sugang_time%60);
     c+=d.co_s_apply[1];
+    c+="\n과목명\t\t\t시간\t수강인원/수강제한  분류";
     for (int i=0;i<SUBJECTS_MAX;i++){
         int p = pl.get_subjects()[i];
         // Continue if player's subject data is unavailable
         if (p<0){
             continue;}
         c+="\n";
-        c+=print_subject_data(p);
+        c+=print_subject_data_people(p);
         c+=d.sb_category[s[p].category];
     }
     //Button design - subject 1~7, next, out
     std::string k[9] = d.bt_s_apply;
     for (int i=0;i<7;i++){
-        int p = index*6+i;
+        int p = (index-1)*7+i;
         // Disable button if there are no subject data
         if(p>=this->subject_number){
             k[i] = "";
@@ -200,7 +299,7 @@ void gameManager::print_sugang_apply(int index){
         }
         std::string b;
         // Add data to button
-        b+=print_subject_data(p);
+        b+=print_subject_data_people(p);
         b+=d.sb_category[s[p].category];
         // Add Apply or deapply
         bool apply = false;
@@ -223,7 +322,28 @@ void gameManager::print_sugang_apply(int index){
 /* print sugang data
  *
  */
-std::string gameManager::print_subject_data(int i){
+std::string gameManager::print_subject_data_people(int i){
+    std::string c;
+    std::string m = s[i].title;
+    c+=s[i].title;
+    for(int i=m.length();i<45;i++){
+        c+=" ";}
+    c+="\t";
+    for(int j=0;j<s[i].credit;j++){
+        c+=d.sb_day[s[i].timetable[j]/4]+d.sb_time[s[i].timetable[j]%4]+" ";}
+    for(int j=s[i].credit;j<=2;j++){
+        c+="　　　 ";}
+    std::string tmp = std::to_string(s[i].attend_people)+"/"+std::to_string(s[i].attend_limit);
+    c+=tmp;
+    for(int i = tmp.length(); i < 10; i++){
+        c+=" ";}
+    return c;
+}
+
+/* print sugang data
+ *
+ */
+std::string gameManager::print_subject_data_hope(int i){
     std::string c;
     std::string m = s[i].title;
     c+=s[i].title;
@@ -241,32 +361,17 @@ std::string gameManager::print_subject_data(int i){
     return c;
 }
 
-
-/* print sugang data
- *
- */
-void gameManager::sugang_apply(int index){
-
-}
-
-
-/* turn pass event for almost every action
-*/
-void gameManager::game_turn_pass(){
-    this->turn ++;
-    this->level *= 1.009;
-    pl.set_life_f(pl.get_stats()[0]*100+1000);
-
-    // Game Over Check
-    if(pl.get_life()<=0){
-        pl.set_life(0);
-        this->gamestate = 44;
-        std::string c="";
-        for(int i=0;i<6;i++){
-            c+=d.co_gameover[i];}
-        print_update(c,d.bt_gameover);
+void gameManager::print_update(std::string co, std::string* bt){
+    this->console = co;
+    for(int i=0;i<BUTTON_LENGTH;i++){this->button[i]=bt[i];}
+    if(co==""){
+        this->console = "ERROR";
+        for(int i=0;i<9;i++){this->button[i]="";}
     }
+    // For Debug
+    // this->console += "\n\n"+std::to_string(gamestate);
 }
+
 
 /// Actions that deplete turn
 
@@ -440,6 +545,6 @@ void gameManager::generate_subjects(){
         for(int j=0;j<4;j++){
             s[i].workload[j] = (int)(rnd_d()*basic_workload*this->level);
         }
-        s[i].attend_hope = (int)(s[i].attend_limit * (rnd_d()*0.4+0.8));
+        s[i].attend_hope = (int)(s[i].attend_limit * (rnd_d()*0.4+0.85));
     }
 }

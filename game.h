@@ -7,7 +7,7 @@
 #include "windows.h"
 #include "player.h"
 
-constexpr int MAX_SUBJECT = 100;
+constexpr int SUBJECT_BUFFER = 100;
 constexpr int DATA_LENGTH = 100;
 constexpr int BUTTON_LENGTH = 9;
 
@@ -94,6 +94,10 @@ struct data
                                   "\n\n게임 오버! 왼쪽의 최종 스코어를 확인해 주세요.\n\n ▶ 새 게임 - Menu -> Game Start\n ▶ 게임 로드 - Menu -> Game Load"};
     std::string bt_gameover[9] = {"","","","","","","","",""};
 
+    std::string co_sugang_fail = "\n\n수강 신청에 실패했습니다.";
+    std::string co_sugang_success = "\n\n수강 신청에 성공했습니다.";
+    std::string co_sugang_cancel = "\n\n수강 과목을 수강 취소했습니다.";
+
 
     // Stat changing message
     std::string msg_add = "만큼 증가했습니다.";
@@ -124,8 +128,9 @@ private:
     int gamestate = 0;
     // Time limit for sugang apply
     int sugang_time = 180;
+    int sugang_time_full = 180;
     // Define enough number of subjects
-    subject s[MAX_SUBJECT];
+    subject s[SUBJECT_BUFFER];
     // Number of subject
     int subject_number;
     // String data to print to console
@@ -154,7 +159,9 @@ public:
     // print_update sugang data
     void print_sugang_data();
     void print_sugang_apply(int index);
-    std::string print_subject_data(int i);
+    std::string print_subject_data_people(int i);
+    std::string print_subject_data_hope(int i);
+    void sugang_time_decrease(double min, double max);
 
     // Outside actions
     void meet_friend();
@@ -167,6 +174,7 @@ public:
     // Computer actions
     void sugang();
     void sugang_apply(int index);
+    void sugang_time_pass(double timepass);
     // Store
     void store();
     // Rest
