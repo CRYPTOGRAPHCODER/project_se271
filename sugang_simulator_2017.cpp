@@ -87,13 +87,14 @@ void Sugang_Simulator_2017::on_actionLoad_Game_triggered()
 
 
 void Sugang_Simulator_2017::player_data_update(player pl,int t){
+    g.pl.set_name(ui->textbox_name->toPlainText().toUtf8().constData());
     ui->text_hp->setText(QString::number(pl.get_life())+"/"+QString::number(pl.get_life_f()));
     ui->text_money->setText("돈     "+QString::number(pl.get_money()));
     ui->text_score->setText("점수     "+QString::number(pl.get_score()));
     ui->text_stats->setText("스탯       체력 "+QString::number(pl.get_stats()[0])+"   회복 "+QString::number(pl.get_stats()[1])
             +"   이학 "+QString::number(pl.get_stats()[2])+"   공학 "+QString::number(pl.get_stats()[3])
             +"   문학 "+QString::number(pl.get_stats()[4])+"   사회 "+QString::number(pl.get_stats()[5]));
-    ui->text_name->setText("이름     " +QString::fromStdString(pl.get_name()));
+    ui->text_name->setText("이름     ");
     ui->text_credit_mandatory->setText("필수 "+QString::number(pl.get_credit_required_ess())+"/"+QString::number(pl.get_credit_required_ess()));
     ui->text_credit_selective->setText("선택 "+QString::number(pl.get_credit_required_chs())+"/"+QString::number(pl.get_credit_required_chs()));
     QString tx = "";
@@ -247,4 +248,10 @@ void Sugang_Simulator_2017::on_button8_released(){
 void Sugang_Simulator_2017::on_button9_released(){
     g.proceed(9);
     update();
+}
+
+void Sugang_Simulator_2017::on_textbox_name_textChanged()
+{
+    g.pl.set_name(ui->textbox_name->toPlainText().toUtf8().constData());
+    player_data_update(g.get_pl(),g.get_turn());
 }

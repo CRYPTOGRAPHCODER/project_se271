@@ -3,8 +3,9 @@
 #include "player.h"
 
 gameManager::gameManager(){
-    this->turn = 0;
-    this->subject_number = 35;
+    gv.turn = 0;
+    gv.level = 1;
+    gv.subject_num = 35;
     generate_subjects();
     for(int i=0;i<BUTTON_LENGTH;i++){
         this->button[i]="";
@@ -25,29 +26,29 @@ gameManager::~gameManager(){
 /// Proceed
 
 void gameManager::proceed(int input){
-    switch(this->gamestate){
+    switch(gv.gamestate){
     case 0:
-        this->gamestate ++;        // To Intro 2
+        gv.gamestate ++;        // To Intro 2
         print_update(d.co_intro02,d.bt_intro);
         break;
     case 1:
-        this->gamestate ++;        // To Intro 3
+        gv.gamestate ++;        // To Intro 3
         print_update(d.co_intro03,d.bt_intro);
         break;
     case 2:
-        this->gamestate ++;        // To Intro 4
+        gv.gamestate ++;        // To Intro 4
         print_update(d.co_intro04,d.bt_intro);
         break;
     case 3:
-        this->gamestate ++;        // To Intro 4
+        gv.gamestate ++;        // To Intro 4
         print_update(d.co_intro05,d.bt_intro);
         break;
     case 4:
-        this->gamestate = 20;      // To Main
+        gv.gamestate = 20;      // To Main
         print_update(d.co_main,d.bt_main);
         break;
     case 20:                                            // Main
-        this->gamestate += input;
+        gv.gamestate += input;
         switch(input){
         case 1:
             print_update(d.co_outside,d.bt_outside);break;   // To Outside
@@ -68,93 +69,93 @@ void gameManager::proceed(int input){
     case 21:                                            // Outside
         switch(input){
         case 1:
-            meet_friend();this->gamestate = 31;break;       // To Meet Friend
+            meet_friend();gv.gamestate = 31;break;       // To Meet Friend
         case 2:
-            club_room();this->gamestate = 31;break;         // To Club Room
+            club_room();gv.gamestate = 31;break;         // To Club Room
         case 3:
-            visit_professor();this->gamestate = 31;break;   // To Visit Professor
+            visit_professor();gv.gamestate = 31;break;   // To Visit Professor
         case 4:
-            wander_around();this->gamestate = 31;break;     // To Wander around
+            wander_around();gv.gamestate = 31;break;     // To Wander around
         case 5:
-            work();this->gamestate = 31;break;              // To Work
+            work();gv.gamestate = 31;break;              // To Work
         case 9:
-            this->gamestate = 20;print_update(d.co_main,d.bt_main);break; // Back to Main
+            gv.gamestate = 20;print_update(d.co_main,d.bt_main);break; // Back to Main
         default: break;
         }
         break;
     case 22:                                            // Sugang
         switch(input){
         case 1:                                             // To Login
-            if(this->turn%40<28){                       // Back to Main if Day<8
-                this->gamestate = 20;
+            if(gv.turn%40<28){                       // Back to Main if Day<8
+                gv.gamestate = 20;
                 print_update(d.co_main, d.bt_main);
             }
             else{                                           // Login Successful
-                this->gamestate = 101;
-                print_sugang_apply(this->gamestate - 100);
+                gv.gamestate = 101;
+                print_sugang_apply(gv.gamestate - 100);
             }
             break;
         case 2:                                             // View Sugang Data
-            this->gamestate = 100;
+            gv.gamestate = 100;
             print_sugang_data();
             break;
         case 9:                                             // Back To Main
-            this->gamestate = 20;
+            gv.gamestate = 20;
             print_update(d.co_main,d.bt_main);
             break;
         }
         break;
     case 23:                                                // Store (Not Available)
         //print_update(d.co_store,d.bt_store);
-        this->gamestate = 20;
+        gv.gamestate = 20;
         print_update(d.co_main,d.bt_main);
         break;
                                                         // Sugang Login
     case 101: case 102: case 103: case 104: case 105: case 106: case 107: case 108: case 109: case 110: case 111: case 112: case 113: case 114: case 115:
         switch(input){
         case 1: case 2: case 3: case 4: case 5: case 6: case 7:
-            sugang_apply((this->gamestate-101)*7+input-1);  // Apply to subject
-            this->sugang_time -= (int)(rnd_r(10.0,13.0));   // Decrease Time
+            sugang_apply((gv.gamestate-101)*7+input-1);  // Apply to subject
+            gv.s_time -= (int)(rnd_r(10.0,13.0));   // Decrease Time
             sugang_time_decrease(10.0,13.0);
-            print_sugang_apply(this->gamestate-100);
-            if(this->sugang_time <= 0){
-                this->sugang_time = this->sugang_time_full;
-                this->gamestate = 20;
+            print_sugang_apply(gv.gamestate-100);
+            if(gv.s_time <= 0){
+                gv.s_time = gv.s_time_full;
+                gv.gamestate = 20;
                 print_update(d.co_main,d.bt_main);
-                this->sugang_time_pass(1000);
+                sugang_time_pass(1000);
                 game_turn_pass();
             }
             break;
         case 8:                                             // View Next Subject
-            if(this->gamestate >= (100 + this->subject_number/7 + 1)){
-                this->gamestate = 100;
+            if(gv.gamestate >= (100 + gv.subject_num/7 + 1)){
+                gv.gamestate = 100;
             }
-            this->gamestate += 1;
+            gv.gamestate += 1;
             sugang_time_decrease(1.0,3.0);
-            if(this->sugang_time <= 0){
-                this->sugang_time = this->sugang_time_full;
-                this->gamestate = 20;
+            if(gv.s_time <= 0){
+                gv.s_time = gv.s_time_full;
+                gv.gamestate = 20;
                 print_update(d.co_main,d.bt_main);
-                this->sugang_time_pass(1000);
+                sugang_time_pass(1000);
                 game_turn_pass();
             }
             break;
         case 9:
-            this->gamestate = 20;                           // To Main Menu, spend turn
+            gv.gamestate = 20;                           // To Main Menu, spend turn
             print_update(d.co_main,d.bt_main);
             game_turn_pass();
             break;
         }
         break;
     case 40:                                                // Semester reset
-        this->gamestate = 20;
+        gv.gamestate = 20;
         print_update(d.co_main,d.bt_main);
         break;
     case 44:
         break;
     case 24: case 25: case 26: case 27:case 31: case 100:   // Default Cases
     default:
-        this->gamestate = 20;
+        gv.gamestate = 20;
         print_update(d.co_main,d.bt_main);
         break;
     }
@@ -164,7 +165,7 @@ void gameManager::proceed(int input){
  * only function that can handle gamestate except proceed
 */
 void gameManager::calculate_semester(){
-    this->gamestate = 40;
+    gv.gamestate = 40;
     std::string c = d.co_semester[0];
     c+= "";
     c+= "\n   |     과목의 어려운 정도    |";
@@ -244,9 +245,9 @@ void gameManager::calculate_semester(){
 
     }
     c += "\n\n"+d.co_semester[1];
-    this->subject_number += (int)(rnd_r(5,8));
-    if(this->subject_number>=100){
-        subject_number = 100;
+    gv.subject_num += (int)(rnd_r(5,8));
+    if(gv.subject_num>=100){
+        gv.subject_num = 100;
     }
     generate_subjects();
     print_update(c,d.bt_semester);
@@ -256,27 +257,27 @@ void gameManager::calculate_semester(){
 */
 void gameManager::game_turn_pass(){
     // Gradually increase level
-    this->level *= 1.009;
+    gv.level *= 1.009;
     // Reset sugang time
-    this->sugang_time = this->sugang_time_full;
+    gv.s_time = gv.s_time_full;
     // player data update
     pl.stat_update();
 
     // Calculate semester
-    if(turn%40==39){
+    if(gv.turn%40==39){
         calculate_semester();
     }
     // Game Over Check
     if(pl.get_life()<=0){
         pl.set_life(0);
-        this->gamestate = 44;
+        gv.gamestate = 44;
         std::string c="";
         for(int i=0;i<6;i++){
             c+=d.co_gameover[i];}
         print_update(c,d.bt_gameover);
     }
 
-    this->turn ++;
+    gv.turn ++;
 }
 
 /// Sugang
@@ -284,7 +285,7 @@ void gameManager::game_turn_pass(){
 /* add people to sugang
 */
 void gameManager::sugang_time_pass(double timepass){
-    for(int i=0;i<this->subject_number;i++){
+    for(int i=0;i<gv.subject_num;i++){
         for(int j =0;j<timepass/2;j++){
             //Add people to each subjects
             int p = (int)(((s[i].attend_hope-s[i].attend_people)/16)*rnd_r(0.8,1.2));
@@ -311,9 +312,9 @@ void gameManager::sugang_time_pass(double timepass){
  */
 void gameManager::sugang_time_decrease(double min, double max){
     double st = rnd_r(min,max);
-    this->sugang_time -= (int)(st);   // Decrease Time
+    gv.s_time -= (int)(st);   // Decrease Time
     sugang_time_pass(st);
-    print_sugang_apply(this->gamestate-100);
+    print_sugang_apply(gv.gamestate-100);
 }
 
 /* apply subjects
@@ -388,7 +389,7 @@ void gameManager::print_sugang_data(){
     std::string c;
     c+=d.co_s_watch;
     c+="\n시간        수강희망/수강제한  분류    과목명";
-    for (int i=0;i<subject_number;i++){
+    for (int i=0;i<gv.subject_num;i++){
         c+="\n";
         c+=print_subject_data(i,2);
     }
@@ -401,7 +402,7 @@ void gameManager::print_sugang_data(){
 void gameManager::print_sugang_apply(int index){
     //Console message - current time, applied subjects
     std::string c = d.co_s_apply[0];
-    c+=std::to_string(this->sugang_time/60)+":"+std::to_string(this->sugang_time%60);
+    c+=std::to_string(gv.s_time/60)+":"+std::to_string(gv.s_time%60);
     c+=d.co_s_apply[1];
     c+="\n시간        수강인원/수강제한  분류    과목명";
     for (int i=0;i<SUBJECTS_MAX;i++){
@@ -417,7 +418,7 @@ void gameManager::print_sugang_apply(int index){
     for (int i=0;i<7;i++){
         int p = (index-1)*7+i;
         // Disable button if there are no subject data
-        if(p>=this->subject_number){
+        if(p>=gv.subject_num){
             k[i] = "";
             continue;
         }
@@ -501,7 +502,7 @@ void gameManager::print_update(std::string co, std::string* bt){
  * depends on global level
  */
 void gameManager::generate_subjects(){
-    for(int i=0;i<subject_number;i++){
+    for(int i=0;i<gv.subject_num;i++){
         // set the category - if it is necessary, it is harder
         if(rnd_d()<0.35){
             s[i].category = 0;
@@ -518,7 +519,7 @@ void gameManager::generate_subjects(){
         }else{s[i].area = 5;}
 
         // set the level of the subject
-        int year = (int)(this->turn/40)+1;
+        int year = (int)(gv.turn/40)+1;
         double rol = rnd_d();
         if(year == 1){
             if(rol<0.65){s[i].level = 1;}
@@ -553,7 +554,7 @@ void gameManager::generate_subjects(){
         }
 
         // set the title of subjects
-        s[i].title = (int)(rnd_d()*20*s[i].area);
+        s[i].title = (int)(rnd_d()*20+20*(s[i].area-1));
 
         // set the credit - amount of timetable
         s[i].credit = (int)(rnd_d()*3)+1;
@@ -567,7 +568,7 @@ void gameManager::generate_subjects(){
         s[i].attend_limit = (int)(rnd_r(40,160)/s[i].level);
 
         // set the basic workload - will effect on health deduction
-        int basic_workload = 250*this->level*((double)s[i].level/3+0.67);
+        int basic_workload = 250*gv.level*((double)s[i].level/3+0.67);
         for(int j=0;j<4;j++){
             s[i].workload[j] = (int)(rnd_r(0.8,1.2)*basic_workload);
         }

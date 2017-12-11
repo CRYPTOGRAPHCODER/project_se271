@@ -159,33 +159,39 @@ struct data
 
     std::string subjects[100] = {"Thesis","음악","체육","English for Leaders","Scientific Writing","디자인공학","감염과 면역","공학적 설계","응용수학방법론","선형대수학","다변수 미적분학","전자기학 실험","분자와 생명현상 실험","응용물리 실험","심화화학 실험","고급대수","위상수학","복합 공학 수학","확률과 통계","편미분 방정식","화학속의 물리학","고전역학","신경과학","고급 고체물리학","고급 양자역학","고체화학","자성체소재","열역학","고분자 개론","촉매화학","고급 생화학","전자기학","생물 의학","응용유체역학","세포신호전달과 생명 연속성","분자와 생명현상","유전자의 구조와 발현","열 및 통계 물리","전기역학","유기화학의 이해","선형시스템","운영체제","분산 및 병렬 컴퓨팅","무선 네트워크","컨벡스 최적화","다변수 미적분학","선형시스템 제어","마이크로/나노공학","모터시스템제어","인공지능","객체지행 프로그래밍","자동제어시스템","프로그래밍","메카트로닉스","전기전자 공학","열유체공학","데이터베이스개론","빅데이터 분석 및 시각화 개론","컴퓨터 알고리즘","수치해석","융복합 영상학 개론","과학과 예술","비교역사학","쓰기·읽기·말하기","동서양 철학의 통시적 이해","과학기술사의 주요장면","인문사회과학 특강","영화와 문학","과학기술과 저널리즘 실무","한국현대문학과 사상","문학과 대중문화","동양의 고전","서양근대문학의 이해","문학과 정신분석","말과 마음","인간 복제와 문학","문학과 사회","도스토예프스키와 톨스토이","언어의 세계","일본 애니메이션의 이해","이노베이션경영 개론","융합탐구세미나","글로벌리더십 (리더십 실습)","근대 사회와 사상","현대 사회와 윤리","법과 사회","글로벌 정치경제","경제학 입문","과학기술과 현대사회","조직관리","재무회계","기술평가 실무","지식재산권 실무","기업과 사회","현대경제의 이해","현대사회와 법","시장경제와 법","민주시민과 헌법","소비자와 시장","공공행정의 이해"};
 };
-class gameManager{
-private:
-    // Global variables that indicates turns and player
+
+struct global_variables{
     // Turn : 10 Days, 4 times
     int turn;
-    // Player variable holds data of player
-    player pl;
+    // global level - basic is 1
+    double level;
     // Determine state of the game
     // -1, -2 ... game over
     // 0, start of the game
     int gamestate = 0;
     // Time limit for sugang apply
-    int sugang_time = 180;
-    int sugang_time_full = 180;
-    // Define enough number of subjects
-    subject s[SUBJECT_BUFFER];
+    int s_time = 180;
+    int s_time_full = 180;
     // Number of subject
-    int subject_number;
+    int subject_num;
+};
+
+class gameManager{
+private:
+    // Global variables that indicates game flow - need to save
+    global_variables gv;
+    // Define enough number of subjects - need to save
+    subject s[SUBJECT_BUFFER];
     // String data to print to console
     std::string console;
     // String data to print to buttons
     std::string button[BUTTON_LENGTH];
-    // data
+    // text data
     data d;
-    // global level - basic is 1
-    double level = 1;
 public:
+    // Player variable holds data of player - need to save
+    player pl;
+
     gameManager();
     ~gameManager();
     /*
@@ -230,8 +236,9 @@ public:
 
 
     player get_pl(){return this->pl;}
-    int get_turn(){return this->turn;}
-    int get_gamestate(){return this->gamestate;}
+    global_variables get_gv(){return this->gv;}
+    int get_turn(){return gv.turn;}
+    int get_gamestate(){return gv.gamestate;}
     std::string get_console(){return this->console;}
     std::string get_button(int i){return this->button[i];}
 };

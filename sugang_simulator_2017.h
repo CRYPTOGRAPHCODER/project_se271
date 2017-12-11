@@ -43,6 +43,7 @@ private slots:
     void on_button7_released();
     void on_button8_released();
     void on_button9_released();
+    void on_textbox_name_textChanged();
 };
 
 

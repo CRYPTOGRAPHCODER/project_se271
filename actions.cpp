@@ -14,8 +14,8 @@ void gameManager::meet_friend(){
 
     switch(act){
     case 1: case 2: case 3:
-        pl.add_life(-this->level*700*(rnd_d()/4+7/8));
-        pl.add_money(-this->level*20000*(rnd_d()/2+0.75));
+        pl.add_life(-gv.level*700*(rnd_d()/4+7/8));
+        pl.add_money(-gv.level*20000*(rnd_d()/2+0.75));
         co += d.co_meet_friend[act];
         break;
     case 4: case 5: case 6:
@@ -31,10 +31,10 @@ void gameManager::meet_friend(){
 */
 void gameManager::work(){
     // Decrease health
-    int l = (int)(-this->level*200*(rnd_r(0.75,1.25)));
+    int l = (int)(-gv.level*200*(rnd_r(0.75,1.25)));
     pl.add_life(l);
     // Increase money (round up by 100)
-    int m = (int)(+this->level*500*(rnd_r(0.75,1.25)))*100;
+    int m = (int)(+gv.level*500*(rnd_r(0.75,1.25)))*100;
     pl.add_money(m);
     // Update console and button message
     std::string co ="";
@@ -65,7 +65,7 @@ void gameManager::rest(){
 */
 void gameManager::study(){
     // Lose Health
-    int l = (int)(-this->level*150*rnd_r(0.75,1.25));
+    int l = (int)(-gv.level*150*rnd_r(0.75,1.25));
     pl.add_life(l);
     // Increasement value
     int s = (int)(rnd_r(1,3));
@@ -89,7 +89,7 @@ void gameManager::study(){
 */
 void gameManager::exercise(){
     // Lose Health
-    int l = (int)(-this->level*200*rnd_r(0.75,1.25));
+    int l = (int)(-gv.level*200*rnd_r(0.75,1.25));
     pl.add_life(l);
     // Increase Maximum health
     int s1 = (int)(rnd_r(2,4));
@@ -119,13 +119,13 @@ void gameManager::wander_around(){
     std::string co ="";
 
     if(act<5){          // 멍 때리기 - STAT--
-        int d1 = (int)(rnd_r(0.5,3)*this->level);
+        int d1 = (int)(rnd_r(0.5,3)*gv.level);
         pl.add_stats(-d1,2);
-        int d2 = (int)(rnd_r(0.5,3)*this->level);
+        int d2 = (int)(rnd_r(0.5,3)*gv.level);
         pl.add_stats(-d2,3);
-        int d3 = (int)(rnd_r(0.5,3)*this->level);
+        int d3 = (int)(rnd_r(0.5,3)*gv.level);
         pl.add_stats(-d3,4);
-        int d4 = (int)(rnd_r(0.5,3)*this->level);
+        int d4 = (int)(rnd_r(0.5,3)*gv.level);
         pl.add_stats(-d4,5);
         co+=d.co_wander_around[0];
         co+="\n";
@@ -134,7 +134,7 @@ void gameManager::wander_around(){
         co+="\n"+d.msg_stats[4]+std::to_string(d3)+d.msg_sub;
         co+="\n"+d.msg_stats[5]+std::to_string(d4)+d.msg_sub;
     }else if(act<9){    // 달리기 선수 - HPST++ HP--;
-        int d1 = (int)(rnd_r(2,4)*this->level);
+        int d1 = (int)(rnd_r(2,4)*gv.level);
         pl.add_stats(d1,0);
         int d2 = (int)(rnd_r(0.8,1.2)*d1*100);
         pl.add_life(-d2);
@@ -143,7 +143,7 @@ void gameManager::wander_around(){
         co+="\n"+d.msg_stats[0]+std::to_string(d1)+d.msg_add;
         co+="\n"+d.msg_life+std::to_string(d2)+d.msg_sub;
     }else if(act<13){   // 전력 질주 - HP--
-        int d1 = (int)(rnd_r(0.8,1.2)*300*this->level);
+        int d1 = (int)(rnd_r(0.8,1.2)*300*gv.level);
         pl.add_life(-d1);
         co+=d.co_wander_around[2];
         co+="\n";
@@ -151,30 +151,30 @@ void gameManager::wander_around(){
     }else if(act<17){   // 사소한 충돌 - No change
         co+=d.co_wander_around[3];
     }else if(act<21){   // 사소한 충돌 - $+
-        int d1 = (int)(rnd_r(0.8,1.2)*100*this->level*100);
+        int d1 = (int)(rnd_r(0.8,1.2)*100*gv.level*100);
         pl.add_money(d1);
         co+=d.co_wander_around[4];
         co+="\n";
         co+="\n"+d.msg_money+std::to_string(d1)+d.msg_add;
     }else if(act<25){   // 사소한 충돌 - HP---, RECO-
-        int d1 = (int)(rnd_r(1,3)*this->level);
+        int d1 = (int)(rnd_r(1,3)*gv.level);
         pl.add_stats(-d1,1);
-        int d2 = (int)(rnd_r(4,7)*100*this->level);
+        int d2 = (int)(rnd_r(4,7)*100*gv.level);
         pl.add_life(-d2);
         co+=d.co_wander_around[5];
         co+="\n";
         co+="\n"+d.msg_stats[0]+std::to_string(d1)+d.msg_sub;
         co+="\n"+d.msg_life+std::to_string(d2)+d.msg_sub;
     }else if(act<30){   // 책의 힘 - LITE++
-        int d1 = (int)(rnd_r(2,5)*this->level);
+        int d1 = (int)(rnd_r(2,5)*gv.level);
         pl.add_stats(d1,4);
         co+=d.co_wander_around[6];
         co+="\n";
         co+="\n"+d.msg_stats[4]+std::to_string(d1)+d.msg_add;
     }else if(act<35){   // 책의 힘 - SCIN+ CODE+
-        int d1 = (int)(rnd_r(2,3)*this->level);
+        int d1 = (int)(rnd_r(2,3)*gv.level);
         pl.add_stats(d1,2);
-        int d2 = (int)(rnd_r(2,3)*this->level);
+        int d2 = (int)(rnd_r(2,3)*gv.level);
         pl.add_stats(d2,3);
         co+=d.co_wander_around[7];
         co+="\n";
