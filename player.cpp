@@ -9,7 +9,10 @@ player::player(){
   for (int i = 0; i < SUBJECTS_MAX; i++){
     this->subjects[i] = -1;}
 
-  this->life_f = this->stats[0]*100+1000;
+  this->life_f = 1000;
+  for(int i =0;i<this->stats[0];i++){
+      this->life_f = (int)(this->life_f*1.03);
+  }
   this->life = this->life_f;
 
   this->money = 0;
@@ -20,7 +23,28 @@ player::player(){
   this->credit_required_chs = 36;
 
   this->score = 0;
+  stat_update();
 }
 player::~player(){
+    /*
+    delete[] this->stats;
+    delete[] this->equipments;
+    delete[] this->subjects;*/
+}
 
+void player::stat_update(){
+    this->life_f=1000;
+    for(int i =0;i<this->stats[0];i++){
+        this->life_f = (int)(this->life_f*1.03);
+    }
+
+}
+
+bool player::check_item(int index){
+    for(int i =0;i < EQUIPMENTS_MAX;i++){
+        if(this->equipments[i] == index){
+            return true;
+        }
+    }
+    return false;
 }

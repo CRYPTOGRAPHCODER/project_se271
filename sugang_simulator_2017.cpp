@@ -8,11 +8,12 @@ Sugang_Simulator_2017::Sugang_Simulator_2017(QWidget *parent) :
 {
     //Ui Setup
     ui->setupUi(this);
-    /*
-    QFont font("굴림");
-    font.setStyleHint(QFont::Monospace);
-    QApplication::setFont(font);
-    */
+/*
+    QFont fon("Courier New",9);
+    fon.setStyleHint(QFont::Monospace);
+    ui->textbox_console->setfont(fon);
+    //QApplication::setFont(font);
+*/
     ui->prog_time->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
     ui->prog_credit_mandatory->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
     ui->prog_hp->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
@@ -21,24 +22,19 @@ Sugang_Simulator_2017::Sugang_Simulator_2017(QWidget *parent) :
     //Game Setup
     player_data_update(g.get_pl(),g.get_turn());
     std::string console = "";
-    /*
-    console += "\n    .d8888b.  888     888  .d8888b.         d8888 888b    888  .d8888b.  ";
-    console += "\n   d88P  Y88b 888     888 d88P  Y88b       d88888 8888b   888 d88P  Y88b ";
-    console += "\n   Y88b.      888     888 888    888      d88P888 88888b  888 888    888 ";
-    console += "\n    'Y888b.   888     888 888            d88P 888 888Y88b 888 888        ";
-    console += "\n       'Y88b. 888     888 888  88888    d88P  888 888 Y88b888 888  88888 ";
-    console += "\n         '888 888     888 888    888   d88P   888 888  Y88888 888    888 ";
-    console += "\n   Y88b  d88P Y88b. .d88P Y88b  d88P  d8888888888 888   Y8888 Y88b  d88P ";
-    console += "\n    'Y8888P'   'Y88888P'   'Y8888P88 d88P     888 888    Y888  'Y8888P88 ";
-    */
-    console += "\n　　　◆◆◆　◆　◆　◆◆◆　◆◆◆　◆◆　　◆　◆◆◆";
-    console += "\n　　　◆　　　◆　◆　◆　　　◆　◆　◆◆　　◆　◆";
-    console += "\n　　　◆◆◆　◆　◆　◆　◆　◆◆◆　◆　◆　◆　◆　◆";
-    console += "\n　　　　　◆　◆　◆　◆　◆　◆　◆　◆　　◆◆　◆　◆";
-    console += "\n　　　◆◆◆　◆◆◆　◆◆◆　◆　◆　◆　　◆◆　◆◆◆";
-    console += "\n                                              Simulator 2017 v1.0";
-    console += "\n\n             \"The Realistic life of undergraudates\"";
 
+    console += "  .d8888b.  888     888  .d8888b.         d8888 888b    888  .d8888b.  ";
+    console += "\n d88P  Y88b 888     888 d88P  Y88b       d88888 8888b   888 d88P  Y88b ";
+    console += "\n Y88b.      888     888 888    888      d88P888 88888b  888 888    888 ";
+    console += "\n  'Y888b.   888     888 888            d88P 888 888Y88b 888 888        ";
+    console += "\n     'Y88b. 888     888 888  88888    d88P  888 888 Y88b888 888  88888 ";
+    console += "\n       '888 888     888 888    888   d88P   888 888  Y88888 888    888 ";
+    console += "\n Y88b  d88P Y88b. .d88P Y88b  d88P  d8888888888 888   Y8888 Y88b  d88P ";
+    console += "\n  'Y8888P'   'Y88888P'   'Y8888P88 d88P     888 888    Y888  'Y8888P88 ";
+    console += "\n  _______ _____ _______ _     _        _______ _______  _____   ______";
+    console += "\n  |______   |   |  |  | |     | |      |_____|    |    |     | |_____/";
+    console += "\n  ______| __|__ |  |  | |_____| |_____ |     |    |    |_____| |    \\_";
+    console += "\n       2  0  1  7           \"The Realistic life of undergraudates\"";
     console += "\n\n ▶ 새 게임 - Menu -> Game Start";
     console += "\n ▶ 게임 로드 - Menu -> Game Load";
 
@@ -123,8 +119,14 @@ void Sugang_Simulator_2017::player_data_update(player pl,int t){
     if(t/4%10>=7){
         ui->prog_time->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #dd3636; width: 1px;}");
     }
+    else{
+        ui->prog_time->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
+
+    }
     if(pl.get_life()<pl.get_life_f()*0.3){
         ui->prog_hp->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #dd3636; width: 1px;}");
+    }else{
+        ui->prog_hp->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
     }
 }
 void Sugang_Simulator_2017::console_update(std::string text){

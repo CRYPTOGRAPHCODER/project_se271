@@ -24,7 +24,8 @@ private:
 public:
   player();
   ~player();
-
+  void stat_update();
+  bool check_item(int index);
   //name
   std::string get_name() { return this->name; };
   void set_name(std::string value) { this->name = value; };

@@ -3,8 +3,8 @@
 #include "player.h"
 
 gameManager::gameManager(){
-    this->turn = 32;
-    this->subject_number = 40;
+    this->turn = 0;
+    this->subject_number = 35;
     generate_subjects();
     for(int i=0;i<BUTTON_LENGTH;i++){
         this->button[i]="";
@@ -39,6 +39,10 @@ void gameManager::proceed(int input){
         print_update(d.co_intro04,d.bt_intro);
         break;
     case 3:
+        this->gamestate ++;        // To Intro 4
+        print_update(d.co_intro05,d.bt_intro);
+        break;
+    case 4:
         this->gamestate = 20;      // To Main
         print_update(d.co_main,d.bt_main);
         break;
@@ -81,7 +85,7 @@ void gameManager::proceed(int input){
     case 22:                                            // Sugang
         switch(input){
         case 1:                                             // To Login
-            if((this->turn/4)%10<=7){                       // Back to Main if Day<8
+            if(this->turn%40<28){                       // Back to Main if Day<8
                 this->gamestate = 20;
                 print_update(d.co_main, d.bt_main);
             }
@@ -116,8 +120,9 @@ void gameManager::proceed(int input){
             if(this->sugang_time <= 0){
                 this->sugang_time = this->sugang_time_full;
                 this->gamestate = 20;
-                game_turn_pass();
                 print_update(d.co_main,d.bt_main);
+                this->sugang_time_pass(1000);
+                game_turn_pass();
             }
             break;
         case 8:                                             // View Next Subject
@@ -129,16 +134,21 @@ void gameManager::proceed(int input){
             if(this->sugang_time <= 0){
                 this->sugang_time = this->sugang_time_full;
                 this->gamestate = 20;
-                game_turn_pass();
                 print_update(d.co_main,d.bt_main);
+                this->sugang_time_pass(1000);
+                game_turn_pass();
             }
             break;
         case 9:
             this->gamestate = 20;                           // To Main Menu, spend turn
-            game_turn_pass();
             print_update(d.co_main,d.bt_main);
+            game_turn_pass();
             break;
         }
+        break;
+    case 40:                                                // Semester reset
+        this->gamestate = 20;
+        print_update(d.co_main,d.bt_main);
         break;
     case 44:
         break;
@@ -150,13 +160,112 @@ void gameManager::proceed(int input){
     }
 }
 
+/* calculating semester
+ * only function that can handle gamestate except proceed
+*/
+void gameManager::calculate_semester(){
+    this->gamestate = 40;
+    std::string c = d.co_semester[0];
+    c+= "";
+    c+= "\n   |     과목의 어려운 정도    |";
+    c+= "\n학점| 이학 | 공학 | 문학 | 사회 |체력소모|학점|과목명";
+    int drain_total = 0;
+    for(int i = 0; i<SUBJECTS_MAX;i++){
+        if(pl.get_subjects()[i]==-1){
+            continue;
+        }
+        c+= "\n";
+        int l = pl.get_subjects()[i];
+        c+= " "+ std::to_string(s[l].credit)+" |";
+        c+= std::to_string(s[l].workload[0]);
+        if(s[l].workload[0]<1000){
+            c+= "  |";
+        }else if(s[l].workload[0]<10000){
+            c+= " |";
+        }else{
+            c+= "|";
+        }
+        c+= std::to_string(s[l].workload[1]);
+        if(s[l].workload[1]<1000){
+            c+= "  |";
+        }else if(s[l].workload[1]<10000){
+            c+= " |";
+        }else{
+            c+= "|";
+        }
+        c+= std::to_string(s[l].workload[2]);
+        if(s[l].workload[2]<1000){
+            c+= "  |";
+        }else if(s[l].workload[2]<10000){
+            c+= " |";
+        }else{
+            c+= "|";
+        }
+        c+= std::to_string(s[l].workload[3]);
+        if(s[l].workload[3]<1000){
+            c+= "  |";
+        }else if(s[l].workload[3]<10000){
+            c+= " |";
+        }else{
+            c+= "|";
+        }
+        int drain = s[i].workload[0]/pl.get_stats()[2]+s[i].workload[1]/pl.get_stats()[3]+s[i].workload[2]/pl.get_stats()[4]+s[i].workload[3]/pl.get_stats()[5];
+        c+= std::to_string(drain);
+        if(drain<100){
+            c+= "     |";
+        }else if(drain<1000){
+            c+= "    |";
+        }else{
+            c+= "   |";
+        }
+        pl.add_life(-drain);
+        drain_total += drain;
+        if(drain<pl.get_life_f()/30){
+            c+=" A |";
+        }else if(drain<pl.get_life_f()/25*s[i].credit){
+            c+=" B |";
+        }else if(drain<pl.get_life_f()/20*s[i].credit){
+            c+=" C |";
+        }else if(drain<pl.get_life_f()/15*s[i].credit){
+            c+=" D |";
+        }else{
+            c+=" F |";
+        }
+
+        std::string m = d.subjects[s[i].title];
+        if(s[i].level == 2){
+            m+=" II";
+        }else if(s[i].level == 3){
+            m+=" III";
+        }else if(s[i].level == 4){
+            m+=" IV";
+        }
+        c+=m;
+
+    }
+    c += "\n\n"+d.co_semester[1];
+    this->subject_number += (int)(rnd_r(5,8));
+    if(this->subject_number>=100){
+        subject_number = 100;
+    }
+    generate_subjects();
+    print_update(c,d.bt_semester);
+}
+
 /* turn pass event for almost every action
 */
 void gameManager::game_turn_pass(){
-    this->turn ++;
+    // Gradually increase level
     this->level *= 1.009;
-    pl.set_life_f(pl.get_stats()[0]*100+1000);
+    // Reset sugang time
+    this->sugang_time = this->sugang_time_full;
+    // player data update
+    pl.stat_update();
 
+    // Calculate semester
+    if(turn%40==39){
+        calculate_semester();
+    }
     // Game Over Check
     if(pl.get_life()<=0){
         pl.set_life(0);
@@ -166,6 +275,8 @@ void gameManager::game_turn_pass(){
             c+=d.co_gameover[i];}
         print_update(c,d.bt_gameover);
     }
+
+    this->turn ++;
 }
 
 /// Sugang
@@ -174,11 +285,23 @@ void gameManager::game_turn_pass(){
 */
 void gameManager::sugang_time_pass(double timepass){
     for(int i=0;i<this->subject_number;i++){
-        s[i].attend_people+=(int)(timepass);
-
-
+        for(int j =0;j<timepass/2;j++){
+            //Add people to each subjects
+            int p = (int)(((s[i].attend_hope-s[i].attend_people)/16)*rnd_r(0.8,1.2));
+            if(p==0 && rnd_d()>0.8){
+                p++;
+            }
+            s[i].attend_people+=p;
+        }
+        // set no more over
         if(s[i].attend_people>s[i].attend_limit){
             s[i].attend_people=s[i].attend_limit;
+        }
+        // random empty seat
+        if(s[i].attend_people==s[i].attend_limit){
+            if(rnd_d()>0.95+0.05*(s[i].attend_hope-s[i].attend_limit)/s[i].attend_limit){
+                s[i].attend_people-=1;
+            }
         }
     }
 
@@ -210,6 +333,9 @@ void gameManager::sugang_apply(int index){
         bool apply = true;
         // check timetable
         for(int i=0;i<SUBJECTS_MAX;i++){
+            if(pl.get_subjects()[i]==-1){
+                continue;
+            }
             for(int j=0;j<s[pl.get_subjects()[i]].credit;j++){
                 for(int k=0;k<s[index].credit;k++){
                     if(s[pl.get_subjects()[i]].timetable[j]==s[index].timetable[k]){
@@ -261,11 +387,10 @@ void gameManager::sugang_apply(int index){
 void gameManager::print_sugang_data(){
     std::string c;
     c+=d.co_s_watch;
-    c+="\n과목명\t\t\t시간\t수강희망/수강제한  분류";
+    c+="\n시간        수강희망/수강제한  분류    과목명";
     for (int i=0;i<subject_number;i++){
         c+="\n";
-        c+=print_subject_data_hope(i);
-        c+=d.sb_category[s[i].category];
+        c+=print_subject_data(i,2);
     }
     print_update(c,d.bt_s_watch);
 }
@@ -278,15 +403,14 @@ void gameManager::print_sugang_apply(int index){
     std::string c = d.co_s_apply[0];
     c+=std::to_string(this->sugang_time/60)+":"+std::to_string(this->sugang_time%60);
     c+=d.co_s_apply[1];
-    c+="\n과목명\t\t\t시간\t수강인원/수강제한  분류";
+    c+="\n시간        수강인원/수강제한  분류    과목명";
     for (int i=0;i<SUBJECTS_MAX;i++){
         int p = pl.get_subjects()[i];
         // Continue if player's subject data is unavailable
         if (p<0){
             continue;}
         c+="\n";
-        c+=print_subject_data_people(p);
-        c+=d.sb_category[s[p].category];
+        c+=print_subject_data(p,1);
     }
     //Button design - subject 1~7, next, out
     std::string k[9] = d.bt_s_apply;
@@ -298,21 +422,21 @@ void gameManager::print_sugang_apply(int index){
             continue;
         }
         std::string b;
-        // Add data to button
-        b+=print_subject_data_people(p);
-        b+=d.sb_category[s[p].category];
         // Add Apply or deapply
         bool apply = false;
         for(int j=0;j<SUBJECTS_MAX;j++){
             if(pl.get_subjects()[j]==p){
-                b+= " 수강취소";
+                b+= "수강취소 ";
                 apply = true;
                 break;
             }
         }
         if(!apply){
-            b+= " 수강신청";
+            b+= "수강신청 ";
         }
+        // Add data to button
+        b+=print_subject_data(p,1);
+
         // Add text to button
         k[i] = b;
     }
@@ -322,42 +446,42 @@ void gameManager::print_sugang_apply(int index){
 /* print sugang data
  *
  */
-std::string gameManager::print_subject_data_people(int i){
+std::string gameManager::print_subject_data(int i, int mode){
     std::string c;
-    std::string m = s[i].title;
-    c+=s[i].title;
-    for(int i=m.length();i<45;i++){
-        c+=" ";}
-    c+="\t";
     for(int j=0;j<s[i].credit;j++){
         c+=d.sb_day[s[i].timetable[j]/4]+d.sb_time[s[i].timetable[j]%4]+" ";}
     for(int j=s[i].credit;j<=2;j++){
         c+="　　　 ";}
-    std::string tmp = std::to_string(s[i].attend_people)+"/"+std::to_string(s[i].attend_limit);
-    c+=tmp;
-    for(int i = tmp.length(); i < 10; i++){
-        c+=" ";}
-    return c;
-}
-
-/* print sugang data
- *
- */
-std::string gameManager::print_subject_data_hope(int i){
-    std::string c;
-    std::string m = s[i].title;
-    c+=s[i].title;
-    for(int i=m.length();i<45;i++){
-        c+=" ";}
-    c+="\t";
-    for(int j=0;j<s[i].credit;j++){
-        c+=d.sb_day[s[i].timetable[j]/4]+d.sb_time[s[i].timetable[j]%4]+" ";}
-    for(int j=s[i].credit;j<=2;j++){
-        c+="　　　 ";}
-    std::string tmp = std::to_string(s[i].attend_hope)+"/"+std::to_string(s[i].attend_limit);
-    c+=tmp;
-    for(int i = tmp.length(); i < 10; i++){
-        c+=" ";}
+    if(mode == 1){
+        std::string tmp = std::to_string(s[i].attend_people)+" / "+std::to_string(s[i].attend_limit);
+        c+=tmp;
+        for(int i =tmp.length();i<=9;i++){
+            c+=" ";
+        }
+    }
+    else{
+        std::string tmp = std::to_string(s[i].attend_hope)+" / "+std::to_string(s[i].attend_limit);
+        c+=tmp;
+        for(int i =tmp.length();i<=9;i++){
+            c+=" ";
+        }
+    }
+    c+=d.sb_category[s[i].category]+" ";
+/*
+    c+=std::to_string(s[i].workload[0])+" "+std::to_string(s[i].workload[1])+" ";
+    c+=std::to_string(s[i].workload[2])+" "+std::to_string(s[i].workload[3])+" ";
+    c+=std::to_string(s[i].workload[0]/pl.get_stats()[2]+s[i].workload[1]/pl.get_stats()[3]+s[i].workload[2]/pl.get_stats()[4]+s[i].workload[3]/pl.get_stats()[5])+" ";
+*/
+    // Subject name
+    std::string m = d.subjects[s[i].title];
+    if(s[i].level == 2){
+        m+=" II";
+    }else if(s[i].level == 3){
+        m+=" III";
+    }else if(s[i].level == 4){
+        m+=" IV";
+    }
+    c+=m;
     return c;
 }
 
@@ -373,178 +497,103 @@ void gameManager::print_update(std::string co, std::string* bt){
 }
 
 
-/// Actions that deplete turn
-
-/* main - outside - meet friend
- * 70% get subject information
- * 10% ~~
-*/
-void gameManager::meet_friend(){
-    int act = (int)(rnd_r(0,100));
-    //Console string initialize
-    std::string co ="";
-
-    switch(act){
-    case 1: case 2: case 3:
-        pl.add_life(-this->level*700*(rnd_d()/4+7/8));
-        pl.add_money(-this->level*20000*(rnd_d()/2+0.75));
-        co += d.co_meet_friend[act];
-        break;
-    case 4: case 5: case 6:
-    case 7: case 8: case 9:
-        break;
-    }
-    print_update(co,d.co_meet_friend);
-}
-
-/* main - rest
- * decrease health
- * add money
-*/
-void gameManager::work(){
-    // Decrease health
-    int l = (int)(-this->level*200*(rnd_r(0.75,1.25)));
-    pl.add_life(l);
-    // Increase money (round up by 100)
-    int m = (int)(+this->level*500*(rnd_r(0.75,1.25)))*100;
-    pl.add_money(m);
-    // Update console and button message
-    std::string co ="";
-    co += d.co_work;
-    co += "\n";
-    co += "\n"+d.msg_money+std::to_string(m)+d.msg_add;
-    co += "\n"+d.msg_life+std::to_string(-l)+d.msg_sub;
-    print_update(co,d.bt_work);
-    // End turn
-    game_turn_pass();
-}
-
-/* main - rest
- * increase health
-*/
-void gameManager::rest(){
-    // update console message and button message
-    print_update(d.co_rest,d.bt_rest);
-    // Add Health
-    pl.add_life((int)(pl.get_stats()[1]*100*rnd_r(0.9,1.2)));
-    // End turn
-    game_turn_pass();
-}
-
-/* main - study
- * increase random study stat
- * lose helath
-*/
-void gameManager::study(){    
-    // Lose Health
-    int l = (int)(-this->level*150*rnd_r(0.75,1.25));
-    pl.add_life(l);
-    // Increasement value
-    int s = (int)(rnd_r(1,3));
-    // Choose random study stat
-    int w = (int)(rnd_r(2,6));
-    pl.add_stats(s,w);
-    // Print console message and button
-    std::string co ="";
-    co += d.co_study[(int)(rnd_d()*5)];
-    co += "\n";
-    co += "\n"+d.msg_stats[w]+std::to_string(s)+d.msg_add;
-    co += "\n"+d.msg_life+std::to_string(-l)+d.msg_sub;
-    print_update(co,d.bt_study);
-    // End turn
-    game_turn_pass();
-}
-
-/* main - exercise
- * increase health stat and recovery stat
- * lose helath
-*/
-void gameManager::exercise(){
-    // Lose Health
-    int l = (int)(-this->level*200*rnd_r(0.75,1.25));
-    pl.add_life(l);
-    // Increase Maximum health
-    int s1 = (int)(rnd_r(2,4));
-    pl.add_stats(s1,0);
-    // Increase Recovery
-    int s2 = (int)(rnd_r(1,3));
-    pl.add_stats(s2,1);
-    // Print console message and button
-    std::string co ="";
-    co += d.co_exercise[(int)(rnd_d()*5)];
-    co += "\n";
-    co += "\n"+d.msg_stats[0]+std::to_string(s1)+d.msg_add;
-    co += "\n"+d.msg_stats[1]+std::to_string(s2)+d.msg_add;
-    co += "\n"+d.msg_life+std::to_string(-l)+d.msg_sub;
-    print_update(co,d.bt_exercise);
-    // End turn
-    game_turn_pass();
-}
-
-void gameManager::store(){};
-void gameManager::visit_professor(){};
-void gameManager::club_room(){};
-void gameManager::wander_around(){};
-
-void gameManager::sugang(){};
-void gameManager::calculate_semester(){};
-
 /* generating subjects
  * depends on global level
  */
 void gameManager::generate_subjects(){
     for(int i=0;i<subject_number;i++){
-        // set the category
-        if(i<subject_number/3){
-            s[i].category = 0;}
-        else{
-            s[i].category = 1;}
+        // set the category - if it is necessary, it is harder
+        if(rnd_d()<0.35){
+            s[i].category = 0;
+        }else{
+            s[i].category = 1;
+        }
+        // set the area of the subject - gives bonus burden
+        // 1 - no special 2 - SCIE 3 - CODE 4 - LITE 5 - SOCI
+        double die = rnd_d();
+        if(die<0.2){s[i].area = 1;
+        }else if(die<0.4){s[i].area = 2;
+        }else if(die<0.6){s[i].area = 3;
+        }else if(die<0.8){s[i].area = 4;
+        }else{s[i].area = 5;}
 
+        // set the level of the subject
+        int year = (int)(this->turn/40)+1;
         double rol = rnd_d();
-
-        if(rol>0.5){
-            s[i].level = 1;}
-        else if(rol>0.3){
-            s[i].level = 2;}
-        else if(rol>0.1){
-            s[i].level = 3;}
-        else if(rol>0.0){
-            s[i].level = 4;}
+        if(year == 1){
+            if(rol<0.65){s[i].level = 1;}
+            else if(rol<0.85){s[i].level=2;}
+            else if(rol<0.95){s[i].level=3;}
+            else            {s[i].level=4;}
+        }else if(year == 2){
+            if(rol<0.4){s[i].level = 1;}
+            else if(rol<0.7){s[i].level=2;}
+            else if(rol<0.9){s[i].level=3;}
+            else            {s[i].level=4;}
+        }else if(year == 3){
+            if(rol<0.2){s[i].level = 1;}
+            else if(rol<0.5){s[i].level=2;}
+            else if(rol<0.8){s[i].level=3;}
+            else            {s[i].level=4;}
+        }else if(year == 4){
+            if(rol<0.1){s[i].level = 1;}
+            else if(rol<0.3){s[i].level=2;}
+            else if(rol<0.6){s[i].level=3;}
+            else            {s[i].level=4;}
+        }else if(year == 5){
+            if(rol>0.05){s[i].level = 1;}
+            else if(rol>0.2){s[i].level=2;}
+            else if(rol>0.5){s[i].level=3;}
+            else            {s[i].level=4;}
+        }else{
+            if(rol<0.05){s[i].level = 1;}
+            else if(rol<0.15){s[i].level=2;}
+            else if(rol<0.35){s[i].level=3;}
+            else            {s[i].level=4;}
+        }
 
         // set the title of subjects
-        /// set the basic name
-        s[i].title = d.subjects[(int)(rnd_d()*100)];
-        /// add I or II
-        if(s[i].level == 2){
-            s[i].title += " II";
-        }
-        if(s[i].level == 3){
-            s[i].title += " III";
-        }
-        if(s[i].level == 4){
-            s[i].title += " IV";
-        }
-        if(s[i].level == 5){
-            s[i].title += " V";
-        }
+        s[i].title = (int)(rnd_d()*20*s[i].area);
+
         // set the credit - amount of timetable
         s[i].credit = (int)(rnd_d()*3)+1;
 
         // set the timetables of subjects - based on credit
-        /// Pick the each subject - not perfect since there might be same class - need to be fixed
         int* a = rnd_ia(20,s[i].credit);
-
         for(int j=0;j<s[i].credit;j++){
             s[i].timetable[j] = a[j];
         }
-        // set the attend limit - completely random bet 20~100
-        s[i].attend_limit = (int)(rnd_d()*80+20);
-        // set the workload - will effect on health deduction
-        int basic_workload = 1500;
+        // set the attend limit - completely random bet 40~160, decrease with level
+        s[i].attend_limit = (int)(rnd_r(40,160)/s[i].level);
 
+        // set the basic workload - will effect on health deduction
+        int basic_workload = 250*this->level*((double)s[i].level/3+0.67);
         for(int j=0;j<4;j++){
-            s[i].workload[j] = (int)(rnd_d()*basic_workload*this->level);
+            s[i].workload[j] = (int)(rnd_r(0.8,1.2)*basic_workload);
         }
-        s[i].attend_hope = (int)(s[i].attend_limit * (rnd_d()*0.4+0.85));
+        // add the area workload
+        if(s[i].area>=2){
+            s[i].workload[s[i].area-2] += (int)(rnd_r(1.0,3.0)*basic_workload);
+        }
+        // set the additional workload if it is necessary
+        for(int j=0;j<4;j++){
+            s[i].workload[j] *=rnd_r(1.2,1.5);
+        }
+        // set the additional workload if it has more timetable
+        for(int j=0;j<s[i].credit;j++){
+            s[i].workload[j] *=1.41;
+        }
+
+        // MAX WORKLOAD VALUE : basic*2.33*g.level*(1.2+3)*1.5 >
+        // MIN WORKLOAD VALUE : basic*1*g.level*0.8 => 160
+
+        // set the attend hope - necessary is harder to enroll
+        if(s[i].category==0){
+            s[i].attend_hope = (int)(s[i].attend_limit * (rnd_r(0.9,1.2)));
+        }else{
+            s[i].attend_hope = (int)(s[i].attend_limit * (rnd_r(0.5,1.7)));
+        }
+        // set the attended people = 0;
+        s[i].attend_people = 0;
     }
 }

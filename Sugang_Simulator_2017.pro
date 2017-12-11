@@ -28,7 +28,8 @@ SOURCES += \
         sugang_simulator_2017.cpp \
     game.cpp \
     player.cpp \
-    functions.cpp
+    functions.cpp \
+    actions.cpp
 
 HEADERS += \
         sugang_simulator_2017.h \
