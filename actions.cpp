@@ -7,25 +7,20 @@
  * 70% get subject information
  * 10% ~~
 */
-void gameManager::meet_friend(){
-    int act = (int)(rnd_r(0,100));
-    //Console string initialize
-    std::string co ="";
 
-    switch(act){
-    case 1: case 2: case 3:
-        pl.add_life(-gv.level*700*(rnd_d()/4+7/8));
-        pl.add_money(-gv.level*20000*(rnd_d()/2+0.75));
-        co += d.co_meet_friend[act];
-        break;
-    case 4: case 5: case 6:
-    case 7: case 8: case 9:
-        break;
-    }
-    print_update(co,d.co_meet_friend);
+void gameManager::meet_friend(){
+  //life는 일괄적으로 50곱해줄 것, 돈은 일괄적으로 2000 곱해줄 것
+    int act = (int)(rnd_r(0,100));
+    //Basic string
+    std::string co ="";
+    int d1 = (int)(2000*rnd_r(2.0, 4.0)*gv.level);
+    co += "\n" + d.msg_money + std::to_string(d1) + d.msg_sub;
+    co+=d.co_meet_friend[0];
+    pl.add_money(-d1);
 }
 
-/* main - rest
+
+/* main - work
  * decrease health
  * add money
 */
@@ -42,7 +37,7 @@ void gameManager::work(){
     co += "\n";
     co += "\n"+d.msg_money+std::to_string(m)+d.msg_add;
     co += "\n"+d.msg_life+std::to_string(-l)+d.msg_sub;
-    print_update(co,d.bt_work);
+    print_update(co,d.bt_basic);
     // End turn
     game_turn_pass();
 }
@@ -52,9 +47,14 @@ void gameManager::work(){
 */
 void gameManager::rest(){
     // update console message and button message
-    print_update(d.co_rest,d.bt_rest);
+    print_update(d.co_rest,d.bt_basic);
     // Add Health
-    pl.add_life((int)(((15+pl.get_stats()[1])*rnd_r(0.9,1.2))/100*pl.get_life_f()));
+    int add = (int)(((15+pl.get_stats()[1])*rnd_r(0.9,1.2))/100*pl.get_life_f());
+    // Item 3
+    if(pl.item_check(3)){
+        add*=1.3;
+    }
+    pl.add_life(add);
     // End turn
     game_turn_pass();
 }
@@ -78,7 +78,7 @@ void gameManager::study(){
     co += "\n";
     co += "\n"+d.msg_stats[w]+std::to_string(s)+d.msg_add;
     co += "\n"+d.msg_life+std::to_string(-l)+d.msg_sub;
-    print_update(co,d.bt_study);
+    print_update(co,d.bt_basic);
     // End turn
     game_turn_pass();
 }
@@ -104,7 +104,7 @@ void gameManager::exercise(){
     co += "\n"+d.msg_stats[0]+std::to_string(s1)+d.msg_add;
     co += "\n"+d.msg_stats[1]+std::to_string(s2)+d.msg_add;
     co += "\n"+d.msg_life+std::to_string(-l)+d.msg_sub;
-    print_update(co,d.bt_exercise);
+    print_update(co,d.bt_basic);
     // End turn
     game_turn_pass();
 }
@@ -187,35 +187,93 @@ void gameManager::wander_around(){
 
     }else if(act<46){   // 친구의 선물 - No change
         co+=d.co_wander_around[10];
-    }else if(act<48){   // 도플갱어
+    }else if(act<48){   // 도플갱어 - HP-
+        int d1 = (int)(rnd_r(4,7)*100*gv.level);
+        pl.add_life(-d1);
+        co+=d.co_wander_around[11];
+        co+="\n";
+        co+="\n"+d.msg_life+std::to_string(d1)+d.msg_sub;
+    }else if(act<50){   // 도플갱어 all stat**
+        co+=d.co_wander_around[12];
+        co+="\n";
+        for(int j=0;j<6;j++){
+            pl.add_stats(pl.get_stats()[j],j);
+            co+="\n"+d.msg_stats[j]+std::to_string(pl.get_stats()[j]/2)+d.msg_add;
+        }
+    }else if(act<55){   // 소매치기 money---
+        int d1 = (int)(rnd_r(0.8,1.2)*1000*gv.level*100);
+        pl.add_money(-d1);
+        co+=d.co_wander_around[13];
+        co+="\n";
+        co+="\n"+d.msg_money+std::to_string(d1)+d.msg_sub;
+    }else if(act<58){   // 강도 item -
+        co+=d.co_wander_around[14];
 
-    }else if(act<50){   // 도플갱어
+    }else if(act<63){   // 오늘은 내가 요리사 HPST+ RECO+ HP+
+        int d1 = (int)(rnd_r(2,4)*gv.level);
+        pl.add_stats(d1,0);
+        int d2 = (int)(rnd_r(0.5,1.7)*gv.level);
+        pl.add_stats(d2,1);
+        int d3 = (int)(rnd_r(200,400)*gv.level);
+        pl.add_life(d3);
+        co+=d.co_wander_around[15];
+        co+="\n";
+        co+="\n"+d.msg_stats[0]+std::to_string(d1)+d.msg_add;
+        co+="\n"+d.msg_stats[1]+std::to_string(d2)+d.msg_add;
+        co+="\n"+d.msg_life+std::to_string(d3)+d.msg_add;
+    }else if(act<68){   // 오늘은 내가 요리사 HPST- RECO- HP-
+        int d1 = (int)(rnd_r(1,3)*gv.level);
+        pl.add_stats(-d1,0);
+        int d2 = (int)(rnd_r(0,2)*gv.level);
+        pl.add_stats(-d2,1);
+        int d3 = (int)(rnd_r(100,200)*gv.level);
+        pl.add_life(-d3);
+        co+=d.co_wander_around[16];
+        co+="\n";
+        co+="\n"+d.msg_stats[0]+std::to_string(d1)+d.msg_sub;
+        co+="\n"+d.msg_stats[1]+std::to_string(d2)+d.msg_sub;
+        co+="\n"+d.msg_life+std::to_string(d3)+d.msg_sub;
+    }else if(act<73){   // 친구의 질문   SCIE+ CODE+
+        int d1 = (int)(rnd_r(2,4)*gv.level);
+        pl.add_stats(d1,2);
+        int d2 = (int)(rnd_r(2,4)*gv.level);
+        pl.add_stats(d2,3);
+        co+=d.co_wander_around[17];
+        co+="\n";
+        co+="\n"+d.msg_stats[2]+std::to_string(d1)+d.msg_add;
+        co+="\n"+d.msg_stats[3]+std::to_string(d2)+d.msg_add;
+    }else if(act<78){   // 친구의 질문 Nothing
+        co+=d.co_wander_around[18];
+    }else if(act<82){   // 실험 조언 SCIE- CODE-
+        int d1 = (int)(rnd_r(1,3)*gv.level);
+        pl.add_stats(-d1,2);
+        int d2 = (int)(rnd_r(1,3)*gv.level);
+        pl.add_stats(-d2,3);
+        co+=d.co_wander_around[19];
+        co+="\n";
+        co+="\n"+d.msg_stats[2]+std::to_string(d1)+d.msg_sub;
+        co+="\n"+d.msg_stats[3]+std::to_string(d2)+d.msg_sub;
+    }else if(act<87){   // 목적 없는 사람 Nothing
+        co+=d.co_wander_around[20];
+    }else if(act<90){   // 특강 ITEM+
+        co+=d.co_wander_around[21];
 
-    }else if(act<55){   // 소매치기
-
-    }else if(act<58){   // 강도
-
-    }else if(act<63){   // 오늘은 내가 요리사
-
-    }else if(act<68){   // 오늘은 내가 요리사
-
-    }else if(act<73){   // 친구의 질문
-
-    }else if(act<78){   // 친구의 질문
-
-    }else if(act<82){   // 실험 조언
-
-    }else if(act<87){   // 목적 없는 사람
-
-    }else if(act<90){   // 특강
-
-    }else if(act<95){   // 특강
-
+    }else if(act<95){   // 특강 HP+
+        int d3 = (int)(rnd_r(200,400)*gv.level);
+        pl.add_life(d3);
+        co+=d.co_wander_around[22];
+        co+="\n";
+        co+="\n"+d.msg_life+std::to_string(d3)+d.msg_add;
     }else{              // 의미 없는 토론
-
+        int d1 = (int)(rnd_r(1,3)*gv.level);
+        pl.add_stats(-d1,4);
+        int d2 = (int)(rnd_r(1,3)*gv.level);
+        pl.add_stats(-d2,5);
+        co+=d.co_wander_around[23];
+        co+="\n";
+        co+="\n"+d.msg_stats[4]+std::to_string(d1)+d.msg_sub;
+        co+="\n"+d.msg_stats[5]+std::to_string(d2)+d.msg_sub;
     }
-
-
     print_update(co,d.bt_wander_around);
     // End turn
     game_turn_pass();

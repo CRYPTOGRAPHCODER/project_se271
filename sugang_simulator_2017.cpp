@@ -14,15 +14,17 @@ Sugang_Simulator_2017::Sugang_Simulator_2017(QWidget *parent) :
     ui->textbox_console->setfont(fon);
     //QApplication::setFont(font);
 */
+    // Set color and style for each progress bar - we don't need any glowing
     ui->prog_time->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
     ui->prog_credit_mandatory->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
     ui->prog_hp->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
     ui->prog_credit_selective->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
 
-    //Game Setup
-    player_data_update(g.get_pl(),g.get_turn());
-    std::string console = "";
+    // Initialize gameManager
+    g = gameManager();
 
+    // Main window of the game
+    std::string console = "";
     console += "  .d8888b.  888     888  .d8888b.         d8888 888b    888  .d8888b.  ";
     console += "\n d88P  Y88b 888     888 d88P  Y88b       d88888 8888b   888 d88P  Y88b ";
     console += "\n Y88b.      888     888 888    888      d88P888 88888b  888 888    888 ";
@@ -37,15 +39,15 @@ Sugang_Simulator_2017::Sugang_Simulator_2017(QWidget *parent) :
     console += "\n       2  0  1  7           \"The Realistic life of undergraudates\"";
     console += "\n\n ▶ 새 게임 - Menu -> Game Start";
     console += "\n ▶ 게임 로드 - Menu -> Game Load";
-
+    // Update Console
     console_update(console);
+    // Update Button
     std::string but = "";
     for(int i=0;i<9;i++){
         button_update(but,i);
     }
-
+    // Disable Save
     ui->actionSave_Game->setEnabled(false);
-
 }
 
 Sugang_Simulator_2017::~Sugang_Simulator_2017()
@@ -55,48 +57,125 @@ Sugang_Simulator_2017::~Sugang_Simulator_2017()
 
 void Sugang_Simulator_2017::on_actionStart_Game_triggered()
 {
+    if(g.get_turn()>0){
+        QMessageBox msgBox;
+        msgBox.setText("You have pressed the New Game buttton");
+        msgBox.setInformativeText("Do you want to restart the game?\nAny unsaved changes are not saved.");
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msgBox.setDefaultButton(QMessageBox::Yes);
+        int ret = msgBox.exec();
+        switch (ret) {
+          case QMessageBox::Yes:
+              g = gameManager();
+              break;
+          case QMessageBox::No:
+              break;
+          default:
+            break;
+        }
+    }else{
+        // Reset gameManager
+        g = gameManager();
+    }
+    // Enable Save
     ui->actionSave_Game->setEnabled(true);
-    g = gameManager();
+    // Update screen
     update();
+
 }
 void Sugang_Simulator_2017::on_actionSave_Game_triggered()
 {
-    ui->textbox_console->setText("Saving...");
-    player SaveData = g.get_pl();
-    std::ofstream fout("Savedata.dat", std::ios_base::out|std::ios_base::binary);
-    fout.write((char*)&SaveData, sizeof(SaveData));
-    fout.close();
+
+    // Save Game
+    QMessageBox msgBox;
+    msgBox.setText("You have pressed the save buttton");
+    msgBox.setInformativeText("Do you want to save your changes?\nSave will be overwritten.");
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Save);
+    int ret = msgBox.exec();
+
+    if(ret==QMessageBox::Save){
+        player SaveData1 = g.get_pl();
+        subject SaveData2[100];
+        for(int i = 0; i<100;i++){
+            SaveData2[i]=g.get_subject(i);
+        }
+        global_variables SaveData3 = g.get_gv();
+        SaveData1.string_to_char();
+        SaveData1.set_name("");
+        std::ofstream fout1("Savedata1.txt");
+        std::ofstream fout2("Savedata2.txt");
+        std::ofstream fout3("Savedata3.txt");
+        fout1.write((char*)&SaveData1, sizeof(SaveData1));
+        fout2.write((char*)&SaveData2, sizeof(SaveData2));
+        fout3.write((char*)&SaveData3, sizeof(SaveData3));
+        fout1.close();
+        fout2.close();
+        fout3.close();
+    }
+    // Update Screen
+    update();
 }
 
 void Sugang_Simulator_2017::on_actionLoad_Game_triggered()
 {
+    // Load Game
+    // Enable Save Button
     ui->actionSave_Game->setEnabled(true);
-    gameManager LoadData;
-    std::ifstream fin("Savedata.dat", std::ios_base::in | std::ios_base::binary);
-    if(fin.is_open() == false){
-        ui->textbox_console->setText("No Saved File");
+    QMessageBox msgBox;
+    msgBox.setText("Load game?");
+    msgBox.setInformativeText("Do you want to load game?\nAny unsaved changes are not saved.");
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::Yes);
+    int ret = msgBox.exec();
+    if(ret ==QMessageBox::Yes ){
+        player LoadData1;
+        subject* LoadData2;
+        global_variables LoadData3;
+        std::ifstream fin1("Savedata1.txt");
+        std::ifstream fin2("Savedata2.txt");
+        std::ifstream fin3("Savedata3.txt");
+        if(fin1.is_open() == false){
+            ui->textbox_console->setText("No Saved File");
+        }
+        else{
+            fin1.read((char*)&LoadData1, sizeof(LoadData1));
+            fin1.close();
+            fin2.read((char*)&LoadData2, sizeof(LoadData2));
+            fin2.close();
+            fin3.read((char*)&LoadData3, sizeof(LoadData3));
+            fin3.close();
+        }
+        g.set_pl(LoadData1);
+        g.pl.char_to_string();
+        g.set_subject(LoadData2);
+        g.set_gv(LoadData3);
+        ui->actionSave_Game->setEnabled(true);
     }
-    else{
-        fin.read((char*)&LoadData, sizeof(LoadData));
-        fin.close();
-        ui->textbox_console->setText("Loading Complete");
-    }
-    g = LoadData;
+    // Update Screen
     update();
 }
 
-
+/* Updates player's data and some game data
+ */
 void Sugang_Simulator_2017::player_data_update(player pl,int t){
     g.pl.set_name(ui->textbox_name->toPlainText().toUtf8().constData());
     ui->text_hp->setText(QString::number(pl.get_life())+"/"+QString::number(pl.get_life_f()));
+    std::string it = "아이템     ";
+    for(int i=0;i<8;i++){
+        if(pl.get_items()[i]>0){
+            it+=g.d.items[pl.get_items()[0]]+", ";
+        }
+    }
+    ui->text_items->setText(QString::fromStdString(it));
     ui->text_money->setText("돈     "+QString::number(pl.get_money()));
     ui->text_score->setText("점수     "+QString::number(pl.get_score()));
     ui->text_stats->setText("스탯       체력 "+QString::number(pl.get_stats()[0])+"   회복 "+QString::number(pl.get_stats()[1])
             +"   이학 "+QString::number(pl.get_stats()[2])+"   공학 "+QString::number(pl.get_stats()[3])
             +"   문학 "+QString::number(pl.get_stats()[4])+"   사회 "+QString::number(pl.get_stats()[5]));
     ui->text_name->setText("이름     ");
-    ui->text_credit_mandatory->setText("필수 "+QString::number(pl.get_credit_required_ess())+"/"+QString::number(pl.get_credit_required_ess()));
-    ui->text_credit_selective->setText("선택 "+QString::number(pl.get_credit_required_chs())+"/"+QString::number(pl.get_credit_required_chs()));
+    ui->text_credit_mandatory->setText("필수 "+QString::number(pl.get_credit_acquired_ess())+"/"+QString::number(pl.get_credit_required_ess()));
+    ui->text_credit_selective->setText("선택 "+QString::number(pl.get_credit_acquired_chs())+"/"+QString::number(pl.get_credit_required_chs()));
     QString tx = "";
     tx="Year "+QString::number(t/40+1)+", Day "+QString::number((t/4)%10+1)+", ";
     switch(t%4+1){
@@ -122,7 +201,6 @@ void Sugang_Simulator_2017::player_data_update(player pl,int t){
     }
     else{
         ui->prog_time->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
-
     }
     if(pl.get_life()<pl.get_life_f()*0.3){
         ui->prog_hp->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #dd3636; width: 1px;}");
@@ -130,9 +208,13 @@ void Sugang_Simulator_2017::player_data_update(player pl,int t){
         ui->prog_hp->setStyleSheet(" QProgressBar { border: 2px solid grey; border-radius: 0px; text-align: center; } QProgressBar::chunk {background-color: #3add36; width: 1px;}");
     }
 }
+/* Update Console textbox
+ */
 void Sugang_Simulator_2017::console_update(std::string text){
     ui->textbox_console->setText(QString::fromStdString(text));
 }
+/* Disables(resets) all button
+ */
 void Sugang_Simulator_2017::button_disable(){
     ui->button1->setText(QString::fromStdString(""));
     ui->button2->setText(QString::fromStdString(""));
@@ -153,6 +235,8 @@ void Sugang_Simulator_2017::button_disable(){
     ui->button8->setEnabled(false);
     ui->button9->setEnabled(false);
 }
+/* Update Each button to desired text
+ */
 void Sugang_Simulator_2017::button_update(std::string da, int index){
     switch(index){
     case 0:
@@ -202,7 +286,8 @@ void Sugang_Simulator_2017::button_update(std::string da, int index){
     break;
     }
 }
-
+/* Update every data
+ */
 void Sugang_Simulator_2017::update(){
     button_disable();
     for(int i=0;i<9;i++){
@@ -254,4 +339,20 @@ void Sugang_Simulator_2017::on_textbox_name_textChanged()
 {
     g.pl.set_name(ui->textbox_name->toPlainText().toUtf8().constData());
     player_data_update(g.get_pl(),g.get_turn());
+}
+
+void Sugang_Simulator_2017::on_actionCredit_triggered()
+{
+    QMessageBox msgBox;
+    msgBox.setText("2017 SE271 Team Project");
+    msgBox.setInformativeText("Lee SeungHyun, Jang HoMin, Bae JiHoon\nTroubleshoot : coder@dgist.ac.kr");
+    msgBox.setStandardButtons(QMessageBox::Close);
+    msgBox.setDefaultButton(QMessageBox::Close);
+    int ret = msgBox.exec();
+    switch (ret) {
+      case QMessageBox::Close:
+          break;
+      default:
+          break;
+    }
 }

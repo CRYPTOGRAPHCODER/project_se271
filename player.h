@@ -1,9 +1,9 @@
 #ifndef __PLAYER_H__
 #define __PLAYER_H__
 #include <string>
-
+#include "functions.h"
 constexpr int STATS = 6;
-constexpr int EQUIPMENTS_MAX = 10;
+constexpr int ITEMS_MAX = 8;
 constexpr int SUBJECTS_MAX = 20;
 
 // add compile option -static-libstdc++
@@ -11,7 +11,8 @@ class player{
 private:
   std::string name;
   int stats[STATS];
-  int equipments[EQUIPMENTS_MAX];
+  int stats_item[STATS];
+  int items[ITEMS_MAX];
   int subjects[SUBJECTS_MAX];
   int life;
   int life_f;
@@ -21,11 +22,11 @@ private:
   int credit_acquired_chs;
   int credit_required_chs;
   int score;
+  char names[BUFFER];
 public:
   player();
   ~player();
   void stat_update();
-  bool check_item(int index);
   //name
   std::string get_name() { return this->name; }
   void set_name(std::string value) { this->name = value; }
@@ -36,8 +37,12 @@ public:
   void add_stats(int value, int i) { stats[i] += value; }
 
   //equipments
-  int* get_equipments() { return this->equipments; }
-  void set_equipments(int value, int i) { equipments[i] = value; }
+  bool item_check(int index);
+  void item_delete_find(int index);
+  void item_add(int index);
+  void item_delete(int index){this->items[index] = 0;}
+  void set_item(int value, int index){this->items[index] = value;}
+  int* get_items(){return this->items;}
 
   //subjects
   int* get_subjects() { return this->subjects; }
@@ -56,7 +61,7 @@ public:
   //money
   int get_money() { return this->money; }
   void set_money(int value) { this->money = value; }
-  void add_money(int value) { this->money += value; }
+  void add_money(int value) { this->money += value; if(this->money<0){int dmg = -this->money; this->money=0; this->life-=dmg/1000;}}
 
   //credit_acquired_ess
   int get_credit_acquired_ess() { return this->credit_acquired_ess; }
@@ -79,6 +84,20 @@ public:
   //score
   int get_score() { return this->score; }
   void add_score(int value) { this->score += value; }
+
+  //misc
+  void string_to_char(){
+      for(int i = 0; i<5; i++){
+          names[i] = name[i];
+      }
+  }
+  void char_to_string(){
+      std::string name2 = "";
+      for(int i= 0; i<5; i++){
+          name2 +=names[i];
+      }
+      name += name2;
+  }
 };
 
 #endif

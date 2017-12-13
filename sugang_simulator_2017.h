@@ -2,12 +2,14 @@
 #define SUGANG_SIMULATOR_2017_H
 
 #include <QMainWindow>
+#include <QMessageBox>
 #include <string>
 #include <fstream>
 #include <iostream>
 #include "player.h"
 #include "game.h"
 
+// Namespace for Qt UI
 namespace Ui {
 class Sugang_Simulator_2017;
 }
@@ -44,6 +46,7 @@ private slots:
     void on_button8_released();
     void on_button9_released();
     void on_textbox_name_textChanged();
+    void on_actionCredit_triggered();
 };
 
 

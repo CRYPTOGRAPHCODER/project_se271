@@ -4,8 +4,8 @@ player::player(){
   //stats : life / recov / science / code / literature / social
   for (int i = 0; i < STATS; i++){
         this->stats[i] = 5;}
-  for (int i = 0; i < EQUIPMENTS_MAX; i++){
-    this->equipments[i] = 0;}
+  for (int i = 0; i < ITEMS_MAX; i++){
+    this->items[i] = 0;}
   for (int i = 0; i < SUBJECTS_MAX; i++){
     this->subjects[i] = -1;}
 
@@ -40,11 +40,27 @@ void player::stat_update(){
 
 }
 
-bool player::check_item(int index){
-    for(int i =0;i < EQUIPMENTS_MAX;i++){
-        if(this->equipments[i] == index){
+bool player::item_check(int index){
+    for(int i =0;i < ITEMS_MAX;i++){
+        if(this->items[i] == index){
             return true;
         }
     }
     return false;
+}
+
+void player::item_delete_find(int index){
+    for(int i =0;i < ITEMS_MAX;i++){
+        if(this->items[i] == index){
+            this->items[i] = 0;
+        }
+    }
+}
+
+void player::item_add(int index){
+    for(int i =0;i < ITEMS_MAX;i++){
+        if(this->items[i] == 0){
+            this->items[i] = index;
+        }
+    }
 }
