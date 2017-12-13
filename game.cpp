@@ -3,13 +3,40 @@
 #include "player.h"
 
 gameManager::gameManager(){
-    gv.turn = 38;
+    gv.turn = 0;
     gv.level = 1;
     gv.subject_num = 35;
     generate_subjects();
     for(int i=0;i<BUTTON_LENGTH;i++){
         this->button[i]="";
     }
+
+    ///Item values
+    d.item_value[5] = 5000;
+    for(int i=0;i<pl.get_stats()[0];i++){
+        d.item_value[5]*=1.07;
+    }
+    d.item_value[6] = 7000;
+    for(int i=0;i<pl.get_stats()[1];i++){
+        d.item_value[6]*=1.07;
+    }
+    d.item_value[7] = 3000;
+    for(int i=0;i<pl.get_stats()[2];i++){
+        d.item_value[7]*=1.07;
+    }
+    d.item_value[8] = 3000;
+    for(int i=0;i<pl.get_stats()[3];i++){
+        d.item_value[8]*=1.07;
+    }
+    d.item_value[9] = 3000;
+    for(int i=0;i<pl.get_stats()[4];i++){
+        d.item_value[9]*=1.07;
+    }
+    d.item_value[10] = 3000;
+    for(int i=0;i<pl.get_stats()[5];i++){
+        d.item_value[10]*=1.07;
+    }
+
     print_update(d.co_intro01,d.bt_basic);
 }
 
@@ -110,9 +137,51 @@ void gameManager::proceed(int input){
         }
         break;
     case 23:                                                // Store (Not Available)
-        //print_update(d.co_store,d.bt_store);
-        gv.gamestate = 20;
-        print_update(d.co_main,d.bt_main);
+        switch(input){
+        case 1:                                                 // Buy
+            gv.gamestate = 81;
+            print_store_buy(1);
+            break;
+        case 2:                                                 // Sell
+            gv.gamestate = 80;
+            print_store_sell();
+            break;
+        default:
+            gv.gamestate = 20;
+            print_update(d.co_main,d.bt_main);
+            break;
+        }
+        break;
+    case 81: case 82: case 83: case 84: case 85: case 86:
+        switch(input){
+        case 1: case 2: case 3: case 4: case 5: case 6: case 7:
+            buy_item((gv.gamestate-81)*7+input);
+            print_store_buy(gv.gamestate - 80);
+            break;
+        case 8:                                             // View Next Items
+            if(gv.gamestate >= (80 + d.item_number/7 + 1)){
+                gv.gamestate = 80;
+            }
+            gv.gamestate += 1;
+            print_store_buy(gv.gamestate-80);
+            break;
+        case 9:
+            gv.gamestate = 20;                           // To Main Menu
+            print_update(d.co_main,d.bt_main);
+            break;
+        }
+        break;
+    case 80:
+        switch(input){
+        case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8:
+            item_sell(input-1);
+            print_store_sell();
+            break;
+        case 9:
+            gv.gamestate = 20;                           // To Main Menu
+            print_update(d.co_main,d.bt_main);
+            break;
+        }
         break;
     case 99:                                            // Sugang logout
         gv.gamestate = 20;
@@ -186,19 +255,46 @@ void gameManager::game_turn_pass(){
 
     /// Item effects
     // Item 1
-    if(pl.item_check(1)){
+    if(pl.item_check(18)){
         gv.s_time = gv.s_time*1.5;}
     // Item 2
-    if(pl.item_check(2)){
-        pl.add_life(50*gv.level);}
+    if(pl.item_check(34)){
+        pl.add_life(60);}
     // Item 5
-    if(pl.item_check(5)){
-        pl.add_life(20*gv.level);}
-    // Item 6
-    if(pl.get_life()<=0 && pl.item_check(6)==true){
+    if(pl.item_check(35)){
+        pl.add_life(30);}
+    // Item 30
+    if(pl.get_life()<=0 && pl.item_check(30)==true){
         pl.set_life(pl.get_life_f()*0.3);
         pl.item_delete_find(6);
     }
+    /// Item Values
+    d.item_value[29]*=rnd_r(0.5,2.0);
+    d.item_value[5] = 5000;
+    for(int i=0;i<pl.get_stats()[0];i++){
+        d.item_value[5]*=1.07;
+    }
+    d.item_value[6] = 7000;
+    for(int i=0;i<pl.get_stats()[1];i++){
+        d.item_value[6]*=1.07;
+    }
+    d.item_value[7] = 3000;
+    for(int i=0;i<pl.get_stats()[2];i++){
+        d.item_value[7]*=1.07;
+    }
+    d.item_value[8] = 3000;
+    for(int i=0;i<pl.get_stats()[3];i++){
+        d.item_value[8]*=1.07;
+    }
+    d.item_value[9] = 3000;
+    for(int i=0;i<pl.get_stats()[4];i++){
+        d.item_value[9]*=1.07;
+    }
+    d.item_value[10] = 3000;
+    for(int i=0;i<pl.get_stats()[5];i++){
+        d.item_value[10]*=1.07;
+    }
+
     // Calculate semester
     if(gv.turn%40==39){
         calculate_semester();
@@ -241,6 +337,7 @@ void gameManager::calculate_semester(){
     c+= "\n   |     과목의 어려운 정도    |";
     c+= "\n학점| 이학 | 공학 | 문학 | 사회 |체력소모|학점|과목명";
     int drain_total = 0;
+    int credit_total = 0;
     for(int i = 0; i<SUBJECTS_MAX;i++){
         if(pl.get_subjects()[i]==-1){
             continue;
@@ -252,7 +349,22 @@ void gameManager::calculate_semester(){
         c+= print_blank(s[l].workload[1],6)+"|";
         c+= print_blank(s[l].workload[2],6)+"|";
         c+= print_blank(s[l].workload[3],6)+"|";
-
+        if(pl.item_check(22)){
+            s[l].workload[0]*=0.9;s[l].workload[1]*=0.9;
+            s[l].workload[2]*=0.9;s[l].workload[3]*=0.9;
+        }
+        if(pl.item_check(23)){
+            s[l].workload[0]*=0.9;
+        }
+        if(pl.item_check(24)){
+            s[l].workload[1]*=0.9;
+        }
+        if(pl.item_check(25)){
+            s[l].workload[2]*=0.9;
+        }
+        if(pl.item_check(26)){
+            s[l].workload[3]*=0.9;
+        }
         int drain = s[i].workload[0]/pl.get_stats()[2]+s[i].workload[1]/pl.get_stats()[3]+s[i].workload[2]/pl.get_stats()[4]+s[i].workload[3]/pl.get_stats()[5];
         c+= print_blank(drain,7)+"|";
         drain_total += drain;
@@ -278,6 +390,8 @@ void gameManager::calculate_semester(){
         c+=m;
 
 
+
+
         // Effect to player
         pl.add_life(-drain);
         if(drain<pl.get_life_f()/10*s[i].credit){
@@ -286,7 +400,45 @@ void gameManager::calculate_semester(){
             }else{
                 pl.add_credit_acquired_chs(s[i].credit);
             }
+        }else{
+            if(pl.item_check(27)){
+                if(s[i].category==0){
+                    pl.add_credit_acquired_ess(s[i].credit);
+                }else{
+                    pl.add_credit_acquired_chs(s[i].credit);
+                }
+                pl.item_delete_find(27);
+            }
         }
+        credit_total += s[i].credit;
+        // bonus stat for subjects
+        pl.add_stats(s[i].credit*s[i].workload[s[i].area-2]/500,s[i].area-2);
+    }
+
+    // Bonus stat for number of credits
+    if(credit_total>=10){
+        pl.add_stats((int)5*gv.level,0);
+        pl.add_stats((int)2*gv.level,1);
+        pl.add_stats((int)2*gv.level,2);
+        pl.add_stats((int)2*gv.level,3);
+        pl.add_stats((int)2*gv.level,4);
+        pl.add_stats((int)2*gv.level,5);
+    }
+    if(credit_total>=15){
+        pl.add_stats((int)5*gv.level,0);
+        pl.add_stats((int)2*gv.level,1);
+        pl.add_stats((int)2*gv.level,2);
+        pl.add_stats((int)2*gv.level,3);
+        pl.add_stats((int)2*gv.level,4);
+        pl.add_stats((int)2*gv.level,5);
+    }
+    if(credit_total>=18){
+        pl.add_stats((int)5*gv.level,0);
+        pl.add_stats((int)2*gv.level,1);
+        pl.add_stats((int)2*gv.level,2);
+        pl.add_stats((int)2*gv.level,3);
+        pl.add_stats((int)2*gv.level,4);
+        pl.add_stats((int)2*gv.level,5);
     }
     c += "\n\n"+d.co_semester[1];
     gv.subject_num += (int)(rnd_r(5,8));
@@ -310,3 +462,55 @@ void gameManager::print_update(std::string co, std::string* bt){
     // this->console += "\n\n"+std::to_string(gamestate);
 }
 
+
+
+void gameManager::buy_item(int index){
+    if(pl.get_money()>=(int)(d.item_value[index])){
+        pl.add_money(-(int)(d.item_value[index]));
+        pl.item_add(index);
+    }
+}
+void gameManager::print_store_buy(int index){
+    std::string c = d.co_store_buy;
+    std::string k[9] = d.bt_store_buy;
+    for (int i=0;i<7;i++){
+        int p = (index-1)*7+i+1;
+        // Disable button if there are no subject data
+        if(p>=d.item_shop){
+            k[i] = "";
+            continue;
+        }
+        std::string b = "\"";
+        b+= d.items[p]+"\" 효과:";
+        b+= d.items_ex[p];
+        b+= " 가격:"+std::to_string((int)(d.item_value[p]));
+        k[i] = b;
+    }
+    print_update(c,k);
+}
+void gameManager::print_store_sell(){
+    std::string c = d.co_store_sell;
+    std::string k[9] = d.bt_store_sell;
+    for (int i=0;i<8;i++){
+        if(pl.get_items()[i]<=0){
+            k[i] = "";
+            continue;
+        }
+        std::string b = "";
+        b+= d.items[pl.get_items()[i]];
+        b+= " 가격: "+std::to_string((int)(d.item_value[pl.get_items()[i]]*0.2));
+        k[i] = b;
+    }
+    print_update(c,k);
+}
+void gameManager::item_sell(int index){
+    switch(index){
+    case 29: case 31:
+        pl.add_money((int)(d.item_value[pl.get_items()[index]]*0.9));
+        break;
+    default:
+        pl.add_money((int)(d.item_value[pl.get_items()[index]]*0.2));
+        break;
+    }
+    pl.item_delete(index);
+}

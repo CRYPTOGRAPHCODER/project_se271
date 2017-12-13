@@ -6,6 +6,9 @@
 /* add people to sugang
 */
 void gameManager::sugang_time_pass(double timepass){
+    if(pl.item_check(17)){
+        timepass*=0.5;
+    }
     for(int i=0;i<gv.subject_num;i++){
         for(int j =0;j<timepass/2;j++){
             //Add people to each subjects
@@ -314,7 +317,7 @@ void gameManager::generate_subjects(){
         s[i].attend_limit = (int)(rnd_r(40,160)/s[i].level);
 
         // set the basic workload - will effect on health deduction
-        int basic_workload = 170*gv.level*((double)s[i].level/3+0.67);
+        int basic_workload = 190*gv.level*((double)s[i].level/3+0.67);
         for(int j=0;j<4;j++){
             s[i].workload[j] = (int)(rnd_r(0.8,1.2)*basic_workload);
         }

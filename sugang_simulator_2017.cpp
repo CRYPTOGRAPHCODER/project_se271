@@ -96,11 +96,11 @@ void Sugang_Simulator_2017::on_actionSave_Game_triggered()
 
     if(ret==QMessageBox::Save){
         player SaveData1 = g.get_pl();
-        subject SaveData2[100];
-        for(int i = 0; i<100;i++){
-            SaveData2[i]=g.get_subject(i);
+        global_variables SaveData2 = g.get_gv();
+        subject SaveData3[100];
+        for(int i = 0; i<SaveData2.subject_num;i++){
+                SaveData3[i]=g.get_subject(i);
         }
-        global_variables SaveData3 = g.get_gv();
         SaveData1.string_to_char();
         SaveData1.set_name("");
         std::ofstream fout1("Savedata1.txt");
@@ -130,8 +130,8 @@ void Sugang_Simulator_2017::on_actionLoad_Game_triggered()
     int ret = msgBox.exec();
     if(ret ==QMessageBox::Yes ){
         player LoadData1;
-        subject* LoadData2;
-        global_variables LoadData3;
+        global_variables LoadData2;
+        subject LoadData3[100];
         std::ifstream fin1("Savedata1.txt");
         std::ifstream fin2("Savedata2.txt");
         std::ifstream fin3("Savedata3.txt");
@@ -148,9 +148,11 @@ void Sugang_Simulator_2017::on_actionLoad_Game_triggered()
         }
         g.set_pl(LoadData1);
         g.pl.char_to_string();
-        g.set_subject(LoadData2);
-        g.set_gv(LoadData3);
-        ui->actionSave_Game->setEnabled(true);
+        LoadData2.gamestate = 19;
+        g.set_gv(LoadData2);
+        for(int i=0;i<LoadData2.subject_num;i++){
+            g.set_subject(LoadData3[i],i);
+        }ui->actionSave_Game->setEnabled(true);
     }
     // Update Screen
     update();
@@ -164,7 +166,7 @@ void Sugang_Simulator_2017::player_data_update(player pl,int t){
     std::string it = "아이템     ";
     for(int i=0;i<8;i++){
         if(pl.get_items()[i]>0){
-            it+=g.d.items[pl.get_items()[0]]+", ";
+            it+=g.d.items[pl.get_items()[i]]+", ";
         }
     }
     ui->text_items->setText(QString::fromStdString(it));

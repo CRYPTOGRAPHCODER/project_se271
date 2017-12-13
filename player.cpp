@@ -11,7 +11,7 @@ player::player(){
 
   this->life_f = 1000;
   for(int i =0;i<this->stats[0];i++){
-      this->life_f = (int)(this->life_f*1.03);
+      this->life_f = (int)(this->life_f*1.02);
   }
   this->life = this->life_f;
 
@@ -35,7 +35,7 @@ player::~player(){
 void player::stat_update(){
     this->life_f=1000;
     for(int i =0;i<this->stats[0];i++){
-        this->life_f = (int)(this->life_f*1.03);
+        this->life_f = (int)(this->life_f*1.02);
     }
 
 }
@@ -58,9 +58,51 @@ void player::item_delete_find(int index){
 }
 
 void player::item_add(int index){
-    for(int i =0;i < ITEMS_MAX;i++){
-        if(this->items[i] == 0){
-            this->items[i] = index;
+    bool item = false;
+    //instant item effect
+    if(index<11){
+        switch(index){
+        case 1:
+            life += 200;
+            break;
+        case 2:
+            life += 1000;
+            break;
+        case 3:
+            life +=(int)(life_f*0.5);
+            break;
+        case 4:
+            life = life_f;
+            break;
+        case 5:
+            stats[0]++;
+            break;
+        case 6:
+            stats[1]++;
+            break;
+        case 7:
+            stats[2]++;
+            break;
+        case 8:
+            stats[3]++;
+            break;
+        case 9:
+            stats[4]++;
+            break;
+        case 10:
+            stats[5]++;
+            break;
+        }
+    }
+    else{
+        for(int i =0;i < ITEMS_MAX;i++){
+            if(this->items[i] == 0){
+                this->items[i] = index;
+                item = true;
+            }
+            if(item){
+                break;
+            }
         }
     }
 }
