@@ -10,33 +10,7 @@ gameManager::gameManager(){
     for(int i=0;i<BUTTON_LENGTH;i++){
         this->button[i]="";
     }
-
-    ///Item values
-    d.item_value[5] = 5000;
-    for(int i=0;i<pl.get_stats()[0];i++){
-        d.item_value[5]*=1.07;
-    }
-    d.item_value[6] = 7000;
-    for(int i=0;i<pl.get_stats()[1];i++){
-        d.item_value[6]*=1.07;
-    }
-    d.item_value[7] = 3000;
-    for(int i=0;i<pl.get_stats()[2];i++){
-        d.item_value[7]*=1.07;
-    }
-    d.item_value[8] = 3000;
-    for(int i=0;i<pl.get_stats()[3];i++){
-        d.item_value[8]*=1.07;
-    }
-    d.item_value[9] = 3000;
-    for(int i=0;i<pl.get_stats()[4];i++){
-        d.item_value[9]*=1.07;
-    }
-    d.item_value[10] = 3000;
-    for(int i=0;i<pl.get_stats()[5];i++){
-        d.item_value[10]*=1.07;
-    }
-
+    item_value_update();
     print_update(d.co_intro01,d.bt_basic);
 }
 
@@ -241,7 +215,7 @@ void gameManager::proceed(int input){
 */
 void gameManager::game_turn_pass(){
     // Gradually increase level
-    gv.level *= 1.009;
+    gv.level *= 1.01;
     // Reset sugang time
     gv.s_time = gv.s_time_full;
 
@@ -269,31 +243,7 @@ void gameManager::game_turn_pass(){
         pl.item_delete_find(6);
     }
     /// Item Values
-    d.item_value[29]*=rnd_r(0.5,2.0);
-    d.item_value[5] = 5000;
-    for(int i=0;i<pl.get_stats()[0];i++){
-        d.item_value[5]*=1.07;
-    }
-    d.item_value[6] = 7000;
-    for(int i=0;i<pl.get_stats()[1];i++){
-        d.item_value[6]*=1.07;
-    }
-    d.item_value[7] = 3000;
-    for(int i=0;i<pl.get_stats()[2];i++){
-        d.item_value[7]*=1.07;
-    }
-    d.item_value[8] = 3000;
-    for(int i=0;i<pl.get_stats()[3];i++){
-        d.item_value[8]*=1.07;
-    }
-    d.item_value[9] = 3000;
-    for(int i=0;i<pl.get_stats()[4];i++){
-        d.item_value[9]*=1.07;
-    }
-    d.item_value[10] = 3000;
-    for(int i=0;i<pl.get_stats()[5];i++){
-        d.item_value[10]*=1.07;
-    }
+    item_value_update();
 
     // Calculate semester
     if(gv.turn%40==39){
@@ -370,11 +320,11 @@ void gameManager::calculate_semester(){
         drain_total += drain;
         if(drain<pl.get_life_f()/30){
             c+=" A |";
-        }else if(drain<pl.get_life_f()/20*s[i].credit){
+        }else if(drain<pl.get_life_f()/25*s[i].credit){
             c+=" B |";
-        }else if(drain<pl.get_life_f()/15*s[i].credit){
+        }else if(drain<pl.get_life_f()/18*s[i].credit){
             c+=" C |";
-        }else if(drain<pl.get_life_f()/10*s[i].credit){
+        }else if(drain<pl.get_life_f()/12*s[i].credit){
             c+=" D |";
         }else{
             c+=" F |";
@@ -394,13 +344,14 @@ void gameManager::calculate_semester(){
 
         // Effect to player
         pl.add_life(-drain);
-        if(drain<pl.get_life_f()/10*s[i].credit){
+        if(drain<pl.get_life_f()/12*s[i].credit){
             if(s[i].category==0){
                 pl.add_credit_acquired_ess(s[i].credit);
             }else{
                 pl.add_credit_acquired_chs(s[i].credit);
             }
-        }else{
+        }
+        if(drain>pl.get_life_f()/12*s[i].credit){
             if(pl.item_check(27)){
                 if(s[i].category==0){
                     pl.add_credit_acquired_ess(s[i].credit);
@@ -414,37 +365,22 @@ void gameManager::calculate_semester(){
         // bonus stat for subjects
         pl.add_stats(s[i].credit*s[i].workload[s[i].area-2]/500,s[i].area-2);
     }
+    pl.add_stats((int)(credit_total-10)/2,0);
+    pl.add_stats((int)(credit_total-10)/4,1);
+    pl.add_stats((int)(credit_total-10)/4,2);
+    pl.add_stats((int)(credit_total-10)/4,3);
+    pl.add_stats((int)(credit_total-10)/4,4);
+    pl.add_stats((int)(credit_total-10)/4,5);
 
-    // Bonus stat for number of credits
-    if(credit_total>=10){
-        pl.add_stats((int)5*gv.level,0);
-        pl.add_stats((int)2*gv.level,1);
-        pl.add_stats((int)2*gv.level,2);
-        pl.add_stats((int)2*gv.level,3);
-        pl.add_stats((int)2*gv.level,4);
-        pl.add_stats((int)2*gv.level,5);
-    }
-    if(credit_total>=15){
-        pl.add_stats((int)5*gv.level,0);
-        pl.add_stats((int)2*gv.level,1);
-        pl.add_stats((int)2*gv.level,2);
-        pl.add_stats((int)2*gv.level,3);
-        pl.add_stats((int)2*gv.level,4);
-        pl.add_stats((int)2*gv.level,5);
-    }
-    if(credit_total>=18){
-        pl.add_stats((int)5*gv.level,0);
-        pl.add_stats((int)2*gv.level,1);
-        pl.add_stats((int)2*gv.level,2);
-        pl.add_stats((int)2*gv.level,3);
-        pl.add_stats((int)2*gv.level,4);
-        pl.add_stats((int)2*gv.level,5);
-    }
     c += "\n\n"+d.co_semester[1];
     gv.subject_num += (int)(rnd_r(5,8));
     if(gv.subject_num>=100){
         gv.subject_num = 100;
     }
+    for(int i=0;i<SUBJECTS_MAX;i++){
+        pl.set_subjects(-1,i);
+    }
+
     generate_subjects();
     print_update(c,d.bt_semester);
 }
@@ -469,6 +405,7 @@ void gameManager::buy_item(int index){
         pl.add_money(-(int)(d.item_value[index]));
         pl.item_add(index);
     }
+    item_value_update();
 }
 void gameManager::print_store_buy(int index){
     std::string c = d.co_store_buy;
@@ -513,4 +450,37 @@ void gameManager::item_sell(int index){
         break;
     }
     pl.item_delete(index);
+}
+
+void gameManager::item_value_update(){
+    d.item_value[29]=(int)(d.item_value[29]*rnd_r(0.5,2.0));
+    if(d.item_value[29]>10000000){
+        d.item_value[29] = 10000000;
+    }
+    d.item_value[3] = pl.get_life_f()*70;
+    d.item_value[4] = pl.get_life_f()*130;
+    d.item_value[5] = 5000;
+    for(int i=0;i<pl.get_stats()[0];i++){
+        d.item_value[5]*=1.07;
+    }
+    d.item_value[6] = 7000;
+    for(int i=0;i<pl.get_stats()[1];i++){
+        d.item_value[6]*=1.07;
+    }
+    d.item_value[7] = 3000;
+    for(int i=0;i<pl.get_stats()[2];i++){
+        d.item_value[7]*=1.07;
+    }
+    d.item_value[8] = 3000;
+    for(int i=0;i<pl.get_stats()[3];i++){
+        d.item_value[8]*=1.07;
+    }
+    d.item_value[9] = 3000;
+    for(int i=0;i<pl.get_stats()[4];i++){
+        d.item_value[9]*=1.07;
+    }
+    d.item_value[10] = 3000;
+    for(int i=0;i<pl.get_stats()[5];i++){
+        d.item_value[10]*=1.07;
+    }
 }

@@ -12,7 +12,7 @@ std::string gameManager::life_dec(int basic, double rnd_min, double rnd_max){
     return "\n" + d.msg_life + std::to_string(d1) + d.msg_sub;
 }
 std::string gameManager::life_inc(int basic, double rnd_min, double rnd_max){
-    double dm = basic*rnd_r(rnd_min, rnd_max)*gv.level;
+    double dm = basic*rnd_r(rnd_min, rnd_max);
     int d1;
     if(pl.item_check(16)){
         d1 = (int)(dm*1.3);
@@ -27,7 +27,7 @@ std::string gameManager::life_set(int value){
     return "\n" + d.msg_life + std::to_string(d1) + d.msg_sub;
 }
 std::string gameManager::money_dec(int basic, double rnd_min, double rnd_max){
-    double dm = basic*rnd_r(rnd_min, rnd_max)*gv.level;
+    double dm = basic*rnd_r(rnd_min, rnd_max);
     int d1;
     if(pl.item_check(14)){
         d1 = (int)(dm*0.7/100)*100;
@@ -38,7 +38,7 @@ std::string gameManager::money_dec(int basic, double rnd_min, double rnd_max){
     return "\n" + d.msg_money + std::to_string(d1) + d.msg_sub;
 }
 std::string gameManager::money_inc(int basic, double rnd_min, double rnd_max){
-    double dm = basic*rnd_r(rnd_min, rnd_max)*gv.level;
+    double dm = basic*rnd_r(rnd_min, rnd_max);
     int d1;
     if(pl.item_check(17)){
         d1 = (int)(dm*1.3/100)*100;
@@ -48,7 +48,7 @@ std::string gameManager::money_inc(int basic, double rnd_min, double rnd_max){
     return "\n" + d.msg_money + std::to_string(d1) + d.msg_add;
 }
 std::string gameManager::stats_dec(int basic, double rnd_min, double rnd_max, int index){
-    double dm = basic*rnd_r(rnd_min, rnd_max)*gv.level;
+    double dm = basic*rnd_r(rnd_min, rnd_max);
     int d1;
     if(pl.item_check(11)){
         d1 = (int)(dm*0.7);
@@ -58,7 +58,7 @@ std::string gameManager::stats_dec(int basic, double rnd_min, double rnd_max, in
     return "\n" + d.msg_stats[index] + std::to_string(d1) + d.msg_sub;
 }
 std::string gameManager::stats_inc(int basic, double rnd_min, double rnd_max, int index){
-    double dm = basic*rnd_r(rnd_min, rnd_max)*gv.level;
+    double dm = basic*rnd_r(rnd_min, rnd_max);
     int d1;
     if(pl.item_check(14)){
         d1 = (int)(dm*1.3);
@@ -389,17 +389,17 @@ void gameManager::club_room(){
         co += d.co_club_room[30];
         co += "\n"+d.co_club_room[34];
         co += life_dec(50,0.9,1.1);
-        co += stats_inc(1,2,4,2);
+        co += stats_inc(1,1,3,2);
     }else if(act < 97) {        // math hw
         co += d.co_club_room[30];
         co += "\n"+d.co_club_room[35];
         co += life_dec(100,0.9,1.1);
-        co += stats_inc(1,3,6,2);
+        co += stats_inc(1,2,4,2);
     }else {        // math hw
         co += d.co_club_room[30];
         co += "\n"+d.co_club_room[36];
         co += life_dec(170,0.9,1.1);
-        co += stats_inc(1,4,8,2);
+        co += stats_inc(1,3,6,2);
     }
     // Update Console and Button
     print_update(co,d.bt_basic);
@@ -543,8 +543,8 @@ void gameManager::study(){
     std::string co ="";
     if(act < 70) {              // Study stat++ hp--
         co += d.co_study[(int)(rnd_r(0,3))];
-        double min = 1.5;
-        double max = 3;
+        double min = 1;
+        double max = 2.5;
         if(pl.item_check(20)){
             min*=1.3; max*=1.3;
         }
@@ -552,7 +552,7 @@ void gameManager::study(){
         co += stats_inc(1,min,max,3);
         co += stats_inc(1,min,max,4);
         co += stats_inc(1,min,max,5);
-        co += life_dec(110,0.9,1.1);
+        co += life_dec(190,0.9,1.1);
     }else if(act < 75) {        // Study?
         co += d.co_study[3];
     }else if(act < 78) {        // GakSung stat +++ life--
@@ -561,7 +561,7 @@ void gameManager::study(){
         co += stats_inc(1,2,4.5,3);
         co += stats_inc(1,2,4.5,4);
         co += stats_inc(1,2,4.5,5);
-        co += life_dec(150,0.9,1.1);
+        co += life_dec(210,0.9,1.1);
     }else if(act < 83) {        // Rest - hp+ stat+
         co += d.co_study[5];
         co += stats_inc(1,1,3,0);
@@ -604,8 +604,8 @@ void gameManager::exercise(){
     std::string co ="";
     if(act < 63) {              // Exercise hp-- stat+
         co += d.co_exercise[(int)(rnd_r(0,2))];
-        double min = 2.5;
-        double max = 5;
+        double min = 2;
+        double max = 4.5;
         if(pl.item_check(21)){
             min*=1.3; max*=1.3;
         }

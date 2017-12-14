@@ -317,7 +317,7 @@ void gameManager::generate_subjects(){
         s[i].attend_limit = (int)(rnd_r(40,160)/s[i].level);
 
         // set the basic workload - will effect on health deduction
-        int basic_workload = 190*gv.level*((double)s[i].level/3+0.67);
+        int basic_workload = 170*gv.level*((double)s[i].level/3+0.67);
         for(int j=0;j<4;j++){
             s[i].workload[j] = (int)(rnd_r(0.8,1.2)*basic_workload);
         }
@@ -331,9 +331,10 @@ void gameManager::generate_subjects(){
         }
         // set the additional workload if it has more timetable
         for(int j=0;j<s[i].credit;j++){
-            s[i].workload[j] *=1.41;
+            for(int k=0;k<4;k++){
+                s[i].workload[k] *=1.5;
+            }
         }
-
         // MAX WORKLOAD VALUE : basic*2.33*g.level*(1.2+3)*1.5 >
         // MIN WORKLOAD VALUE : basic*1*g.level*0.8 => 160
 

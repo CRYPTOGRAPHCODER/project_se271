@@ -268,7 +268,7 @@ struct data
     // Items
     int item_number = 36;
     int item_shop = 36;
-    int item_value[36] = {0,5000,20000,80000,150000,5000,7000,3000,
+    int item_value[36] = {0,20000,80000,300000,600000,5000,7000,3000,
                           3000,3000,3000,240000,200000,180000,220000,
                           200000,160000,270000,320000,120000,140000,150000,
                           500000,180000,180000,180000,180000,1000000,2400,
@@ -449,8 +449,9 @@ public:
     std::string item_get_random(int min,int max);
     std::string item_loss();
 
-    /// Misc
 
+    /// Misc
+    void item_value_update();
     player get_pl(){return this->pl;}
     void set_pl(player gl){ pl = gl;}
     global_variables get_gv(){return this->gv;}
@@ -463,7 +464,5 @@ public:
     std::string get_button(int i){return this->button[i];}
 
 };
-
-
 
 #endif

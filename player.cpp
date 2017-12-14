@@ -8,13 +8,6 @@ player::player(){
     this->items[i] = 0;}
   for (int i = 0; i < SUBJECTS_MAX; i++){
     this->subjects[i] = -1;}
-
-  this->life_f = 1000;
-  for(int i =0;i<this->stats[0];i++){
-      this->life_f = (int)(this->life_f*1.02);
-  }
-  this->life = this->life_f;
-
   this->money = 0;
 
   this->credit_acquired_ess = 0;
@@ -24,6 +17,7 @@ player::player(){
 
   this->score = 0;
   stat_update();
+  this->life = this->life_f;
 }
 player::~player(){
     /*
@@ -33,10 +27,12 @@ player::~player(){
 }
 
 void player::stat_update(){
+    this->life_f = 1000 + stats[0]*50+stats[1]*10;
+    /*
     this->life_f=1000;
     for(int i =0;i<this->stats[0];i++){
         this->life_f = (int)(this->life_f*1.02);
-    }
+    }*/
 
 }
 

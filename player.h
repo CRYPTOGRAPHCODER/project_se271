@@ -61,7 +61,7 @@ public:
   //money
   int get_money() { return this->money; }
   void set_money(int value) { this->money = value; }
-  void add_money(int value) { this->money += value; if(this->money<0){int dmg = -this->money; this->money=0; this->life-=dmg/1000;}}
+  void add_money(int value) { this->money += value; if(this->money<0){int dmg = -this->money; this->money=0; this->life-=dmg/50;}}
 
   //credit_acquired_ess
   int get_credit_acquired_ess() { return this->credit_acquired_ess; }
