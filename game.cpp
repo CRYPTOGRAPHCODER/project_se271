@@ -45,6 +45,10 @@ void gameManager::proceed(int input){
         print_update(d.co_intro05,d.bt_basic);
         break;
     case 4:
+        gv.gamestate ++;        // To Intro 4
+        print_update(d.co_intro06,d.bt_basic);
+        break;
+    case 5:
         gv.gamestate = 20;      // To Main
         print_update(d.co_main,d.bt_main);
         break;
@@ -223,8 +227,8 @@ void gameManager::game_turn_pass(){
     pl.stat_update();
 
     // Sugang time pass
-    if(gv.turn%40>=29){
-        sugang_time_pass(120);
+    if(gv.turn%40>=28){
+        sugang_time_pass(300);
     }
 
     /// Item effects
@@ -240,15 +244,24 @@ void gameManager::game_turn_pass(){
     // Item 30
     if(pl.get_life()<=0 && pl.item_check(30)==true){
         pl.set_life(pl.get_life_f()*0.3);
-        pl.item_delete_find(6);
+        pl.item_delete_find(30);
     }
     /// Item Values
     item_value_update();
-
+    /// Bytecoin
+    d.item_value[29]=(int)(d.item_value[29]*rnd_r(0.8,1.2));
+    if(d.item_value[29]>10000000){
+        d.item_value[29] = 10000000;
+    }
+    if(d.item_value[29]<10000){
+        d.item_value[29] = 10000;
+    }
     // Calculate semester
     if(gv.turn%40==39){
         calculate_semester();
     }
+    /// Add Score
+    pl.add_score_turn(gv.turn,gv.level);
     // Game Clear Check
     if(pl.get_life()>0 && pl.get_credit_acquired_chs()>=pl.get_credit_required_chs()&&pl.get_credit_acquired_ess()>=pl.get_credit_required_ess()){
         gv.gamestate = 77;
@@ -315,21 +328,21 @@ void gameManager::calculate_semester(){
         if(pl.item_check(26)){
             s[l].workload[3]*=0.9;
         }
-        int drain = s[i].workload[0]/pl.get_stats()[2]+s[i].workload[1]/pl.get_stats()[3]+s[i].workload[2]/pl.get_stats()[4]+s[i].workload[3]/pl.get_stats()[5];
+        int drain = s[l].workload[0]/pl.get_stats()[2]+s[l].workload[1]/pl.get_stats()[3]+s[l].workload[2]/pl.get_stats()[4]+s[l].workload[3]/pl.get_stats()[5];
         c+= print_blank(drain,7)+"|";
         drain_total += drain;
         if(drain<pl.get_life_f()/30){
             c+=" A |";
-        }else if(drain<pl.get_life_f()/25*s[i].credit){
+        }else if(drain<pl.get_life_f()/25*s[l].credit){
             c+=" B |";
-        }else if(drain<pl.get_life_f()/18*s[i].credit){
+        }else if(drain<pl.get_life_f()/18*s[l].credit){
             c+=" C |";
-        }else if(drain<pl.get_life_f()/12*s[i].credit){
+        }else if(drain<pl.get_life_f()/12*s[l].credit){
             c+=" D |";
         }else{
             c+=" F |";
         }
-        std::string m = d.subjects[s[i].title];
+        std::string m = d.subjects[s[l].title];
         if(s[i].level == 2){
             m+=" II";
         }else if(s[i].level == 3){
@@ -344,26 +357,28 @@ void gameManager::calculate_semester(){
 
         // Effect to player
         pl.add_life(-drain);
-        if(drain<pl.get_life_f()/12*s[i].credit){
+        if(drain<pl.get_life_f()/12*s[l].credit){
             if(s[i].category==0){
-                pl.add_credit_acquired_ess(s[i].credit);
+                pl.add_credit_acquired_ess(s[l].credit);
             }else{
-                pl.add_credit_acquired_chs(s[i].credit);
+                pl.add_credit_acquired_chs(s[l].credit);
             }
+            pl.add_score(drain);
         }
-        if(drain>pl.get_life_f()/12*s[i].credit){
+        if(drain>pl.get_life_f()/12*s[l].credit){
             if(pl.item_check(27)){
                 if(s[i].category==0){
-                    pl.add_credit_acquired_ess(s[i].credit);
+                    pl.add_credit_acquired_ess(s[l].credit);
                 }else{
-                    pl.add_credit_acquired_chs(s[i].credit);
+                    pl.add_credit_acquired_chs(s[l].credit);
                 }
                 pl.item_delete_find(27);
             }
+            pl.add_score(drain/5);
         }
-        credit_total += s[i].credit;
+        credit_total += s[l].credit;
         // bonus stat for subjects
-        pl.add_stats(s[i].credit*s[i].workload[s[i].area-2]/500,s[i].area-2);
+        pl.add_stats(s[l].credit*s[l].workload[s[l].area-2]/500,s[l].area-2);
     }
     pl.add_stats((int)(credit_total-10)/2,0);
     pl.add_stats((int)(credit_total-10)/4,1);
@@ -377,8 +392,8 @@ void gameManager::calculate_semester(){
     if(gv.subject_num>=100){
         gv.subject_num = 100;
     }
-    for(int i=0;i<SUBJECTS_MAX;i++){
-        pl.set_subjects(-1,i);
+    for(int j=0;j<SUBJECTS_MAX;j++){
+        pl.set_subjects(-1,j);
     }
 
     generate_subjects();
@@ -435,13 +450,17 @@ void gameManager::print_store_sell(){
         }
         std::string b = "";
         b+= d.items[pl.get_items()[i]];
-        b+= " 가격: "+std::to_string((int)(d.item_value[pl.get_items()[i]]*0.2));
+        if(pl.get_items()[i]==29 || pl.get_items()[i]==31){
+            b+= " 가격: "+std::to_string((int)(d.item_value[pl.get_items()[i]]*0.9));
+        }else{
+            b+= " 가격: "+std::to_string((int)(d.item_value[pl.get_items()[i]]*0.2));
+        }
         k[i] = b;
     }
     print_update(c,k);
 }
 void gameManager::item_sell(int index){
-    switch(index){
+    switch(pl.get_items()[index]){
     case 29: case 31:
         pl.add_money((int)(d.item_value[pl.get_items()[index]]*0.9));
         break;
@@ -453,12 +472,15 @@ void gameManager::item_sell(int index){
 }
 
 void gameManager::item_value_update(){
-    d.item_value[29]=(int)(d.item_value[29]*rnd_r(0.5,2.0));
-    if(d.item_value[29]>10000000){
-        d.item_value[29] = 10000000;
+
+    d.item_value[3] = pl.get_life_f()*38;
+    if(d.item_value[3]<300000){
+        d.item_value[3]=300000;
     }
-    d.item_value[3] = pl.get_life_f()*70;
-    d.item_value[4] = pl.get_life_f()*130;
+    d.item_value[4] = pl.get_life_f()*70;
+    if(d.item_value[4]<600000){
+        d.item_value[4]=600000;
+    }
     d.item_value[5] = 5000;
     for(int i=0;i<pl.get_stats()[0];i++){
         d.item_value[5]*=1.07;

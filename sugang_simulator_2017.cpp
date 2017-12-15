@@ -179,7 +179,7 @@ void Sugang_Simulator_2017::player_data_update(player pl,int t){
     ui->text_credit_mandatory->setText("필수 "+QString::number(pl.get_credit_acquired_ess())+"/"+QString::number(pl.get_credit_required_ess()));
     ui->text_credit_selective->setText("선택 "+QString::number(pl.get_credit_acquired_chs())+"/"+QString::number(pl.get_credit_required_chs()));
     QString tx = "";
-    tx="Year "+QString::number(t/40+1)+", Day "+QString::number((t/4)%10+1)+", ";
+    tx="Semester "+QString::number(t/40+1)+", Day "+QString::number((t/4)%10+1)+", ";
     switch(t%4+1){
       case 1: tx+="아침";break;
       case 2: tx+="오후";break;

@@ -24,7 +24,7 @@ void gameManager::sugang_time_pass(double timepass){
         }
         // random empty seat
         if(s[i].attend_people==s[i].attend_limit){
-            if(rnd_d()>0.95+0.05*(s[i].attend_hope-s[i].attend_limit)/s[i].attend_limit){
+            if(rnd_d()>0.9+0.1*(s[i].attend_hope-s[i].attend_limit)/s[i].attend_limit){
                 s[i].attend_people-=1;
             }
         }
@@ -228,11 +228,10 @@ std::string gameManager::print_subject_data(int i, int mode){
         }
     }
     c+=d.sb_category[s[i].category]+" ";
-/*
-    c+=std::to_string(s[i].workload[0])+" "+std::to_string(s[i].workload[1])+" ";
-    c+=std::to_string(s[i].workload[2])+" "+std::to_string(s[i].workload[3])+" ";
-    c+=std::to_string(s[i].workload[0]/pl.get_stats()[2]+s[i].workload[1]/pl.get_stats()[3]+s[i].workload[2]/pl.get_stats()[4]+s[i].workload[3]/pl.get_stats()[5])+" ";
-*/
+
+    c+=","+std::to_string(s[i].workload[0])+","+std::to_string(s[i].workload[1])+",";
+    c+=std::to_string(s[i].workload[2])+","+std::to_string(s[i].workload[3])+",";
+    //c+=std::to_string(s[i].workload[0]/pl.get_stats()[2]+s[i].workload[1]/pl.get_stats()[3]+s[i].workload[2]/pl.get_stats()[4]+s[i].workload[3]/pl.get_stats()[5])+" ";
     // Subject name
     std::string m = d.subjects[s[i].title];
     if(s[i].level == 2){
@@ -314,33 +313,37 @@ void gameManager::generate_subjects(){
             s[i].timetable[j] = a[j];
         }
         // set the attend limit - completely random bet 40~160, decrease with level
-        s[i].attend_limit = (int)(rnd_r(40,160)/s[i].level);
+        int basic_attend = (int)(rnd_r(40,160));
+        s[i].attend_limit = (int)(basic_attend/s[i].level);
 
         // set the basic workload - will effect on health deduction
-        int basic_workload = 170*gv.level*((double)s[i].level/3+0.67);
-        for(int j=0;j<4;j++){
-            s[i].workload[j] = (int)(rnd_r(0.8,1.2)*basic_workload);
-        }
+        double workload_basic = 200*gv.level*((double)s[i].level/2+0.5);
+        double workload_random[4] = {rnd_r(0.85,1.3),rnd_r(0.85,1.3),rnd_r(0.85,1.3),rnd_r(0.85,1.3)};
         // add the area workload
-        if(s[i].area>=2){
-            s[i].workload[s[i].area-2] += (int)(rnd_r(1.0,3.0)*basic_workload);
+        double workload_area[4] = {1,1,1,1};
+        if(s[i].area>=1){
+            workload_area[s[i].area-1] = rnd_r(3,6);
         }
-        // set the additional workload if it is necessary
+        double workload_nece[4] = {rnd_r(1.4,1.7),rnd_r(1.4,1.7),rnd_r(1.4,1.7),rnd_r(1.4,1.7)};
         for(int j=0;j<4;j++){
-            s[i].workload[j] *=rnd_r(1.2,1.5);
+            if(s[i].category==0){
+                s[i].workload[j] = (int)(workload_basic*workload_random[j]*workload_area[j]*workload_nece[j]);
+            }
+            else{
+                s[i].workload[j] = (int)(workload_basic*workload_random[j]*workload_area[j]);
+            }
         }
         // set the additional workload if it has more timetable
-        for(int j=0;j<s[i].credit;j++){
+        for(int j=1;j<s[i].credit;j++){
             for(int k=0;k<4;k++){
                 s[i].workload[k] *=1.5;
             }
         }
-        // MAX WORKLOAD VALUE : basic*2.33*g.level*(1.2+3)*1.5 >
+        // MAX WORKLOAD VALUE : basic*2.5*g.level*(1.2+3)*1.5 >
         // MIN WORKLOAD VALUE : basic*1*g.level*0.8 => 160
-
         // set the attend hope - necessary is harder to enroll
         if(s[i].category==0){
-            s[i].attend_hope = (int)(s[i].attend_limit * (rnd_r(0.9,1.2)));
+            s[i].attend_hope = (int)(s[i].attend_limit * (rnd_r(0.85,1.2)));
         }else{
             s[i].attend_hope = (int)(s[i].attend_limit * (rnd_r(0.5,1.7)));
         }

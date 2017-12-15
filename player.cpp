@@ -28,6 +28,9 @@ player::~player(){
 
 void player::stat_update(){
     this->life_f = 1000 + stats[0]*50+stats[1]*10;
+    if(this->life>this->life_f){
+        this->life = this->life_f;
+    }
     /*
     this->life_f=1000;
     for(int i =0;i<this->stats[0];i++){
@@ -101,4 +104,12 @@ void player::item_add(int index){
             }
         }
     }
+}
+void player::add_score_turn(int turn, double gl){
+    for(int i=0;i<6;i++){
+        score+=(int)(stats[i]*gl*10);
+    }
+    score+=(int)(money/1000);
+    score+=(int)(life/life_f*gl*1000);
+    score+=(int)(100+turn*10);
 }

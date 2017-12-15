@@ -84,6 +84,7 @@ public:
   //score
   int get_score() { return this->score; }
   void add_score(int value) { this->score += value; }
+  void add_score_turn(int turn, double gv);
 
   //misc
   void string_to_char(){

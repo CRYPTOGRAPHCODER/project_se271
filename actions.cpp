@@ -70,7 +70,15 @@ std::string gameManager::stats_inc(int basic, double rnd_min, double rnd_max, in
 std::string gameManager::random_info(double rnd_min, double rnd_max){
     int d2 = (int)(rnd_r(0,gv.subject_num));
     std::string co="";
-    co += "\n" + d.subjects[s[d2].title] + d.msg_subject[0];
+    co += "\n" + d.subjects[s[d2].title];
+    if(s[d2].level == 2){
+        co+=" II";
+    }else if(s[d2].level == 3){
+        co+=" III";
+    }else if(s[d2].level == 4){
+        co+=" IV";
+    }
+    co += d.msg_subject[0];
     co += std::to_string((int)(s[d2].workload[0]*rnd_r(rnd_min,rnd_max)))+",";
     co += std::to_string((int)(s[d2].workload[1]*rnd_r(rnd_min,rnd_max)))+",";
     co += std::to_string((int)(s[d2].workload[2]*rnd_r(rnd_min,rnd_max)))+",";
@@ -474,26 +482,26 @@ void gameManager::rest(){
     if(act < 70) {              // 휴식 life +++
         co += d.co_rest[0];
         if(pl.item_check(19)){
-            co += life_inc(260,0.9,1.1);
+            co += life_inc(600*1.3,0.9,1.1);
         }else{
-            co += life_inc(200,0.9,1.1);}
+            co += life_inc(600,0.9,1.1);}
     }else if(act < 73){         // 내 사전에 휴식은 없다 life-- stat++
         co += d.co_rest[1];
         co += life_dec(80,0.9,1.1);
         co += stats_inc(1,3,5,rnd_r(2,6));
     }else if(act < 76){         // 비디오 게임 life+ stat-
         co += d.co_rest[2];
-        co += life_inc(80,0.9,1.1);
+        co += life_inc(180,0.9,1.1);
         co += stats_dec(1,0,2,rnd_r(2,6));
     }else if(act < 78){         // 비디오 게임 life+ stat+
         co += d.co_rest[3];
-        co += life_inc(80,0.9,1.1);
+        co += life_inc(120,0.9,1.1);
         co += stats_inc(1,0,2,rnd_r(2,6));
     }else if(act < 80){         // 뒤죽박죽 stat random, life+++ hpstat+
         co += d.co_rest[4];
-        co += life_inc(200,0.9,1.1);
+        co += life_inc(400,0.9,1.1);
         co += stats_inc(1,3,3,0);
-        co += stats_inc(1,3,3,1);
+        co += stats_inc(1,2,2,1);
         co += stats_inc(1,0,3,2);
         co += stats_inc(1,0,3,3);
         co += stats_inc(1,0,3,4);
@@ -502,30 +510,30 @@ void gameManager::rest(){
         co += d.co_rest[5];
     }else if(act < 86){         // 1석2조 - hp+++ stat++
         co += d.co_rest[6];
-        co += life_inc(170,0.9,1.1);
+        co += life_inc(400,0.9,1.1);
         co += stats_inc(1,1,3,0);
     }else if(act < 88){         // TV - hp+ soci+
         co += d.co_rest[7];
-        co += life_inc(50,0.9,1.1);
+        co += life_inc(120,0.9,1.1);
         co += stats_inc(1,1,3,0);
     }else if(act < 90){         // TV - hp+ stat+
         co += d.co_rest[8];
-        co += life_inc(60,0.9,1.1);
+        co += life_inc(120,0.9,1.1);
         co += stats_inc(1,1,3,0);
     }else if(act < 92){         // Friends - hp + money-
         co += d.co_rest[9];
-        co += life_inc(70,0.9,1.1);
+        co += life_inc(120,0.9,1.1);
         co += money_dec(6000,0.9,1.1);
     }else if(act < 95){         // Friends HP++ INFO
-        co += d.co_rest[9];
+        co += d.co_rest[10];
         co += life_inc(120,0.9,1.1);
         co += random_info(1,1);
     }else if(act < 97){         // Empty - HP++
-        co += d.co_rest[9];
-        co += life_inc(180,0.9,1.1);
+        co += d.co_rest[11];
+        co += life_inc(250,0.9,1.1);
     }else{                      // Empty - HP-
-        co += d.co_rest[10];
-        co += life_dec(30,0.9,1.1);
+        co += d.co_rest[12];
+        co += life_dec(50,0.9,1.1);
     }
     // Update console and Buttons
     print_update(co,d.bt_basic);
@@ -552,7 +560,7 @@ void gameManager::study(){
         co += stats_inc(1,min,max,3);
         co += stats_inc(1,min,max,4);
         co += stats_inc(1,min,max,5);
-        co += life_dec(190,0.9,1.1);
+        co += life_dec(150,0.9,1.1);
     }else if(act < 75) {        // Study?
         co += d.co_study[3];
     }else if(act < 78) {        // GakSung stat +++ life--
