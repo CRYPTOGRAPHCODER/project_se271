@@ -229,8 +229,8 @@ std::string gameManager::print_subject_data(int i, int mode){
     }
     c+=d.sb_category[s[i].category]+" ";
 
-    c+=","+std::to_string(s[i].workload[0])+","+std::to_string(s[i].workload[1])+",";
-    c+=std::to_string(s[i].workload[2])+","+std::to_string(s[i].workload[3])+",";
+    //c+=","+std::to_string(s[i].workload[0])+","+std::to_string(s[i].workload[1])+",";
+    //c+=std::to_string(s[i].workload[2])+","+std::to_string(s[i].workload[3])+",";
     //c+=std::to_string(s[i].workload[0]/pl.get_stats()[2]+s[i].workload[1]/pl.get_stats()[3]+s[i].workload[2]/pl.get_stats()[4]+s[i].workload[3]/pl.get_stats()[5])+" ";
     // Subject name
     std::string m = d.subjects[s[i].title];
